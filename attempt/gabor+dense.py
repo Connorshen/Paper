@@ -8,10 +8,12 @@ import tensorflow as tf
 from util.mnist import load_preprocess
 
 """
-acc = 98.34%
+acc = 98.54%
 """
 tf.random.set_seed(1)
-model = tf.keras.Sequential([tf.keras.layers.Dense(100, activation='relu'),
+model = tf.keras.Sequential([tf.keras.layers.Dense(128, activation='relu'),
+                             tf.keras.layers.Dropout(0.2),
+                             tf.keras.layers.Dense(64, activation='relu'),
                              tf.keras.layers.Dropout(0.2),
                              tf.keras.layers.Dense(10, activation='softmax')])
 model.compile(optimizer=tf.keras.optimizers.Adam(0.001),
