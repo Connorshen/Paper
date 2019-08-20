@@ -38,7 +38,7 @@ def process(data):
     return result_feature_map
 
 
-train_image, train_label, test_image, test_label = load_mnist(flatten=False, one_hot=False)
+train_image, train_label, test_image, test_label = load_mnist(flatten=False, one_hot=False, ratio=0.1)
 
 train_feature_map = process(train_image)
 train = pd.DataFrame(train_feature_map)

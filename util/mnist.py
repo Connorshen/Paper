@@ -10,6 +10,7 @@ from url import DataConfig
 from PIL import Image
 import pandas as pd
 import tensorflow as tf
+from sklearn.model_selection import train_test_split
 
 
 def __read_image(path):
@@ -75,7 +76,7 @@ def load_file(train_image_path,
     return image['train'], label['train'], image['test'], label['test']
 
 
-def load_mnist(flatten=True, one_hot=True):
+def load_mnist(flatten=True, one_hot=True, ratio=1.0):
     train_image, train_label, test_image, test_label = load_file(DataConfig.TRAIN_IMAGE_PATH,
                                                                  DataConfig.TRAIN_LABEL_PATH,
                                                                  DataConfig.TEST_IMAGE_PATH,
@@ -84,6 +85,9 @@ def load_mnist(flatten=True, one_hot=True):
     if flatten is not True:
         train_image = train_image.reshape(-1, 28, 28, 1)
         test_image = test_image.reshape(-1, 28, 28, 1)
+    if ratio != 1:
+        train_image, _, train_label, _ = train_test_split(train_image, train_label, train_size=ratio)
+        test_image, _, test_label, _ = train_test_split(test_image, test_label, train_size=ratio)
     return train_image, train_label, test_image, test_label
 
 
