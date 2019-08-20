@@ -10,7 +10,7 @@ from util.mnist import load_preprocess
 from tqdm import tqdm
 
 
-# TODO 速度太慢
+# TODO 速度太慢不支持tensor改变值，换pytorch
 
 class ClusterLayer(tf.keras.layers.Layer):
     def compute_output_signature(self, input_signature):
