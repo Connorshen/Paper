@@ -10,7 +10,7 @@ from util.mnist import loader
 from util.model_test import run_testing
 
 """
-acc = 96.96%
+acc = 97.70%
 """
 EPOCH = 5
 BATCH_SIZE = 32
@@ -20,18 +20,23 @@ LR = 0.001
 class Net(torch.nn.Module):
     def __init__(self):
         super(Net, self).__init__()
-
-        self.dense = torch.nn.Sequential(
+        self.fc1 = torch.nn.Sequential(
             torch.nn.Linear(784, 128),
-            torch.nn.ReLU(),
             torch.nn.Dropout(0.2),
-            torch.nn.Linear(128, 10),
-            torch.nn.Softmax(1)
+            torch.nn.ReLU(),
         )
+        self.fc2 = torch.nn.Sequential(
+            torch.nn.Linear(128, 64),
+            torch.nn.Dropout(0.2),
+            torch.nn.ReLU(),
+        )
+        self.fc3 = torch.nn.Linear(64, 10)
 
     def forward(self, x):
-        output = self.dense(x)
-        return output
+        x = self.fc1(x)
+        x = self.fc2(x)
+        x = self.fc3(x)
+        return x
 
 
 net = Net()
