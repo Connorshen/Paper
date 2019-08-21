@@ -11,6 +11,8 @@ from PIL import Image
 import pandas as pd
 import tensorflow as tf
 from sklearn.model_selection import train_test_split
+from torch.utils.data import DataLoader, TensorDataset
+import torch
 
 
 def __read_image(path):
@@ -111,6 +113,15 @@ def load_preprocess_file(train_path, test_path, one_hot):
         test_label = tf.one_hot(test_label, 10)
         test_label = test_label.numpy()
     return train_image, train_label, test_image, test_label
+
+
+def loader(batch_size=32, shuffle=True):
+    train_image, train_label, test_image, test_label = load_mnist(flatten=True, one_hot=False)
+    train_dataset = TensorDataset(torch.from_numpy(train_image), torch.from_numpy(train_label).long())
+    test_dataset = TensorDataset(torch.from_numpy(test_image), torch.from_numpy(test_label).long())
+    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=shuffle)
+    test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=shuffle)
+    return train_loader, test_loader
 
 
 def show_image(image_arr):
