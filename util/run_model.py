@@ -8,13 +8,13 @@ import torch
 from sklearn.metrics import accuracy_score
 
 
-def run_testing(net, loss_func, test_loader):
+def run_testing(net, loss_func, test_loader, gpu=True):
     net.eval()
     outputs = []
     labels = []
     predictions = []
     for step, (b_img, b_label) in enumerate(test_loader):
-        if torch.cuda.is_available():
+        if torch.cuda.is_available() and gpu:
             b_img = b_img.cuda()
             b_label = b_label.cuda()
         b_output = net(b_img)
@@ -31,11 +31,11 @@ def run_testing(net, loss_func, test_loader):
     return loss, accuracy
 
 
-def run_training(epoch, train_loader, test_loader, net, loss_func, optimizer):
+def run_training(epoch, train_loader, test_loader, net, loss_func, optimizer, gpu=True):
     for e in range(epoch):
         for step, (b_img, b_label) in enumerate(train_loader):
             net.train()
-            if torch.cuda.is_available():
+            if torch.cuda.is_available() and gpu:
                 b_img = b_img.cuda()
                 b_label = b_label.cuda()
             b_output = net(b_img)

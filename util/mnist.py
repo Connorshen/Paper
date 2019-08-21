@@ -93,28 +93,6 @@ def load_mnist(flatten=True, one_hot=True, ratio=1.0):
     return train_image, train_label, test_image, test_label
 
 
-def load_preprocess(one_hot=True):
-    return load_preprocess_file(DataConfig.PREPROCESS_TRAIN, DataConfig.PREPROCESS_TEST, one_hot)
-
-
-def load_preprocess_file(train_path, test_path, one_hot):
-    train = pd.read_csv(train_path)
-    test = pd.read_csv(test_path)
-    train_label = train["label"].values
-    train = train.drop(["label"], axis=1)
-    train_image = train.values
-
-    test_label = test["label"].values
-    test = test.drop(["label"], axis=1)
-    test_image = test.values
-    if one_hot:
-        train_label = tf.one_hot(train_label, 10)
-        train_label = train_label.numpy()
-        test_label = tf.one_hot(test_label, 10)
-        test_label = test_label.numpy()
-    return train_image, train_label, test_image, test_label
-
-
 def loader(batch_size=32, shuffle=True, flatten=True, one_hot=False):
     train_image, train_label, test_image, test_label = load_mnist(flatten=flatten, one_hot=one_hot)
     train_dataset = TensorDataset(torch.from_numpy(train_image), torch.from_numpy(train_label).long())
