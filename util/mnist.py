@@ -85,8 +85,8 @@ def load_mnist(flatten=True, one_hot=True, ratio=1.0):
                                                                  DataConfig.TEST_LABEL_PATH,
                                                                  one_hot=one_hot)
     if flatten is not True:
-        train_image = train_image.reshape(-1, 28, 28, 1)
-        test_image = test_image.reshape(-1, 28, 28, 1)
+        train_image = train_image.reshape(-1, 1, 28, 28, )
+        test_image = test_image.reshape(-1, 1, 28, 28, )
     if ratio != 1:
         train_image, _, train_label, _ = train_test_split(train_image, train_label, train_size=ratio)
         test_image, _, test_label, _ = train_test_split(test_image, test_label, train_size=ratio)
@@ -115,8 +115,8 @@ def load_preprocess_file(train_path, test_path, one_hot):
     return train_image, train_label, test_image, test_label
 
 
-def loader(batch_size=32, shuffle=True):
-    train_image, train_label, test_image, test_label = load_mnist(flatten=True, one_hot=False)
+def loader(batch_size=32, shuffle=True, flatten=True, one_hot=False):
+    train_image, train_label, test_image, test_label = load_mnist(flatten=flatten, one_hot=one_hot)
     train_dataset = TensorDataset(torch.from_numpy(train_image), torch.from_numpy(train_label).long())
     test_dataset = TensorDataset(torch.from_numpy(test_image), torch.from_numpy(test_label).long())
     train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=shuffle)
