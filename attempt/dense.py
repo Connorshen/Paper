@@ -7,7 +7,7 @@
 
 import torch
 from util.mnist import loader
-from util.model_test import run_testing
+from util.run_model import run_testing, run_training
 
 """
 acc = 97.70%
@@ -50,21 +50,7 @@ loss_func = torch.nn.CrossEntropyLoss()
 # 数据集
 train_loader, test_loader = loader(batch_size=BATCH_SIZE, shuffle=True)
 # train
-net.train()
-for epoch in range(EPOCH):
-    for step, (b_img, b_label) in enumerate(train_loader):
-        if torch.cuda.is_available():
-            b_img = b_img.cuda()
-            b_label = b_label.cuda()
-        b_output = net(b_img)
-        loss = loss_func(b_output, b_label)
-        optimizer.zero_grad()
-        loss.backward()
-        optimizer.step()
-        if step % 100 == 0:
-            loss, accuracy = run_testing(net, loss_func, test_loader)
-            print('Epoch: ', epoch, '| train loss: %.4f' % loss, '| test accuracy: %.4f' % accuracy)
+run_training(EPOCH, train_loader, test_loader, net, loss_func, optimizer)
 # test
-net.eval()
 loss, accuracy = run_testing(net, loss_func, test_loader)
 print('test accuracy: %.4f' % accuracy)
