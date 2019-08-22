@@ -24,9 +24,9 @@ class Net(torch.nn.Module):
         self.conv1 = torch.nn.Sequential(  # input shape (1, 28, 28)
             Gabor2d(
                 channel_in=1,  # input height
-                theta_num=8,  # n_filters
-                param_num=2,  # filter size
-                kernel_size=5,  # filter movement/step
+                theta_num=8,  # n directions
+                param_num=2,  # n params
+                kernel_size=5,  # kernel size
                 stride=1,
                 padding=2,
             ),  # output shape (16, 28, 28)
@@ -53,7 +53,7 @@ class Net(torch.nn.Module):
         x = x.view(x.size(0), -1)  # flatten the output of conv2 to (batch_size, 32 * 7 * 7)
         x = self.fc1(x)
         output = self.out(x)
-        return output  # return x for visualization
+        return output
 
 
 net = Net()
