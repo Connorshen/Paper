@@ -12,6 +12,10 @@ import cv2
 import numpy as np
 import matplotlib.pyplot as plt
 
+"""
+Gabor固定
+"""
+
 
 def show_filters(filters):
     rows = int(len(filters) / 8)
@@ -51,7 +55,6 @@ def gabor_filter(kernel_size, channel_in, theta_num, param_num):
 
     kernels = torch.cat(kernels, dim=0)
     return kernels
-
 
 
 class Gabor2d(nn.Module):

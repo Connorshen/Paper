@@ -10,11 +10,12 @@ from util.run_model import run_testing, run_training
 from attempt.module.gabor_gard import GaborConv2d
 
 """
-acc = 98.58%
+acc = 98.54%
 """
 EPOCH = 5
 BATCH_SIZE = 32
 LR = 0.001
+torch.manual_seed(1)
 
 
 class Net(torch.nn.Module):

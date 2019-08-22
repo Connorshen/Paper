@@ -10,11 +10,12 @@ from util.mnist import loader
 from util.run_model import run_testing, run_training
 
 """
-acc = 97.70%
+acc = 97.51%
 """
 EPOCH = 5
 BATCH_SIZE = 32
 LR = 0.001
+torch.manual_seed(1)
 
 
 class Net(torch.nn.Module):

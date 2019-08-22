@@ -9,6 +9,10 @@ import torch
 from torch import nn
 import math
 
+"""
+Gabor可以被训练
+"""
+
 
 def gabor_fn(kernel_size, channel_in, channel_out, sigma, theta, Lambda, psi, gamma):
     sigma_x = sigma  # [channel_out]
