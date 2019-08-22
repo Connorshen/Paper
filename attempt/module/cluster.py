@@ -6,7 +6,6 @@
 """
 from torch import nn
 import torch
-import numpy as np
 
 
 class Cluster(nn.Module):
@@ -22,12 +21,13 @@ class Cluster(nn.Module):
         self.channel_in = channel_in
         self.weight = torch.randn(channel_in, channel_out, requires_grad=False).cuda()
 
-    def forward(self, x):  # shape(-1,1568)
+    def forward(self, x):  # shape(batch_size,1568)
         n_cluster = int(self.channel_out / self.n_neuron_cluster)  # 20000
-        cluster_layer_in = torch.mm(x, self.weight)  # shape(-1,200000)
-        cluster_layer_in_group = cluster_layer_in.view(-1, n_cluster, self.n_neuron_cluster)  # shape(-1,20000,10)
+        cluster_layer_in = torch.mm(x, self.weight)  # shape(batch_size,200000)
+        cluster_layer_in_group = cluster_layer_in.view(-1, n_cluster,
+                                                       self.n_neuron_cluster)  # shape(batch_size,20000,10)
         max_index_local = torch.argmax(cluster_layer_in_group, dim=2).view(x.size(0),
-                                                                           n_cluster).cuda()  # shape(-1,20000)
+                                                                           n_cluster).cuda()  # shape(batch_size,20000)
         max_index_base = torch.arange(0, self.channel_out, self.n_neuron_cluster).view(1, n_cluster).repeat(x.size(0),
                                                                                                             1).cuda()
         max_index = torch.add(max_index_base, max_index_local).cuda()

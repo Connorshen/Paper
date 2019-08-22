@@ -6,9 +6,10 @@
 """
 import torch
 from util.mnist import loader
-from util.run_model import run_testing, run_training
 from attempt.module.gabor import Gabor2d
 from attempt.module.cluster import Cluster
+from attempt.module.output import Output
+from util.run_model import run_testing
 
 """
 acc = 98.51%
@@ -42,19 +43,22 @@ class Net(torch.nn.Module):
             torch.nn.BatchNorm2d(32)
         )
         self.cluster = Cluster(channel_in=32 * 7 * 7, channel_out=200000, n_neuron_cluster=10)
+        self.output = Output(channel_in=200000, channel_out=10)
 
     def forward(self, x):
         x = self.conv1(x)
         x = self.conv2(x)
         x = x.view(x.size(0), -1)  # flatten the output of conv2 to (batch_size, 32 * 7 * 7)
-        output = self.cluster(x)
-        return output
+        x = self.cluster(x)
+        x = self.output(x)
+        return x
 
 
 net = Net()
 if torch.cuda.is_available():
     net = net.cuda()
 print(net)
+loss_func = torch.nn.CrossEntropyLoss()
 # 数据集
 train_loader, test_loader = loader(batch_size=BATCH_SIZE, shuffle=True, flatten=False, one_hot=False)
 # forward
@@ -65,4 +69,8 @@ for e in range(EPOCH):
             b_img = b_img.cuda()
             b_label = b_label.cuda()
         b_output = net(b_img)
-        print(net.cluster.weight.cpu().data.numpy())
+        loss, accuracy = run_testing(net, loss_func, test_loader)
+        print(loss)
+        print(accuracy)
+        break
+    break

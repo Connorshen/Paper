@@ -6,11 +6,7 @@
 """
 import torch
 
-torch.manual_seed(1)
-class_num = 10
-batch_size = 4
-label = torch.LongTensor(batch_size, 1).random_() % class_num
-label = torch.cat([label, label - 1], 1)
-one_hot = torch.zeros(batch_size, class_num).scatter_(1, label, 1)
-print(label)
-print(one_hot)
+a = torch.arange(15, dtype=torch.float).view(5, 3)
+b = torch.mean(a, 1)
+print(a)
+print(b)
