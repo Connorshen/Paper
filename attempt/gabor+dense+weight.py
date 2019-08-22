@@ -1,16 +1,16 @@
 # -*- coding: utf-8 -*-
 """
-@Time    : 2019/8/22 下午2:46
+@Time    : 2019/8/14 下午4:24
 @Author  : 比尔丶盖子
 @Email   : 914138410@qq.com
 """
 import torch
 from util.mnist import loader
 from util.run_model import run_testing, run_training
-from attempt.module.gabor import Gabor2d
+from attempt.module.gabor_gard import GaborConv2d
 
 """
-acc = 98.82%
+acc = 98.58%
 """
 EPOCH = 5
 BATCH_SIZE = 32
@@ -21,20 +21,20 @@ class Net(torch.nn.Module):
     def __init__(self):
         super(Net, self).__init__()
         self.conv1 = torch.nn.Sequential(  # input shape (1, 28, 28)
-            Gabor2d(
+            GaborConv2d(
                 channel_in=1,  # input height
-                theta_num=8,  # n_filters
-                param_num=2,  # filter size
-                kernel_size=5,  # filter movement/step
-                stride=1,
+                channel_out=16,  # n_filters
+                kernel_size=5,  # filter size
+                stride=1,  # filter movement/step
                 padding=2,
+                # if want same width and length of this image after Conv2d, padding=(kernel_size-1)/2 if stride=1
             ),  # output shape (16, 28, 28)
             torch.nn.MaxPool2d(kernel_size=2),  # choose max value in 2x2 area, output shape (16, 14, 14)
             torch.nn.ReLU(),  # activation
             torch.nn.BatchNorm2d(16)
         )
         self.conv2 = torch.nn.Sequential(  # input shape (16, 14, 14)
-            Gabor2d(16, 8, 4, 5, 1, 2),  # output shape (32, 14, 14)
+            GaborConv2d(16, 32, 5, 1, 2),  # output shape (32, 14, 14)
             torch.nn.ReLU(),  # activation
             torch.nn.MaxPool2d(2),  # output shape (32, 7, 7)
             torch.nn.BatchNorm2d(32)
