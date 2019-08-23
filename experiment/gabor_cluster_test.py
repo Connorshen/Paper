@@ -11,11 +11,16 @@ from experiment.layer.cluster import Cluster
 from experiment.layer.output import Output
 from util.run_model import run_testing
 from util.run_model import run_training
+import numpy as np
 
 EPOCH = 5
 BATCH_SIZE = 32
+CLUSTER_LAYER_WEIGHT_DENSITY = 0.01
+N_NEURON_CLUSTER = 10
+N_FEATURES_CLUSTER_LAYER = 50000
 LR = 0.001
 torch.manual_seed(1)
+np.random.seed(1)
 
 
 class Net(torch.nn.Module):
@@ -40,8 +45,8 @@ class Net(torch.nn.Module):
             torch.nn.MaxPool2d(2),  # output shape (32, 7, 7)
             torch.nn.BatchNorm2d(32)
         )
-        self.cluster = Cluster(in_features=32 * 7 * 7, out_features=50000, n_neuron_cluster=10)
-        self.output = torch.nn.Linear(50000, 10)
+        self.cluster = Cluster(32 * 7 * 7, N_FEATURES_CLUSTER_LAYER, N_NEURON_CLUSTER, CLUSTER_LAYER_WEIGHT_DENSITY)
+        self.output = torch.nn.Linear(N_FEATURES_CLUSTER_LAYER, 10)
 
     def forward(self, x):
         x = self.conv1(x)
