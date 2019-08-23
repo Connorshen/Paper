@@ -11,6 +11,8 @@ from PIL import Image
 import pandas as pd
 import tensorflow as tf
 from sklearn.model_selection import train_test_split
+from torch.utils.data import DataLoader, TensorDataset
+import torch
 
 
 def __read_image(path):
@@ -83,34 +85,21 @@ def load_mnist(flatten=True, one_hot=True, ratio=1.0):
                                                                  DataConfig.TEST_LABEL_PATH,
                                                                  one_hot=one_hot)
     if flatten is not True:
-        train_image = train_image.reshape(-1, 28, 28, 1)
-        test_image = test_image.reshape(-1, 28, 28, 1)
+        train_image = train_image.reshape(-1, 1, 28, 28, )
+        test_image = test_image.reshape(-1, 1, 28, 28, )
     if ratio != 1:
         train_image, _, train_label, _ = train_test_split(train_image, train_label, train_size=ratio)
         test_image, _, test_label, _ = train_test_split(test_image, test_label, train_size=ratio)
     return train_image, train_label, test_image, test_label
 
 
-def load_preprocess(one_hot=True):
-    return load_preprocess_file(DataConfig.PREPROCESS_TRAIN, DataConfig.PREPROCESS_TEST, one_hot)
-
-
-def load_preprocess_file(train_path, test_path, one_hot):
-    train = pd.read_csv(train_path)
-    test = pd.read_csv(test_path)
-    train_label = train["label"].values
-    train = train.drop(["label"], axis=1)
-    train_image = train.values
-
-    test_label = test["label"].values
-    test = test.drop(["label"], axis=1)
-    test_image = test.values
-    if one_hot:
-        train_label = tf.one_hot(train_label, 10)
-        train_label = train_label.numpy()
-        test_label = tf.one_hot(test_label, 10)
-        test_label = test_label.numpy()
-    return train_image, train_label, test_image, test_label
+def loader(batch_size=32, shuffle=True, flatten=True, one_hot=False):
+    train_image, train_label, test_image, test_label = load_mnist(flatten=flatten, one_hot=one_hot)
+    train_dataset = TensorDataset(torch.from_numpy(train_image), torch.from_numpy(train_label).long())
+    test_dataset = TensorDataset(torch.from_numpy(test_image), torch.from_numpy(test_label).long())
+    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=shuffle)
+    test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=shuffle)
+    return train_loader, test_loader
 
 
 def show_image(image_arr):
