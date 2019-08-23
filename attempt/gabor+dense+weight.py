@@ -7,7 +7,7 @@
 import torch
 from util.mnist import loader
 from util.run_model import run_testing, run_training
-from attempt.module.gabor_gard import GaborConv2d
+from attempt.layer.gabor_gard import GaborConv2d
 
 """
 acc = 98.54%

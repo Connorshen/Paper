@@ -6,9 +6,9 @@
 """
 import torch
 from util.mnist import loader
-from attempt.module.gabor import Gabor2d
-from attempt.module.cluster import Cluster
-from attempt.module.output import Output
+from attempt.layer.gabor import Gabor2d
+from attempt.layer.cluster import Cluster
+from attempt.layer.output import Output
 from util.run_model import run_testing
 from util.run_model import run_training
 
