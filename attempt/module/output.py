@@ -10,13 +10,13 @@ import torch
 
 
 class Output(nn.Module):
-    def __init__(self, channel_in, channel_out):
+    def __init__(self, in_features, out_features):
         """
-        :param channel_in: 输入通道数字
-        :param channel_out: 输出通道数字
+        :param in_features: 输入通道数字
+        :param out_features: 输出通道数字
         """
         super(Output, self).__init__()
-        self.weight = torch.randn(channel_out, channel_in).cuda()
+        self.weight = torch.randn(out_features, in_features).cuda()
 
     def forward(self, x):
         x = F.linear(x, self.weight)

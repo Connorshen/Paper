@@ -6,7 +6,15 @@
 """
 import torch
 
-a = torch.arange(15, dtype=torch.float).view(5, 3)
-b = torch.mean(a, 1)
-print(a)
-print(b)
+print
+torch.sparse.FloatTensor(2, 3)
+# 输入如下内容
+# FloatTensor of size 2x3 with indices:
+# [torch.LongTensor with no dimension]
+# and values:
+# [torch.FloatTensor with no dimension]
+
+# 我们输出tenser中的数组
+print(torch.sparse.FloatTensor(2, 3).to_dense())
+# 输出结果类似于
+print(torch.zeros(2, 3))

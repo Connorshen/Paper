@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-@Time    : 2019/8/22 下午3:15
+@Time    : 2019/8/22 下午9:05
 @Author  : 比尔丶盖子
 @Email   : 914138410@qq.com
 """
@@ -10,6 +10,7 @@ from attempt.module.gabor import Gabor2d
 from attempt.module.cluster import Cluster
 from attempt.module.output import Output
 from util.run_model import run_testing
+from util.run_model import run_training
 
 EPOCH = 5
 BATCH_SIZE = 32
@@ -39,8 +40,8 @@ class Net(torch.nn.Module):
             torch.nn.MaxPool2d(2),  # output shape (32, 7, 7)
             torch.nn.BatchNorm2d(32)
         )
-        self.cluster = Cluster(in_features=32 * 7 * 7, out_features=200000, n_neuron_cluster=10)
-        self.output = Output(in_features=200000, out_features=10)
+        self.cluster = Cluster(in_features=32 * 7 * 7, out_features=50000, n_neuron_cluster=10)
+        self.output = torch.nn.Linear(50000, 10)
 
     def forward(self, x):
         x = self.conv1(x)
@@ -55,19 +56,14 @@ net = Net()
 if torch.cuda.is_available():
     net = net.cuda()
 print(net)
+# 优化器
+optimizer = torch.optim.Adam(net.parameters(), lr=1e-3)
+# 损失函数
 loss_func = torch.nn.CrossEntropyLoss()
 # 数据集
 train_loader, test_loader = loader(batch_size=BATCH_SIZE, shuffle=True, flatten=False, one_hot=False)
-# forward
-for e in range(EPOCH):
-    for step, (b_img, b_label) in enumerate(train_loader):
-        net.train()
-        if torch.cuda.is_available():
-            b_img = b_img.cuda()
-            b_label = b_label.cuda()
-        b_output = net(b_img)
-        loss, accuracy = run_testing(net, loss_func, test_loader)
-        print(loss)
-        print(accuracy)
-        break
-    break
+# train
+run_training(EPOCH, train_loader, test_loader, net, loss_func, optimizer)
+# test
+loss, accuracy = run_testing(net, loss_func, test_loader)
+print('test accuracy: %.4f' % accuracy)
