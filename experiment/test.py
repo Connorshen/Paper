@@ -6,15 +6,7 @@
 """
 import torch
 
-print
-torch.sparse.FloatTensor(2, 3)
-# 输入如下内容
-# FloatTensor of size 2x3 with indices:
-# [torch.LongTensor with no dimension]
-# and values:
-# [torch.FloatTensor with no dimension]
-
-# 我们输出tenser中的数组
-print(torch.sparse.FloatTensor(2, 3).to_dense())
-# 输出结果类似于
-print(torch.zeros(2, 3))
+a = torch.rand(2000)
+b = torch.rand(10, 2000)
+c = a < b
+print(c.shape)
