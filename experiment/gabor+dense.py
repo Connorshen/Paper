@@ -72,5 +72,5 @@ train_loader, test_loader = loader(batch_size=BATCH_SIZE, shuffle=True, flatten=
 # train
 run_training(EPOCH, train_loader, test_loader, net, loss_func, optimizer, True, DIGITS)
 # test
-loss, accuracy = run_testing(net, loss_func, test_loader)
+loss, accuracy = run_testing(net, loss_func, test_loader, True, DIGITS)
 print('test accuracy: %.4f' % accuracy)

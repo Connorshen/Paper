@@ -104,5 +104,5 @@ for e in range(EPOCH):
                 modify_weight = modify_weight - LR * predict_prob * potential
             modify_weight[modify_weight < 0] = 0
             weight[predict, :] = modify_weight
-        loss, accuracy = run_testing(net, loss_func, test_loader)
+        loss, accuracy = run_testing(net, loss_func, test_loader, True, DIGITS)
         print(accuracy)

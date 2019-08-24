@@ -71,7 +71,7 @@ def run_training(epoch, train_loader, test_loader, net, loss_func, optimizer, gp
             loss.backward()
             optimizer.step()
             if step % 100 == 0:
-                loss, accuracy = run_testing(net, loss_func, test_loader)
+                loss, accuracy = run_testing(net, loss_func, test_loader, gpu, digits)
                 print('Epoch: ', e, '| train loss: %.4f' % loss, '| test accuracy: %.4f' % accuracy)
 
 
