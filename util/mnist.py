@@ -78,7 +78,7 @@ def load_file(train_image_path,
     return image['train'], label['train'], image['test'], label['test']
 
 
-def load_mnist(flatten=True, one_hot=True, ratio=1.0):
+def load_mnist(flatten=True, one_hot=True, ratio=1.0, digits=np.arange(0, 10)):
     train_image, train_label, test_image, test_label = load_file(DataConfig.TRAIN_IMAGE_PATH,
                                                                  DataConfig.TRAIN_LABEL_PATH,
                                                                  DataConfig.TEST_IMAGE_PATH,
@@ -90,11 +90,27 @@ def load_mnist(flatten=True, one_hot=True, ratio=1.0):
     if ratio != 1:
         train_image, _, train_label, _ = train_test_split(train_image, train_label, train_size=ratio)
         test_image, _, test_label, _ = train_test_split(test_image, test_label, train_size=ratio)
+    if one_hot is False:
+        train_images = []
+        train_labels = []
+        test_images = []
+        test_labels = []
+        for digit in digits:
+            train_index = train_label == digit
+            train_images.append(train_image[train_index])
+            train_labels.append(np.reshape(train_label[train_index], [-1, 1]))
+            test_index = test_label == digit
+            test_images.append(test_image[test_index])
+            test_labels.append(np.reshape(test_label[test_index], [-1, 1]))
+        train_image = np.vstack(train_images)
+        train_label = np.reshape(np.vstack(train_labels), [-1])
+        test_image = np.vstack(test_images)
+        test_label = np.reshape(np.vstack(test_labels), [-1])
     return train_image, train_label, test_image, test_label
 
 
-def loader(batch_size=32, shuffle=True, flatten=True, one_hot=False):
-    train_image, train_label, test_image, test_label = load_mnist(flatten=flatten, one_hot=one_hot)
+def loader(batch_size=32, shuffle=True, flatten=True, one_hot=False, digits=np.arange(0, 10)):
+    train_image, train_label, test_image, test_label = load_mnist(flatten=flatten, one_hot=one_hot, digits=digits)
     train_dataset = TensorDataset(torch.from_numpy(train_image), torch.from_numpy(train_label).long())
     test_dataset = TensorDataset(torch.from_numpy(test_image), torch.from_numpy(test_label).long())
     train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=shuffle)
@@ -111,3 +127,6 @@ def show_image(image_arr):
     image = image_arr.reshape(28, 28) * 255
     image = Image.fromarray(image)
     image.show()
+
+
+train_image, train_label, test_image, test_label = load_mnist(one_hot=False, digits=np.arange(3, 5))

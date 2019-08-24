@@ -19,6 +19,8 @@ N_NEURON_CLUSTER = 10  # 每个簇内神经元个数
 N_FEATURES_CLUSTER_LAYER = 50000  # 50000
 LR = 0.1  # 学习率
 SYNAPTIC_TH = 0.8  # 中间层和输出层之间连接矩阵的突触阈值
+DIGITS = np.array([3, 5])
+CATEGORY = len(DIGITS)
 torch.manual_seed(1)
 np.random.seed(1)
 np.set_printoptions(precision=3, suppress=True)
@@ -47,8 +49,9 @@ class Net(torch.nn.Module):
             torch.nn.BatchNorm2d(32)
         )
         self.cluster = Cluster(32 * 7 * 7, N_FEATURES_CLUSTER_LAYER, N_NEURON_CLUSTER, CLUSTER_LAYER_WEIGHT_DENSITY)
-        self.output = Output(N_FEATURES_CLUSTER_LAYER, 10, SYNAPTIC_TH)
-        self.softmax = torch.nn.Softmax(dim=1)
+        self.output = Output(N_FEATURES_CLUSTER_LAYER, CATEGORY, SYNAPTIC_TH)
+        self.prob = torch.nn.Sequential(torch.nn.BatchNorm1d(CATEGORY),
+                                        torch.nn.Softmax(dim=1))
 
     def forward(self, x):
         x = self.conv1(x)
@@ -56,7 +59,7 @@ class Net(torch.nn.Module):
         x = x.view(x.size(0), -1)  # flatten the output of conv2 to (batch_size, 32 * 7 * 7)
         cluster_output = self.cluster(x)
         x = self.output(cluster_output)
-        x = self.softmax(x)
+        x = self.prob(x)
         return x, cluster_output
 
 
@@ -70,7 +73,7 @@ if torch.cuda.is_available():
 print(net)
 loss_func = torch.nn.CrossEntropyLoss()
 # 数据集
-train_loader, test_loader = loader(batch_size=BATCH_SIZE, shuffle=True, flatten=False, one_hot=False)
+train_loader, test_loader = loader(batch_size=BATCH_SIZE, shuffle=True, flatten=False, one_hot=False, digits=DIGITS)
 
 for e in range(EPOCH):
     for step, (b_img, b_label) in enumerate(train_loader):
@@ -80,6 +83,7 @@ for e in range(EPOCH):
             b_label = b_label.cuda()
         # forward
         b_output, b_cluster_output = net(b_img)  # shape(batch_size,10)
+        print_gpu_tensor(b_output[0])
         # backward
         b_predict_prob, b_predict = torch.max(b_output, dim=1)
         b_reward = torch.zeros(BATCH_SIZE)
@@ -100,6 +104,5 @@ for e in range(EPOCH):
                 modify_weight = modify_weight - LR * predict_prob * potential
             modify_weight[modify_weight < 0] = 0
             weight[predict, :] = modify_weight
-            net.output.weight = weight
         loss, accuracy = run_testing(net, loss_func, test_loader)
         print(accuracy)

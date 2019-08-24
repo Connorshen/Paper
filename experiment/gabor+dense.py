@@ -8,6 +8,7 @@ import torch
 from util.mnist import loader
 from util.run_model import run_testing, run_training
 from experiment.layer.gabor import Gabor2d
+import numpy as np
 
 """
 acc = 98.51%
@@ -15,6 +16,8 @@ acc = 98.51%
 EPOCH = 5
 BATCH_SIZE = 32
 LR = 0.001
+DIGITS = np.array([3, 5])
+CATEGORY = len(DIGITS)
 torch.manual_seed(1)
 
 
@@ -45,7 +48,7 @@ class Net(torch.nn.Module):
             torch.nn.Dropout(0.2),
             torch.nn.ReLU(),
         )
-        self.out = torch.nn.Linear(128, 10)  # fully connected layer, output 10 classes
+        self.out = torch.nn.Linear(128, CATEGORY)  # fully connected layer, output 10 classes
 
     def forward(self, x):
         x = self.conv1(x)
@@ -65,9 +68,9 @@ optimizer = torch.optim.Adam(net.parameters(), lr=1e-3)
 # 损失函数
 loss_func = torch.nn.CrossEntropyLoss()
 # 数据集
-train_loader, test_loader = loader(batch_size=BATCH_SIZE, shuffle=True, flatten=False, one_hot=False)
+train_loader, test_loader = loader(batch_size=BATCH_SIZE, shuffle=True, flatten=False, one_hot=False, digits=DIGITS)
 # train
-run_training(EPOCH, train_loader, test_loader, net, loss_func, optimizer)
+run_training(EPOCH, train_loader, test_loader, net, loss_func, optimizer, True, DIGITS)
 # test
 loss, accuracy = run_testing(net, loss_func, test_loader)
 print('test accuracy: %.4f' % accuracy)

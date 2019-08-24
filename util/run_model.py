@@ -6,9 +6,10 @@
 """
 import torch
 from sklearn.metrics import accuracy_score
+import numpy as np
 
 
-def run_testing(net, loss_func, test_loader, gpu=True):
+def run_testing(net, loss_func, test_loader, gpu=True, digits=np.arange(0, 10)):
     net.eval()
     outputs = []
     labels = []
@@ -17,6 +18,7 @@ def run_testing(net, loss_func, test_loader, gpu=True):
         if torch.cuda.is_available() and gpu:
             b_img = b_img.cuda()
             b_label = b_label.cuda()
+        b_label = convert_label(b_label, digits)
         b_output = net(b_img)
         b_predict = torch.argmax(b_output, dim=1)
         outputs.append(b_output)
@@ -31,7 +33,7 @@ def run_testing(net, loss_func, test_loader, gpu=True):
     return loss, accuracy
 
 
-def run_testing_cluster(net, loss_func, test_loader, gpu=True):
+def run_testing_cluster(net, loss_func, test_loader, gpu=True, digits=np.arange(0, 10)):
     net.eval()
     outputs = []
     labels = []
@@ -40,6 +42,7 @@ def run_testing_cluster(net, loss_func, test_loader, gpu=True):
         if torch.cuda.is_available() and gpu:
             b_img = b_img.cuda()
             b_label = b_label.cuda()
+        b_label = convert_label(b_label, digits)
         b_output, b_cluster_output = net(b_img)
         b_predict = torch.argmax(b_output, dim=1)
         outputs.append(b_output)
@@ -54,13 +57,14 @@ def run_testing_cluster(net, loss_func, test_loader, gpu=True):
     return loss, accuracy
 
 
-def run_training(epoch, train_loader, test_loader, net, loss_func, optimizer, gpu=True):
+def run_training(epoch, train_loader, test_loader, net, loss_func, optimizer, gpu=True, digits=np.arange(0, 10)):
     for e in range(epoch):
         for step, (b_img, b_label) in enumerate(train_loader):
             net.train()
             if torch.cuda.is_available() and gpu:
                 b_img = b_img.cuda()
                 b_label = b_label.cuda()
+            b_label = convert_label(b_label, digits)
             b_output = net(b_img)
             loss = loss_func(b_output, b_label)
             optimizer.zero_grad()
@@ -69,3 +73,10 @@ def run_training(epoch, train_loader, test_loader, net, loss_func, optimizer, gp
             if step % 100 == 0:
                 loss, accuracy = run_testing(net, loss_func, test_loader)
                 print('Epoch: ', e, '| train loss: %.4f' % loss, '| test accuracy: %.4f' % accuracy)
+
+
+def convert_label(labels, digits):
+    for i in range(len(digits)):
+        digit = digits[i]
+        labels[labels == digit] = i
+    return labels
