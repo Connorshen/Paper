@@ -10,17 +10,19 @@ from experiment.layer.gabor import Gabor2d
 from experiment.layer.cluster import Cluster
 from experiment.layer.output import Output
 from util.run_model import run_testing_cluster as run_testing
+from util.mnist import convert_label
 import numpy as np
 
 EPOCH = 5
-BATCH_SIZE = 12  # 32
+BATCH_SIZE = 32  # 32
 CLUSTER_LAYER_WEIGHT_DENSITY = 0.001  # 输入层和中间层之间连接矩阵的稀疏度
 N_NEURON_CLUSTER = 10  # 每个簇内神经元个数
-N_FEATURES_CLUSTER_LAYER = 50000  # 50000
+N_FEATURES_CLUSTER_LAYER = 5000  # 中间层输出神经元个数
 LR = 0.1  # 学习率
 SYNAPTIC_TH = 0.8  # 中间层和输出层之间连接矩阵的突触阈值
-DIGITS = np.array([3, 8])
-CATEGORY = len(DIGITS)
+DIGITS = np.arange(0, 10)  # 训练的数字
+CATEGORY = len(DIGITS)  # 有几类数字
+USE_GPU = True  # 是否启用GPU加速
 torch.manual_seed(1)
 np.random.seed(1)
 np.set_printoptions(precision=3, suppress=True)
@@ -47,7 +49,7 @@ class Net(torch.nn.Module):
             torch.nn.ReLU(),  # activation
             torch.nn.MaxPool2d(2),  # output shape (32, 7, 7)
             torch.nn.BatchNorm2d(32),
-            torch.nn.Sigmoid()
+            torch.nn.Sigmoid()  # 映射到[0,1]
         )
         self.cluster = Cluster(32 * 7 * 7, N_FEATURES_CLUSTER_LAYER, N_NEURON_CLUSTER, CLUSTER_LAYER_WEIGHT_DENSITY)
         self.output = Output(N_FEATURES_CLUSTER_LAYER, CATEGORY, SYNAPTIC_TH)
@@ -58,18 +60,19 @@ class Net(torch.nn.Module):
         x = self.conv1(x)
         x = self.conv2(x)
         x = x.view(x.size(0), -1)  # flatten the output of conv2 to (batch_size, 32 * 7 * 7)
-        cluster_output = self.cluster(x)
-        x = self.output(cluster_output)
+        cluster_out = self.cluster(x)
+        x = self.output(cluster_out)
         x = self.prob(x)
-        return x, cluster_output
+        return x, cluster_out
 
 
-def print_gpu_tensor(tensor):
-    print(tensor.cpu().data.numpy())
+def print_gpu_tensor(tensor, name="", debug=False):
+    if debug:
+        print(name, tensor.cpu().data.numpy())
 
 
 net = Net()
-if torch.cuda.is_available():
+if torch.cuda.is_available() and USE_GPU:
     net = net.cuda()
 print(net)
 loss_func = torch.nn.CrossEntropyLoss()
@@ -79,13 +82,13 @@ train_loader, test_loader = loader(batch_size=BATCH_SIZE, shuffle=True, flatten=
 for e in range(EPOCH):
     for step, (b_img, b_label) in enumerate(train_loader):
         net.train()
-        if torch.cuda.is_available():
+        if torch.cuda.is_available() and USE_GPU:
             b_img = b_img.cuda()
             b_label = b_label.cuda()
+        b_label = convert_label(b_label, DIGITS)
         # forward
         b_output, b_cluster_output = net(b_img)  # shape(batch_size,10)
         cluster_weight = net.cluster.weight
-        print(len(cluster_weight[cluster_weight == 1]) / len(cluster_weight[cluster_weight >= 0]))
         print_gpu_tensor(b_output[0])
         # backward
         b_predict_prob, b_predict = torch.max(b_output, dim=1)
@@ -93,13 +96,16 @@ for e in range(EPOCH):
         b_reward[b_predict == b_label] = 1
         for i in range(BATCH_SIZE):
             reward = b_reward[i]
-            predict_prob = b_predict[i]
+            predict_prob = b_predict_prob[i]
             predict = b_predict[i]
+            label = b_label[i]
             cluster_output = b_cluster_output[i]
             cluster = net.cluster
             weight = net.output.weight  # shape(10,n_features_cluster__layer)
             modify_weight = weight[predict, :]  # shape(n_features_cluster__layer)
-            need_modify_weight = (torch.rand(modify_weight.shape).cuda() < modify_weight).float()
+            rand = torch.rand(modify_weight.shape)
+            rand = rand.cuda() if torch.cuda.is_available() and USE_GPU else rand
+            need_modify_weight = (rand < modify_weight).float()
             potential = torch.mul(cluster_output, need_modify_weight)  # shape(n_features_cluster__layer)
             if reward:
                 modify_weight = modify_weight + LR * (reward - predict_prob) * potential
@@ -107,5 +113,5 @@ for e in range(EPOCH):
                 modify_weight = modify_weight - LR * predict_prob * potential
             modify_weight[modify_weight < 0] = 0
             weight[predict, :] = modify_weight
-        loss, accuracy = run_testing(net, loss_func, test_loader, True, DIGITS)
-        print(accuracy)
+        loss, accuracy = run_testing(net, loss_func, test_loader, USE_GPU, DIGITS)
+        print(str(round(accuracy * 100, 2)) + "%")

@@ -19,7 +19,8 @@ class Output(nn.Module):
         super(Output, self).__init__()
         self.synaptic_th = synaptic_th
         self.weight = Parameter(torch.rand(out_features, in_features), requires_grad=False)
-        self.weight_zero=Parameter(torch.zeros(self.weight.shape), requires_grad=False)
+        self.weight_zero = Parameter(torch.zeros(self.weight.shape), requires_grad=False)
+
     def forward(self, x):
         x = F.linear(x, self.filter(self.weight, self.synaptic_th))
         x = x - torch.mean(x, dim=1, keepdim=True).repeat(1, x.shape[1])

@@ -125,3 +125,10 @@ def show_image(image_arr):
     image = image_arr.reshape(28, 28) * 255
     image = Image.fromarray(image)
     image.show()
+
+
+def convert_label(labels, digits):
+    for i in range(len(digits)):
+        digit = digits[i]
+        labels[labels == digit] = i
+    return labels

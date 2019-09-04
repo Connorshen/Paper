@@ -7,6 +7,7 @@
 import torch
 from sklearn.metrics import accuracy_score
 import numpy as np
+from util.mnist import convert_label
 
 
 def run_testing(net, loss_func, test_loader, gpu=True, digits=np.arange(0, 10)):
@@ -73,10 +74,3 @@ def run_training(epoch, train_loader, test_loader, net, loss_func, optimizer, gp
             if step % 100 == 0:
                 loss, accuracy = run_testing(net, loss_func, test_loader, gpu, digits)
                 print('Epoch: ', e, '| train loss: %.4f' % loss, '| test accuracy: %.4f' % accuracy)
-
-
-def convert_label(labels, digits):
-    for i in range(len(digits)):
-        digit = digits[i]
-        labels[labels == digit] = i
-    return labels
