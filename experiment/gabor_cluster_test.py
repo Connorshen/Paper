@@ -19,7 +19,7 @@ CLUSTER_LAYER_WEIGHT_DENSITY = 0.01
 N_NEURON_CLUSTER = 10
 N_FEATURES_CLUSTER_LAYER = 5000
 LR = 0.001
-USE_GPU = True
+USE_GPU = False
 torch.manual_seed(1)
 np.random.seed(1)
 

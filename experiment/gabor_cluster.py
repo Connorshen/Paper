@@ -20,9 +20,9 @@ N_NEURON_CLUSTER = 10  # 每个簇内神经元个数
 N_FEATURES_CLUSTER_LAYER = 5000  # 中间层输出神经元个数
 LR = 0.1  # 学习率
 SYNAPTIC_TH = 0.8  # 中间层和输出层之间连接矩阵的突触阈值
-DIGITS = np.arange(0, 10)  # 训练的数字
+DIGITS = np.array([3, 8])  # 训练的数字:np.array([3,8])
 CATEGORY = len(DIGITS)  # 有几类数字
-USE_GPU = True  # 是否启用GPU加速
+USE_GPU = False  # 是否启用GPU加速
 torch.manual_seed(1)
 np.random.seed(1)
 np.set_printoptions(precision=3, suppress=True)
@@ -75,7 +75,7 @@ net = Net()
 if torch.cuda.is_available() and USE_GPU:
     net = net.cuda()
 print(net)
-loss_func = torch.nn.CrossEntropyLoss()
+loss_func = torch.nn.CrossEntropyLoss()  # loss只用来算准确度
 # 数据集
 train_loader, test_loader = loader(batch_size=BATCH_SIZE, shuffle=True, flatten=False, one_hot=False, digits=DIGITS)
 
@@ -86,15 +86,15 @@ for e in range(EPOCH):
             b_img = b_img.cuda()
             b_label = b_label.cuda()
         b_label = convert_label(b_label, DIGITS)
+        batch_size = len(b_label)
         # forward
         b_output, b_cluster_output = net(b_img)  # shape(batch_size,10)
         cluster_weight = net.cluster.weight
-        print_gpu_tensor(b_output[0])
         # backward
         b_predict_prob, b_predict = torch.max(b_output, dim=1)
-        b_reward = torch.zeros(BATCH_SIZE)
+        b_reward = torch.zeros(batch_size)
         b_reward[b_predict == b_label] = 1
-        for i in range(BATCH_SIZE):
+        for i in range(batch_size):
             reward = b_reward[i]
             predict_prob = b_predict_prob[i]
             predict = b_predict[i]
@@ -113,5 +113,16 @@ for e in range(EPOCH):
                 modify_weight = modify_weight - LR * predict_prob * potential
             modify_weight[modify_weight < 0] = 0
             weight[predict, :] = modify_weight
-        loss, accuracy = run_testing(net, loss_func, test_loader, USE_GPU, DIGITS)
-        print(str(round(accuracy * 100, 2)) + "%")
+
+            del rand
+            del need_modify_weight
+            del potential
+            del modify_weight
+            del weight
+        del b_predict_prob
+        del b_predict
+        del b_reward
+        del cluster_weight
+        if step % 10 == 0:
+            loss, accuracy = run_testing(net, loss_func, test_loader, USE_GPU, DIGITS)
+            print('Epoch: ', e, '| train loss: %.4f' % loss, '| test accuracy: %.4f' % accuracy)

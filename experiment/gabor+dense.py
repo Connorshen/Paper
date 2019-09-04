@@ -13,12 +13,12 @@ import numpy as np
 """
 acc = 98.51%
 """
-EPOCH = 5
+EPOCH = 10
 BATCH_SIZE = 32
 LR = 0.001
 DIGITS = np.array([3, 5])
 CATEGORY = len(DIGITS)
-USE_GPU = False
+USE_GPU = True
 torch.manual_seed(1)
 
 

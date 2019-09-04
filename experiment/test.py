@@ -4,9 +4,9 @@
 @Author  : 比尔丶盖子
 @Email   : 914138410@qq.com
 """
-import torch
+import numpy as np
 
-a = torch.rand(2000)
-b = torch.rand(10, 2000)
-c = a < b
-print(c.shape)
+a = np.array([1, 2, 3])
+print(a)
+del a
+print(a)
