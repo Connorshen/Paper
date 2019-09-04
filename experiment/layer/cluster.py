@@ -25,6 +25,8 @@ class Cluster(nn.Module):
         self.channel_in = in_features
         self.weight = self.build_sparse_weight(in_features, out_features, density)
         self.weight = Parameter(self.weight, requires_grad=False)
+        self.max_index_base = torch.arange(0, self.channel_out, self.n_neuron_cluster)
+        self.max_index_base = Parameter(self.max_index_base, requires_grad=False)
 
     def forward(self, x):  # shape(batch_size,1568)
         # 20000
@@ -34,11 +36,10 @@ class Cluster(nn.Module):
         # shape(batch_size,20000,10)
         cluster_layer_in_group = cluster_layer_in.view(-1, n_cluster, self.n_neuron_cluster)
         # shape(batch_size,20000)
-        max_index_local = torch.argmax(cluster_layer_in_group, dim=2).view(x.size(0), n_cluster).cuda()
-        max_index_base = torch.arange(0, self.channel_out, self.n_neuron_cluster).view(1, n_cluster).repeat(x.size(0),
-                                                                                                            1).cuda()
-        max_index = torch.add(max_index_base, max_index_local).cuda()
-        cluster_layer_out = torch.zeros(cluster_layer_in.shape).cuda().scatter(1, max_index, 1)
+        max_index_local = torch.argmax(cluster_layer_in_group, dim=2).view(x.size(0), n_cluster)
+        max_index_base = self.max_index_base.view(1, n_cluster).repeat(x.size(0), 1)
+        max_index = torch.add(max_index_base, max_index_local)
+        cluster_layer_out = (cluster_layer_in * 0).scatter(1, max_index, 1)
         return cluster_layer_out
 
     @staticmethod
