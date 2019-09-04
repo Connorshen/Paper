@@ -28,6 +28,7 @@ class Cluster(nn.Module):
         self.max_index_base = torch.arange(0, self.channel_out, self.n_neuron_cluster)
         self.max_index_base = Parameter(self.max_index_base, requires_grad=False)
 
+    # TODO 目前是按位置group，可改成随机group
     def forward(self, x):  # shape(batch_size,1568)
         # 20000
         n_cluster = int(self.channel_out / self.n_neuron_cluster)
