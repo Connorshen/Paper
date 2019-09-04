@@ -18,6 +18,7 @@ BATCH_SIZE = 32
 LR = 0.001
 DIGITS = np.array([3, 5])
 CATEGORY = len(DIGITS)
+USE_GPU = False
 torch.manual_seed(1)
 
 
@@ -61,7 +62,7 @@ class Net(torch.nn.Module):
 
 
 net = Net()
-if torch.cuda.is_available():
+if torch.cuda.is_available() and USE_GPU:
     net = net.cuda()
 print(net)
 # 优化器
@@ -71,7 +72,7 @@ loss_func = torch.nn.CrossEntropyLoss()
 # 数据集
 train_loader, test_loader = loader(batch_size=BATCH_SIZE, shuffle=True, flatten=False, one_hot=False, digits=DIGITS)
 # train
-run_training(EPOCH, train_loader, test_loader, net, loss_func, optimizer, True, DIGITS)
+run_training(EPOCH, train_loader, test_loader, net, loss_func, optimizer, USE_GPU, DIGITS)
 # test
-loss, accuracy = run_testing(net, loss_func, test_loader, True, DIGITS)
+loss, accuracy = run_testing(net, loss_func, test_loader, USE_GPU, DIGITS)
 print('test accuracy: %.4f' % accuracy)
