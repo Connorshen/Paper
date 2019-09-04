@@ -8,8 +8,6 @@ import numpy as np
 from struct import unpack
 from url import DataConfig
 from PIL import Image
-import pandas as pd
-import tensorflow as tf
 from sklearn.model_selection import train_test_split
 from torch.utils.data import DataLoader, TensorDataset
 import torch
@@ -24,7 +22,7 @@ def __read_image(path):
 
 def __read_label(path):
     with open(path, 'rb') as f:
-        magic, num = unpack('>2I', f.read(8))
+        _, _ = unpack('>2I', f.read(8))
         lab = np.fromfile(f, dtype=np.uint8)
     return lab
 
@@ -127,6 +125,3 @@ def show_image(image_arr):
     image = image_arr.reshape(28, 28) * 255
     image = Image.fromarray(image)
     image.show()
-
-
-train_image, train_label, test_image, test_label = load_mnist(one_hot=False, digits=np.arange(3, 5))

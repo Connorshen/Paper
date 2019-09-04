@@ -43,7 +43,8 @@ class Net(torch.nn.Module):
             Gabor2d(16, 8, 4, 5, 1, 2),  # output shape (32, 14, 14)
             torch.nn.ReLU(),  # activation
             torch.nn.MaxPool2d(2),  # output shape (32, 7, 7)
-            torch.nn.BatchNorm2d(32)
+            torch.nn.BatchNorm2d(32),
+            torch.nn.Sigmoid()
         )
         self.cluster = Cluster(32 * 7 * 7, N_FEATURES_CLUSTER_LAYER, N_NEURON_CLUSTER, CLUSTER_LAYER_WEIGHT_DENSITY)
         self.output = torch.nn.Linear(N_FEATURES_CLUSTER_LAYER, 10)

@@ -14,12 +14,12 @@ import numpy as np
 
 EPOCH = 5
 BATCH_SIZE = 12  # 32
-CLUSTER_LAYER_WEIGHT_DENSITY = 0.01  # 输入层和中间层之间连接矩阵的稀疏度
+CLUSTER_LAYER_WEIGHT_DENSITY = 0.001  # 输入层和中间层之间连接矩阵的稀疏度
 N_NEURON_CLUSTER = 10  # 每个簇内神经元个数
 N_FEATURES_CLUSTER_LAYER = 50000  # 50000
 LR = 0.1  # 学习率
 SYNAPTIC_TH = 0.8  # 中间层和输出层之间连接矩阵的突触阈值
-DIGITS = np.array([3, 5])
+DIGITS = np.array([3, 8])
 CATEGORY = len(DIGITS)
 torch.manual_seed(1)
 np.random.seed(1)
@@ -46,7 +46,8 @@ class Net(torch.nn.Module):
             Gabor2d(16, 8, 4, 5, 1, 2),  # output shape (32, 14, 14)
             torch.nn.ReLU(),  # activation
             torch.nn.MaxPool2d(2),  # output shape (32, 7, 7)
-            torch.nn.BatchNorm2d(32)
+            torch.nn.BatchNorm2d(32),
+            torch.nn.Sigmoid()
         )
         self.cluster = Cluster(32 * 7 * 7, N_FEATURES_CLUSTER_LAYER, N_NEURON_CLUSTER, CLUSTER_LAYER_WEIGHT_DENSITY)
         self.output = Output(N_FEATURES_CLUSTER_LAYER, CATEGORY, SYNAPTIC_TH)
@@ -83,6 +84,8 @@ for e in range(EPOCH):
             b_label = b_label.cuda()
         # forward
         b_output, b_cluster_output = net(b_img)  # shape(batch_size,10)
+        cluster_weight = net.cluster.weight
+        print(len(cluster_weight[cluster_weight == 1]) / len(cluster_weight[cluster_weight >= 0]))
         print_gpu_tensor(b_output[0])
         # backward
         b_predict_prob, b_predict = torch.max(b_output, dim=1)

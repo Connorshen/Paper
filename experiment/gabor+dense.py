@@ -41,7 +41,8 @@ class Net(torch.nn.Module):
             Gabor2d(16, 8, 4, 5, 1, 2),  # output shape (32, 14, 14)
             torch.nn.ReLU(),  # activation
             torch.nn.MaxPool2d(2),  # output shape (32, 7, 7)
-            torch.nn.BatchNorm2d(32)
+            torch.nn.BatchNorm2d(32),
+            torch.nn.Sigmoid()
         )
         self.fc1 = torch.nn.Sequential(
             torch.nn.Linear(32 * 7 * 7, 128),
