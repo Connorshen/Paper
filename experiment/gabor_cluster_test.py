@@ -19,6 +19,7 @@ CLUSTER_LAYER_WEIGHT_DENSITY = 0.01
 N_NEURON_CLUSTER = 10
 N_FEATURES_CLUSTER_LAYER = 5000
 LR = 0.001
+USE_GPU = False
 torch.manual_seed(1)
 np.random.seed(1)
 
@@ -59,7 +60,7 @@ class Net(torch.nn.Module):
 
 
 net = Net()
-if torch.cuda.is_available():
+if torch.cuda.is_available() and USE_GPU:
     net = net.cuda()
 print(net)
 # 优化器
@@ -69,7 +70,7 @@ loss_func = torch.nn.CrossEntropyLoss()
 # 数据集
 train_loader, test_loader = loader(batch_size=BATCH_SIZE, shuffle=True, flatten=False, one_hot=False)
 # train
-run_training(EPOCH, train_loader, test_loader, net, loss_func, optimizer)
+run_training(EPOCH, train_loader, test_loader, net, loss_func, optimizer, USE_GPU)
 # test
-loss, accuracy = run_testing(net, loss_func, test_loader)
+loss, accuracy = run_testing(net, loss_func, test_loader, USE_GPU)
 print('test accuracy: %.4f' % accuracy)
