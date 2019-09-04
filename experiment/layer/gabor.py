@@ -5,6 +5,7 @@
 @Email   : 914138410@qq.com
 """
 import torch.nn.functional as F
+from torch.nn import Parameter
 import torch
 from torch import nn
 import math
@@ -49,7 +50,7 @@ def gabor_filter(kernel_size, channel_in, theta_num, param_num):
         for j in range(theta_num):
             kernel = cv2.getGaborKernel(ksize=(kernel_size, kernel_size), sigma=sigma[i], theta=theta[j],
                                         lambd=lambd[i], gamma=0.5, psi=0, ktype=cv2.CV_32F)
-            kernel = torch.tensor(kernel).cuda()
+            kernel = torch.tensor(kernel)
             kernel = kernel.view(1, 1, kernel_size, kernel_size).repeat(1, channel_in, 1, 1)
             kernels.append(kernel)
 
@@ -62,8 +63,11 @@ class Gabor2d(nn.Module):
         super(Gabor2d, self).__init__()
         self.stride = stride
         self.padding = padding
-        self.kernels = gabor_filter(kernel_size=kernel_size, channel_in=channel_in, theta_num=theta_num,
+        self.kernels = gabor_filter(kernel_size=kernel_size,
+                                    channel_in=channel_in,
+                                    theta_num=theta_num,
                                     param_num=param_num)  # [channel_out, channel_in, kernel, kernel]
+        self.kernels = Parameter(self.kernels, requires_grad=False)
 
     def forward(self, x):
         out = F.conv2d(x, self.kernels, stride=self.stride, padding=self.padding)

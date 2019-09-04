@@ -7,6 +7,7 @@
 from torch import nn
 import torch
 import torch.nn.functional as F
+from torch.nn import Parameter
 import scipy.sparse as sparse
 import numpy as np
 
@@ -23,6 +24,7 @@ class Cluster(nn.Module):
         self.channel_out = out_features
         self.channel_in = in_features
         self.weight = self.build_sparse_weight(in_features, out_features, density)
+        self.weight = Parameter(self.weight, requires_grad=False)
 
     def forward(self, x):  # shape(batch_size,1568)
         # 20000
@@ -42,11 +44,11 @@ class Cluster(nn.Module):
     @staticmethod
     def build_sparse_weight(in_features, out_features, density):
         weight = sparse.rand(out_features, in_features, density, dtype=np.float)
-        row = torch.tensor(weight.row).cuda().view(1, -1)
-        col = torch.tensor(weight.col).cuda().view(1, -1)
+        row = torch.tensor(weight.row).view(1, -1)
+        col = torch.tensor(weight.col).view(1, -1)
         indices = torch.cat([row, col])
-        values = torch.tensor(weight.data).cuda()
+        values = torch.tensor(weight.data)
         weight = torch.sparse_coo_tensor(indices=indices, values=values, dtype=torch.float, requires_grad=False)
-        weight = weight.cuda().to_dense()
+        weight = weight.to_dense()
         weight[weight != 0] = 1
         return weight

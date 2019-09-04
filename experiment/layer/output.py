@@ -5,6 +5,7 @@
 @Email   : 914138410@qq.com
 """
 import torch.nn.functional as F
+from torch.nn import Parameter
 from torch import nn
 import torch
 
@@ -17,7 +18,7 @@ class Output(nn.Module):
         """
         super(Output, self).__init__()
         self.synaptic_th = synaptic_th
-        self.weight = torch.rand(out_features, in_features).cuda()
+        self.weight = Parameter(torch.rand(out_features, in_features), requires_grad=False)
 
     def forward(self, x):
         x = F.linear(x, self.filter(self.weight, self.synaptic_th))
@@ -26,6 +27,6 @@ class Output(nn.Module):
 
     @staticmethod
     def filter(weight, synaptic_th):
-        weight_filter = torch.zeros(weight.shape).cuda()
+        weight_filter = torch.zeros(weight.shape)
         weight_filter[weight > synaptic_th] = 1
         return weight_filter
