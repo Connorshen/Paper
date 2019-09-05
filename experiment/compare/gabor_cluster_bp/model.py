@@ -5,8 +5,8 @@
 @Email   : 914138410@qq.com
 """
 from torch.nn import Linear, BatchNorm2d, ReLU, MaxPool2d, Module, Sequential
-from attempt.layer.gabor import Gabor2d
-from attempt.layer.cluster import Cluster
+from experiment.layer.gabor import Gabor2d
+from experiment.layer.cluster import Cluster
 
 
 class Net(Module):

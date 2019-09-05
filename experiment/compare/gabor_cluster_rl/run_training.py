@@ -15,12 +15,12 @@ batch_size = 32
 digits = np.array([3, 5])
 cluster_layer_weight_density = 0.01
 n_neuron_cluster = 10
-n_features_cluster_layer = 5000
+n_features_cluster_layer = 50000
 n_category = len(digits)
 learning_rate = 0.1  # 学习率
 synaptic_th = 0.8  # 中间层和输出层之间连接矩阵的突触阈值
 epoch = 5
-use_gpu = True
+use_gpu = False
 # 构建模型
 net = Net(n_features_cluster_layer=n_features_cluster_layer,
           n_neuron_cluster=n_neuron_cluster,

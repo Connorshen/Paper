@@ -4,7 +4,7 @@
 @Author  : 比尔丶盖子
 @Email   : 914138410@qq.com
 """
-from experiment.compare.gabor_dense.model import Net
+from experiment.compare.gabor_bp.model import Net
 import numpy as np
 from util.data_util import loader, convert_label
 from util.test_util import run_testing
