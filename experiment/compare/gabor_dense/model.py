@@ -5,7 +5,7 @@
 @Email   : 914138410@qq.com
 """
 from torch.nn import Linear, Dropout, BatchNorm2d, ReLU, MaxPool2d, Module, Sequential
-from attempt.layer.gabor import Gabor2d
+from experiment.layer.gabor import Gabor2d
 
 
 class Net(Module):
