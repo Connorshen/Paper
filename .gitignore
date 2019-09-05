@@ -155,3 +155,4 @@ dmypy.json
 /data
 /preprocess_data
 /.idea
+/experiment/model_state
