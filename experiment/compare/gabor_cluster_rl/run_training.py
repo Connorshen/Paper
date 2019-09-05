@@ -39,6 +39,7 @@ train_loader, test_loader = loader(batch_size=batch_size,
 # 损失函数
 loss_func = CrossEntropyLoss()
 for e in range(epoch):
+    # b开头的变量表示关于batch的变量
     for step, (b_img, b_label) in enumerate(train_loader):
         net.train()
         if torch.cuda.is_available() and use_gpu:
@@ -54,12 +55,11 @@ for e in range(epoch):
         b_reward = torch.zeros(batch_size)
         b_reward[b_predict == b_label] = 1
         for i in range(batch_size):
-            reward = b_reward[i]
-            predict_prob = b_predict_prob[i]
+            reward = b_reward[i]  # 奖励
+            predict_prob = b_predict_prob[i]  # 预测的概率range(0,1)
             predict = b_predict[i]
             label = b_label[i]
             cluster_output = b_cluster_output[i]
-            cluster = net.cluster
             weight = net.state_dict()["output.weight"]  # shape(10,n_features_cluster__layer)
             modify_weight = weight[predict, :]  # shape(n_features_cluster__layer)
             rand = torch.rand(modify_weight.shape)
