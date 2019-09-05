@@ -1,27 +1,25 @@
 # -*- coding: utf-8 -*-
 """
-@Time    : 2019/8/22 下午9:05
+@Time    : 2019/8/22 下午2:46
 @Author  : 比尔丶盖子
 @Email   : 914138410@qq.com
 """
 import torch
 from util.mnist import loader
-from experiment.layer.gabor import Gabor2d
-from experiment.layer.cluster import Cluster
-from experiment.layer.output import Output
-from util.run_model import run_testing
-from util.run_model import run_training
+from util.run_model import run_testing, run_training
+from attempt.layer.gabor import Gabor2d
 import numpy as np
 
-EPOCH = 5
+"""
+acc = 98.51%
+"""
+EPOCH = 10
 BATCH_SIZE = 32
-CLUSTER_LAYER_WEIGHT_DENSITY = 0.01
-N_NEURON_CLUSTER = 10
-N_FEATURES_CLUSTER_LAYER = 5000
 LR = 0.001
-USE_GPU = False
+DIGITS = np.array([3, 5])
+CATEGORY = len(DIGITS)
+USE_GPU = True
 torch.manual_seed(1)
-np.random.seed(1)
 
 
 class Net(torch.nn.Module):
@@ -47,16 +45,20 @@ class Net(torch.nn.Module):
             torch.nn.BatchNorm2d(32),
             torch.nn.Sigmoid()
         )
-        self.cluster = Cluster(32 * 7 * 7, N_FEATURES_CLUSTER_LAYER, N_NEURON_CLUSTER, CLUSTER_LAYER_WEIGHT_DENSITY)
-        self.output = torch.nn.Linear(N_FEATURES_CLUSTER_LAYER, 10)
+        self.fc1 = torch.nn.Sequential(
+            torch.nn.Linear(32 * 7 * 7, 128),
+            torch.nn.Dropout(0.2),
+            torch.nn.ReLU(),
+        )
+        self.out = torch.nn.Linear(128, CATEGORY)  # fully connected layer, output 10 classes
 
     def forward(self, x):
         x = self.conv1(x)
         x = self.conv2(x)
         x = x.view(x.size(0), -1)  # flatten the output of conv2 to (batch_size, 32 * 7 * 7)
-        x = self.cluster(x)
-        x = self.output(x)
-        return x
+        x = self.fc1(x)
+        output = self.out(x)
+        return output
 
 
 net = Net()
@@ -68,9 +70,9 @@ optimizer = torch.optim.Adam(net.parameters(), lr=1e-3)
 # 损失函数
 loss_func = torch.nn.CrossEntropyLoss()
 # 数据集
-train_loader, test_loader = loader(batch_size=BATCH_SIZE, shuffle=True, flatten=False, one_hot=False)
+train_loader, test_loader = loader(batch_size=BATCH_SIZE, shuffle=True, flatten=False, one_hot=False, digits=DIGITS)
 # train
-run_training(EPOCH, train_loader, test_loader, net, loss_func, optimizer, USE_GPU)
+run_training(EPOCH, train_loader, test_loader, net, loss_func, optimizer, USE_GPU, DIGITS)
 # test
-loss, accuracy = run_testing(net, loss_func, test_loader, USE_GPU)
+loss, accuracy = run_testing(net, loss_func, test_loader, USE_GPU, DIGITS)
 print('test accuracy: %.4f' % accuracy)
