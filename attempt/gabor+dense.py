@@ -5,7 +5,7 @@
 @Email   : 914138410@qq.com
 """
 import torch
-from util.mnist import loader
+from util.data_util import loader
 from util.run_model import run_testing, run_training
 from attempt.layer.gabor import Gabor2d
 import numpy as np

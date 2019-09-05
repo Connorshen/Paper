@@ -5,7 +5,7 @@
 @Email   : 914138410@qq.com
 """
 import torch
-from util.mnist import loader
+from util.data_util import loader
 from attempt.layer.gabor import Gabor2d
 from attempt.layer.cluster import Cluster
 from attempt.layer.output import Output

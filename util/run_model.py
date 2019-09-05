@@ -7,7 +7,7 @@
 import torch
 from sklearn.metrics import accuracy_score
 import numpy as np
-from util.mnist import convert_label
+from util.data_util import convert_label
 
 
 def run_testing(net, loss_func, test_loader, gpu=True, digits=np.arange(0, 10)):

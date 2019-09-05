@@ -5,12 +5,12 @@
 @Email   : 914138410@qq.com
 """
 import torch
-from util.mnist import loader
+from util.data_util import loader
 from attempt.layer.gabor import Gabor2d
 from attempt.layer.cluster import Cluster
 from attempt.layer.output import Output
 from util.run_model import run_testing_cluster as run_testing
-from util.mnist import convert_label
+from util.data_util import convert_label
 import numpy as np
 
 EPOCH = 5

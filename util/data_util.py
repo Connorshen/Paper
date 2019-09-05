@@ -128,6 +128,11 @@ def show_image(image_arr):
 
 
 def convert_label(labels, digits):
+    """
+    :param labels: [3,8,3,6,8,8,3] shape(batch_size)
+    :param digits: [3,6,8]
+    :return: [0,2,0,1,2,2,0]
+    """
     for i in range(len(digits)):
         digit = digits[i]
         labels[labels == digit] = i
