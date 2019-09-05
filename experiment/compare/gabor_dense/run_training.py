@@ -10,6 +10,8 @@ from util.data_util import loader, convert_label
 from util.test_util import run_testing
 import torch
 from torch.nn import CrossEntropyLoss
+from experiment.static import config
+from os import path
 
 batch_size = 32
 digits = np.array([3, 5])
@@ -46,3 +48,5 @@ for e in range(epoch):
         if step % 100 == 0:
             loss, accuracy = run_testing(net, loss_func, test_loader, use_gpu, digits)
             print('Epoch: ', e, '| train loss: %.4f' % loss, '| test accuracy: %.4f' % accuracy)
+# 保存模型
+torch.save(net, path.join(config.MODEL_STATE_PATH, net.name))

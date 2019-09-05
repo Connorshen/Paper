@@ -9,6 +9,7 @@ from attempt.layer.gabor import Gabor2d
 
 
 class Net(Module):
+    name = "gabor_dense_net"
     def __init__(self, n_category):
         super(Net, self).__init__()
         self.conv1 = Sequential(  # input shape (1, 28, 28)
