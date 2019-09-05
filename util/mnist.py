@@ -112,7 +112,7 @@ def loader(batch_size=32, shuffle=True, flatten=True, one_hot=False, digits=np.a
     train_dataset = TensorDataset(torch.from_numpy(train_image), torch.from_numpy(train_label).long())
     test_dataset = TensorDataset(torch.from_numpy(test_image), torch.from_numpy(test_label).long())
     train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=shuffle)
-    test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=shuffle)
+    test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
     return train_loader, test_loader
 
 

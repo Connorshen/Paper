@@ -36,13 +36,13 @@ class Net(torch.nn.Module):
             ),  # output shape (16, 28, 28)
             torch.nn.MaxPool2d(kernel_size=2),  # choose max value in 2x2 area, output shape (16, 14, 14)
             torch.nn.ReLU(),  # activation
-            torch.nn.BatchNorm2d(16)
+            torch.nn.BatchNorm2d(16, track_running_stats=False)
         )
         self.conv2 = torch.nn.Sequential(  # input shape (16, 14, 14)
             Gabor2d(16, 8, 4, 5, 1, 2),  # output shape (32, 14, 14)
             torch.nn.ReLU(),  # activation
             torch.nn.MaxPool2d(2),  # output shape (32, 7, 7)
-            torch.nn.BatchNorm2d(32),
+            torch.nn.BatchNorm2d(32, track_running_stats=False),
             torch.nn.Sigmoid()
         )
         self.fc1 = torch.nn.Sequential(
