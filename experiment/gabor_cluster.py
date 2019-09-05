@@ -101,7 +101,7 @@ for e in range(EPOCH):
             label = b_label[i]
             cluster_output = b_cluster_output[i]
             cluster = net.cluster
-            weight = net.output.weight  # shape(10,n_features_cluster__layer)
+            weight = net.state_dict()["output.weight"]  # shape(10,n_features_cluster__layer)
             modify_weight = weight[predict, :]  # shape(n_features_cluster__layer)
             rand = torch.rand(modify_weight.shape)
             rand = rand.cuda() if torch.cuda.is_available() and USE_GPU else rand
@@ -113,16 +113,6 @@ for e in range(EPOCH):
                 modify_weight = modify_weight - LR * predict_prob * potential
             modify_weight[modify_weight < 0] = 0
             weight[predict, :] = modify_weight
-
-            del rand
-            del need_modify_weight
-            del potential
-            del modify_weight
-            del weight
-        del b_predict_prob
-        del b_predict
-        del b_reward
-        del cluster_weight
         if step % 10 == 0:
             loss, accuracy = run_testing(net, loss_func, test_loader, USE_GPU, DIGITS)
             print('Epoch: ', e, '| train loss: %.4f' % loss, '| test accuracy: %.4f' % accuracy)
