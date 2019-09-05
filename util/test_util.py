@@ -44,7 +44,7 @@ def run_testing_cluster(net, loss_func, test_loader, gpu=True, digits=np.arange(
             b_img = b_img.cuda()
             b_label = b_label.cuda()
         b_label = convert_label(b_label, digits)
-        b_output, b_cluster_output = net(b_img)
+        b_output, b_cluster_output = net(b_img)  # 这个地方跟上面那个不一样，多了个输出
         b_predict = torch.argmax(b_output, dim=1)
         outputs.append(b_output)
         labels.append(b_label)
