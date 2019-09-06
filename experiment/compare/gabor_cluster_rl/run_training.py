@@ -64,7 +64,9 @@ for e in range(epoch):
             modify_weight = weight[predict, :]  # shape(n_features_cluster__layer)
             rand = torch.rand(modify_weight.shape)
             rand = rand.cuda() if torch.cuda.is_available() and use_gpu else rand
+            # 权重值越大有越大的概论被改变
             need_modify_weight = (rand < modify_weight).float()
+            # 中间层值越大改变的值越大
             potential = torch.mul(cluster_output, need_modify_weight)  # shape(n_features_cluster__layer)
             if reward:
                 modify_weight = modify_weight + learning_rate * (reward - predict_prob) * potential
