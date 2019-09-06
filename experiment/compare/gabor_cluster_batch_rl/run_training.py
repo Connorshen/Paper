@@ -17,7 +17,6 @@ cluster_layer_weight_density = 0.01
 n_neuron_cluster = 10
 n_features_cluster_layer = 5000
 n_category = len(digits)
-learning_rate = 0.1  # 学习率
 synaptic_th = 0.8  # 中间层和输出层之间连接矩阵的突触阈值
 epoch = 5
 use_gpu = False
@@ -38,6 +37,28 @@ train_loader, test_loader = loader(batch_size=batch_size,
                                    digits=digits)
 # 损失函数
 loss_func = CrossEntropyLoss()
+
+
+def get_lr(b_label, b_cluster_output):
+    lr_map = dict()
+    for i in range(len(b_label)):
+        label = b_label[i]
+        label = int(label.numpy())
+        cluster_output = b_cluster_output[i]
+        if label in lr_map.keys():
+            lr_map[label].append(cluster_output)
+        else:
+            lr_map[label] = [cluster_output]
+    for label in lr_map.keys():
+        lr_map[label] = torch.mean(torch.stack(lr_map[label], dim=0), dim=0)
+    lr_list = []
+    for label in b_label:
+        label = int(label.numpy())
+        lr_list.append(lr_map[label])
+    lr = torch.stack(lr_list, dim=0)
+    return lr
+
+
 for e in range(epoch):
     # b开头的变量表示关于batch的变量
     for step, (b_img, b_label) in enumerate(train_loader):
@@ -54,6 +75,7 @@ for e in range(epoch):
         b_predict_prob, b_predict = torch.max(b_output, dim=1)
         b_reward = torch.zeros(batch_size)
         b_reward[b_predict == b_label] = 1
+        lr = get_lr(b_label, b_cluster_output)
         for i in range(batch_size):
             reward = b_reward[i]  # 奖励
             predict_prob = b_predict_prob[i]  # 预测的概率range(0,1)
@@ -69,9 +91,9 @@ for e in range(epoch):
             # 中间层值越大改变的值越大
             potential = torch.mul(cluster_output, need_modify_weight)  # shape(n_features_cluster__layer)
             if reward:
-                modify_weight = modify_weight + learning_rate * (reward - predict_prob) * potential
+                modify_weight = modify_weight + lr[i] * (reward - predict_prob) * potential
             else:
-                modify_weight = modify_weight - learning_rate * predict_prob * potential
+                modify_weight = modify_weight - lr[i] * predict_prob * potential
             modify_weight[modify_weight < 0] = 0
             weight[predict, :] = modify_weight
         if step % 100 == 0:
