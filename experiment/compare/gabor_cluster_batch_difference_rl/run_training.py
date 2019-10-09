@@ -41,10 +41,10 @@ loss_func = CrossEntropyLoss()
 
 def get_lr(labels, cluster_outputs):
     lr_map = dict()
-    for i in range(len(labels)):
-        lb = labels[i]
+    for index in range(len(labels)):
+        lb = labels[index]
         lb = int(lb.numpy())
-        out = cluster_outputs[i]
+        out = cluster_outputs[index]
         if lb in lr_map.keys():
             lr_map[lb].append(out)
         else:
