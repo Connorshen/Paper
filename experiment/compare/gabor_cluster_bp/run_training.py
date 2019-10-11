@@ -17,9 +17,9 @@ batch_size = 32
 digits = np.array([3, 5])
 cluster_layer_weight_density = 0.01
 n_neuron_cluster = 10
-n_features_cluster_layer = 5000
+n_features_cluster_layer = 50000
 n_category = len(digits)
-epoch = 5
+epoch = 10
 use_gpu = True
 # 构建模型
 net = Net(n_features_cluster_layer=n_features_cluster_layer,
