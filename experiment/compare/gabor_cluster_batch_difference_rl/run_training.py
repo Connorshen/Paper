@@ -40,21 +40,39 @@ loss_func = CrossEntropyLoss()
 
 
 def get_lr(labels, cluster_outputs):
-    lr_map = dict()
+    cluster_out_map = dict()
+    for lb in labels:
+        cluster_out_map[int(lb.numpy())] = {"self_percent": [],
+                                            "other_percent": [],
+                                            "cluster_out": [],
+                                            "cluster_out_sum": [],
+                                            "lr": 0,
+                                            "self_num": 0,
+                                            "other_num": 0}
     for index in range(len(labels)):
         lb = labels[index]
         lb = int(lb.numpy())
         out = cluster_outputs[index]
-        if lb in lr_map.keys():
-            lr_map[lb].append(out)
-        else:
-            lr_map[lb] = [out]
-    for lb in lr_map.keys():
-        lr_map[lb] = torch.mean(torch.stack(lr_map[lb], dim=0), dim=0)
+        cluster_out_map[lb]["cluster_out"].append(out)
+    for lb in cluster_out_map.keys():
+        cluster_out_map[lb]["self_num"] = len(cluster_out_map[lb]["cluster_out"])
+        cluster_out_map[lb]["other_num"] = batch_size - cluster_out_map[lb]["self_num"]
+        cluster_out_map[lb]["cluster_out"] = torch.stack(cluster_out_map[lb]["cluster_out"], dim=0)
+        cluster_out_map[lb]["cluster_out_sum"] = torch.sum(cluster_out_map[lb]["cluster_out"], dim=0)
+        cluster_out_map[lb]["self_percent"] = cluster_out_map[lb]["cluster_out_sum"] / cluster_out_map[lb]["self_num"]
+    for lb in cluster_out_map.keys():
+        other_out_sum_list = []
+        for other_lb in cluster_out_map.keys():
+            if other_lb != lb:
+                other_out_sum_list.append(cluster_out_map[other_lb]["cluster_out_sum"])
+        other_out_sum = torch.sum(torch.stack(other_out_sum_list, dim=0), dim=0)
+        cluster_out_map[lb]["other_percent"] = other_out_sum / cluster_out_map[lb]["other_num"]
+        diff = cluster_out_map[lb]["self_percent"] - cluster_out_map[lb]["other_percent"]
+        cluster_out_map[lb]["lr"] = 1 / (1 + torch.exp(-diff))
     lr_list = []
-    for lb in labels:
+    for lb in b_label:
         lb = int(lb.numpy())
-        lr_list.append(lr_map[lb])
+        lr_list.append(cluster_out_map[lb]["lr"])
     return torch.stack(lr_list, dim=0)
 
 
