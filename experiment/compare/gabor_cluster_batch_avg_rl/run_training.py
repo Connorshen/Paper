@@ -11,8 +11,8 @@ from util.test_util import run_testing_cluster as run_testing
 import torch
 from torch.nn import CrossEntropyLoss
 
-batch_size = 32
-digits = np.array([3, 5, 8])
+batch_size = 40
+digits = np.array([2, 3, 4])
 cluster_layer_weight_density = 0.01
 n_neuron_cluster = 10
 n_features_cluster_layer = 50000
