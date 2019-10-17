@@ -11,7 +11,7 @@ from experiment.layer.output import Output
 
 
 class Net(Module):
-    name = "gabor_cluster_rl_net"
+    name = "gabor_cluster_batch_diff_rl_net"
 
     def __init__(self,
                  n_features_cluster_layer,

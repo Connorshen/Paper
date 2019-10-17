@@ -49,4 +49,4 @@ for e in range(epoch):
             loss, accuracy = run_testing(net, loss_func, test_loader, use_gpu, digits)
             print('Epoch: ', e, '| train loss: %.4f' % loss, '| test accuracy: %.4f' % accuracy)
 # 保存模型
-# torch.save(net, path.join(config.MODEL_STATE_PATH, Net.name))
+torch.save(net, path.join(config.MODEL_STATE_PATH, Net.name))
