@@ -1,17 +1,20 @@
-from experiment.compare.gabor_bp.model import Net
-import torch
+from experiment.compare.gabor_cluster_bp.model import Net
 from util.data_util import loader, convert_label
 from torch.nn import CrossEntropyLoss
-from tqdm import tqdm
+import torch
 from sklearn.metrics import accuracy_score
+from tqdm import tqdm
 from experiment.trainer.base_trainer import BaseTrainer
 
 
-class CnnBpTrainer(BaseTrainer):
+class CnnClusterBpTrainer(BaseTrainer):
     def __init__(self,
                  batch_size,
                  digits,
                  epoch,
+                 cluster_layer_weight_density,
+                 n_neuron_cluster,
+                 n_features_cluster_layer,
                  use_gpu):
         super().__init__()
         self.batch_size = batch_size
@@ -19,7 +22,10 @@ class CnnBpTrainer(BaseTrainer):
         self.epoch = epoch
         self.use_gpu = use_gpu
         self.n_category = len(digits)
-        self.net = Net(n_category=self.n_category)
+        self.net = Net(n_features_cluster_layer=n_features_cluster_layer,
+                       n_neuron_cluster=n_neuron_cluster,
+                       cluster_layer_weight_density=cluster_layer_weight_density,
+                       n_category=self.n_category)
         if torch.cuda.is_available() and use_gpu:
             self.net = self.net.cuda()
         self.train_loader, self.test_loader = loader(batch_size=batch_size,
@@ -31,6 +37,8 @@ class CnnBpTrainer(BaseTrainer):
         self.loss_func = CrossEntropyLoss()
         # 优化器
         self.optimizer = torch.optim.Adam(self.net.parameters(), lr=1e-3)
+        self.loss_all = []
+        self.acc_all = []
 
     def run_training(self):
         self.loss_all = []

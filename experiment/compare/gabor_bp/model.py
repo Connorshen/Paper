@@ -9,7 +9,7 @@ from experiment.layer.gabor import Gabor2d
 
 
 class Net(Module):
-    name = "gabor_dense_net"
+    name = "gabor_bp_net"
 
     def __init__(self, n_category):
         super(Net, self).__init__()

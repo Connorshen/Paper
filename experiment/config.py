@@ -14,8 +14,11 @@ class Config:
     def __init__(self):
         self.ROOT = os.path.dirname(__file__)
         self.MODEL_STATE_PATH = os.path.join(self.ROOT, "model_state")
+        self.FIG_PATH = os.path.join(self.ROOT, "fig")
         self.verify_path()
 
     def verify_path(self):
         if os.path.exists(self.MODEL_STATE_PATH) is not True:
             os.mkdir(self.MODEL_STATE_PATH)
+        if os.path.exists(self.FIG_PATH) is not True:
+            os.mkdir(self.FIG_PATH)

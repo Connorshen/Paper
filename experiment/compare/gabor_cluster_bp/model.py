@@ -10,7 +10,7 @@ from experiment.layer.cluster import Cluster
 
 
 class Net(Module):
-    name = "gabor_cluster_dense_net"
+    name = "gabor_cluster_bp_net"
 
     def __init__(self,
                  n_features_cluster_layer,
