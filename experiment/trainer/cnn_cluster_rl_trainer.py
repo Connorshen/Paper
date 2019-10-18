@@ -3,7 +3,7 @@ import torch
 from util.data_util import loader, convert_label
 from torch.nn import CrossEntropyLoss
 from tqdm import tqdm
-from sklearn.metrics import accuracy_score
+from util.test_util import run_testing
 from experiment.trainer.base_trainer import BaseTrainer
 
 
@@ -17,7 +17,9 @@ class CnnClusterRlTrainer(BaseTrainer):
                  n_features_cluster_layer,
                  synaptic_th,
                  learning_rate,
-                 use_gpu):
+                 use_gpu,
+                 early_stopping_step,
+                 valid_interval_step):
         super().__init__()
         self.batch_size = batch_size
         self.digits = digits
@@ -25,6 +27,8 @@ class CnnClusterRlTrainer(BaseTrainer):
         self.use_gpu = use_gpu
         self.n_category = len(digits)
         self.learning_rate = learning_rate
+        self.early_stopping_step = early_stopping_step
+        self.valid_interval_step = valid_interval_step
         self.net = Net(n_features_cluster_layer=n_features_cluster_layer,
                        n_neuron_cluster=n_neuron_cluster,
                        cluster_layer_weight_density=cluster_layer_weight_density,
@@ -71,6 +75,8 @@ class CnnClusterRlTrainer(BaseTrainer):
     def run_training(self):
         self.loss_all = []
         self.acc_all = []
+        self.step_all = []
+        total_step = 0
         print(self.net)
         for e in tqdm(range(self.epoch)):
             for step, (b_img, b_label) in enumerate(self.train_loader):
@@ -86,8 +92,20 @@ class CnnClusterRlTrainer(BaseTrainer):
                 loss = self.loss_func(b_output, b_label)
                 # backward
                 self.update_weight(batch_size, b_predict, b_predict_prob, b_label, b_cluster_output)
-                acc = accuracy_score(b_label.data.cpu().numpy(), b_predict.data.cpu().numpy())
-                self.loss_all.append(float(loss.data.cpu().numpy()))
-                self.acc_all.append(acc)
+                if total_step % self.valid_interval_step == 0:
+                    loss, acc = run_testing(self.net,
+                                            self.loss_func,
+                                            self.test_loader,
+                                            self.use_gpu,
+                                            self.digits,
+                                            is_rl=True,
+                                            break_step=100)
+                    print('Epoch: ', e, '| train loss: %.4f' % loss, '| test accuracy: %.4f' % acc)
+                    self.loss_all.append(loss)
+                    self.acc_all.append(acc)
+                    self.step_all.append(total_step)
+                if total_step == self.early_stopping_step:
+                    break
+                total_step += 1
         self.plot()
         return self.loss_all, self.acc_all

@@ -10,7 +10,7 @@ import numpy as np
 from util.data_util import convert_label
 
 
-def run_testing(net, loss_func, test_loader, gpu=True, digits=np.arange(0, 10)):
+def run_testing(net, loss_func, test_loader, gpu=True, digits=np.arange(0, 10), is_rl=False, break_step=None):
     net.eval()
     outputs = []
     labels = []
@@ -20,16 +20,21 @@ def run_testing(net, loss_func, test_loader, gpu=True, digits=np.arange(0, 10)):
             b_img = b_img.cuda()
             b_label = b_label.cuda()
         b_label = convert_label(b_label, digits)
-        b_output = net(b_img)
+        if is_rl:
+            b_output, b_cluster_output = net(b_img)
+        else:
+            b_output = net(b_img)
         b_predict = torch.argmax(b_output, dim=1)
         outputs.append(b_output)
         labels.append(b_label)
         predictions.append(b_predict)
+        if break_step is not None and step == break_step:
+            break
     outputs = torch.cat(outputs, dim=0)
     labels = torch.cat(labels, dim=0)
     predictions = torch.cat(predictions, dim=0)
     loss = loss_func(outputs, labels)
-    loss = loss.data.cpu().numpy()
+    loss = float(loss.data.cpu().numpy())
     accuracy = accuracy_score(labels.data.cpu().numpy(), predictions.data.cpu().numpy())
     return loss, accuracy
 
