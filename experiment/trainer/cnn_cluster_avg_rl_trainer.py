@@ -1,4 +1,4 @@
-from experiment.compare.gabor_cluster_rl.model import Net
+from experiment.compare.gabor_cluster_batch_avg_rl.model import Net
 import torch
 from util.data_util import loader, convert_label
 from torch.nn import CrossEntropyLoss
@@ -7,7 +7,7 @@ from util.test_util import run_testing
 from experiment.trainer.base_trainer import BaseTrainer
 
 
-class CnnClusterRlTrainer(BaseTrainer):
+class CnnClusterAvgRlTrainer(BaseTrainer):
     def __init__(self,
                  batch_size,
                  digits,
@@ -16,7 +16,6 @@ class CnnClusterRlTrainer(BaseTrainer):
                  n_neuron_cluster,
                  n_features_cluster_layer,
                  synaptic_th,
-                 learning_rate,
                  use_gpu,
                  early_stopping_step,
                  valid_interval_step):
@@ -26,7 +25,6 @@ class CnnClusterRlTrainer(BaseTrainer):
         self.epoch = epoch
         self.use_gpu = use_gpu
         self.n_category = len(digits)
-        self.learning_rate = learning_rate
         self.early_stopping_step = early_stopping_step
         self.valid_interval_step = valid_interval_step
         self.net = Net(n_features_cluster_layer=n_features_cluster_layer,
@@ -48,14 +46,39 @@ class CnnClusterRlTrainer(BaseTrainer):
         self.loss_all = []
         self.acc_all = []
 
+    def get_lr(self, b_label, b_cluster_output):
+        lr_map = dict()
+        for i in range(len(b_label)):
+            label = b_label[i]
+            if torch.cuda.is_available() and self.use_gpu:
+                label = int(label.cpu().numpy())
+            else:
+                label = int(label.numpy())
+            cluster_output = b_cluster_output[i]
+            if label in lr_map.keys():
+                lr_map[label].append(cluster_output)
+            else:
+                lr_map[label] = [cluster_output]
+        for label in lr_map.keys():
+            lr_map[label] = torch.mean(torch.stack(lr_map[label], dim=0), dim=0)
+        lr_list = []
+        for label in b_label:
+            if torch.cuda.is_available() and self.use_gpu:
+                label = int(label.cpu().numpy())
+            else:
+                label = int(label.numpy())
+            lr_list.append(lr_map[label])
+        lr = torch.stack(lr_list, dim=0)
+        return lr
+
     def update_weight(self, batch_size, b_predict, b_predict_prob, b_label, b_cluster_output):
         b_reward = torch.zeros(batch_size)
         b_reward[b_predict == b_label] = 1
+        lr = self.get_lr(b_label, b_cluster_output)
         for i in range(batch_size):
             reward = b_reward[i]  # 奖励
             predict_prob = b_predict_prob[i]  # 预测的概率range(0,1)
             predict = b_predict[i]
-            label = b_label[i]
             cluster_output = b_cluster_output[i]
             weight = self.net.state_dict()["output.weight"]  # shape(10,n_features_cluster__layer)
             modify_weight = weight[predict, :]  # shape(n_features_cluster__layer)
@@ -66,9 +89,9 @@ class CnnClusterRlTrainer(BaseTrainer):
             # 中间层值越大改变的值越大
             potential = torch.mul(cluster_output, need_modify_weight)  # shape(n_features_cluster__layer)
             if reward:
-                modify_weight = modify_weight + self.learning_rate * (reward - predict_prob) * potential
+                modify_weight = modify_weight + lr[i] * (reward - predict_prob) * potential
             else:
-                modify_weight = modify_weight - self.learning_rate * predict_prob * potential
+                modify_weight = modify_weight - lr[i] * predict_prob * potential
             modify_weight[modify_weight < 0] = 0
             weight[predict, :] = modify_weight
 

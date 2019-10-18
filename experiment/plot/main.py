@@ -1,6 +1,8 @@
 from experiment.trainer.cnn_bp_trainer import CnnBpTrainer
 from experiment.trainer.cnn_cluster_bp_trainer import CnnClusterBpTrainer
 from experiment.trainer.cnn_cluster_rl_trainer import CnnClusterRlTrainer
+from experiment.trainer.cnn_cluster_avg_rl_trainer import CnnClusterAvgRlTrainer
+from experiment.trainer.cnn_cluster_diff_rl_trainer import CnnClusterDiffRlTrainer
 import numpy as np
 
 batch_size = 40
@@ -40,6 +42,28 @@ cnn_cluster_rl_trainer = CnnClusterRlTrainer(batch_size,
                                              use_gpu,
                                              early_stopping_step,
                                              valid_interval_step)
+cnn_cluster_avg_rl_trainer = CnnClusterAvgRlTrainer(batch_size,
+                                                    digits,
+                                                    epoch,
+                                                    cluster_layer_weight_density,
+                                                    n_neuron_cluster,
+                                                    n_features_cluster_layer,
+                                                    synaptic_th,
+                                                    use_gpu,
+                                                    early_stopping_step,
+                                                    valid_interval_step)
+cnn_cluster_diff_rl_trainer = CnnClusterDiffRlTrainer(batch_size,
+                                                      digits,
+                                                      epoch,
+                                                      cluster_layer_weight_density,
+                                                      n_neuron_cluster,
+                                                      n_features_cluster_layer,
+                                                      synaptic_th,
+                                                      use_gpu,
+                                                      early_stopping_step,
+                                                      valid_interval_step)
 cnn_bp_trainer.run_training()
-cnn_cluster_bp_trainer.run_training()
-cnn_cluster_rl_trainer.run_training()
+# cnn_cluster_bp_trainer.run_training()
+# cnn_cluster_rl_trainer.run_training()
+# cnn_cluster_avg_rl_trainer.run_training()
+# cnn_cluster_diff_rl_trainer.run_training()
