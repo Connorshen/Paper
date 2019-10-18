@@ -32,6 +32,6 @@ cnn_cluster_rl_trainer = CnnClusterRlTrainer(batch_size,
                                              synaptic_th,
                                              learning_rate,
                                              use_gpu)
-cnn_bp_trainer.run_training()
-cnn_cluster_bp_trainer.run_training()
+# cnn_bp_trainer.run_training()
+# cnn_cluster_bp_trainer.run_training()
 cnn_cluster_rl_trainer.run_training()

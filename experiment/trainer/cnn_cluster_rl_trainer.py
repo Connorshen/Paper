@@ -44,6 +44,30 @@ class CnnClusterRlTrainer(BaseTrainer):
         self.loss_all = []
         self.acc_all = []
 
+    def update_weight(self, batch_size, b_predict, b_predict_prob, b_label, b_cluster_output):
+        b_reward = torch.zeros(batch_size)
+        b_reward[b_predict == b_label] = 1
+        for i in range(batch_size):
+            reward = b_reward[i]  # 奖励
+            predict_prob = b_predict_prob[i]  # 预测的概率range(0,1)
+            predict = b_predict[i]
+            label = b_label[i]
+            cluster_output = b_cluster_output[i]
+            weight = self.net.state_dict()["output.weight"]  # shape(10,n_features_cluster__layer)
+            modify_weight = weight[predict, :]  # shape(n_features_cluster__layer)
+            rand = torch.rand(modify_weight.shape)
+            rand = rand.cuda() if torch.cuda.is_available() and self.use_gpu else rand
+            # 权重值越大有越大的概率被改变
+            need_modify_weight = (rand < modify_weight).float()
+            # 中间层值越大改变的值越大
+            potential = torch.mul(cluster_output, need_modify_weight)  # shape(n_features_cluster__layer)
+            if reward:
+                modify_weight = modify_weight + self.learning_rate * (reward - predict_prob) * potential
+            else:
+                modify_weight = modify_weight - self.learning_rate * predict_prob * potential
+            modify_weight[modify_weight < 0] = 0
+            weight[predict, :] = modify_weight
+
     def run_training(self):
         self.loss_all = []
         self.acc_all = []
@@ -58,32 +82,10 @@ class CnnClusterRlTrainer(BaseTrainer):
                 batch_size = len(b_label)
                 # forward
                 b_output, b_cluster_output = self.net(b_img)  # shape(batch_size,10)
-                cluster_weight = self.net.cluster.weight
+                b_predict_prob, b_predict = torch.max(b_output, dim=1)
                 loss = self.loss_func(b_output, b_label)
                 # backward
-                b_predict_prob, b_predict = torch.max(b_output, dim=1)
-                b_reward = torch.zeros(batch_size)
-                b_reward[b_predict == b_label] = 1
-                for i in range(batch_size):
-                    reward = b_reward[i]  # 奖励
-                    predict_prob = b_predict_prob[i]  # 预测的概率range(0,1)
-                    predict = b_predict[i]
-                    label = b_label[i]
-                    cluster_output = b_cluster_output[i]
-                    weight = self.net.state_dict()["output.weight"]  # shape(10,n_features_cluster__layer)
-                    modify_weight = weight[predict, :]  # shape(n_features_cluster__layer)
-                    rand = torch.rand(modify_weight.shape)
-                    rand = rand.cuda() if torch.cuda.is_available() and self.use_gpu else rand
-                    # 权重值越大有越大的概率被改变
-                    need_modify_weight = (rand < modify_weight).float()
-                    # 中间层值越大改变的值越大
-                    potential = torch.mul(cluster_output, need_modify_weight)  # shape(n_features_cluster__layer)
-                    if reward:
-                        modify_weight = modify_weight + self.learning_rate * (reward - predict_prob) * potential
-                    else:
-                        modify_weight = modify_weight - self.learning_rate * predict_prob * potential
-                    modify_weight[modify_weight < 0] = 0
-                    weight[predict, :] = modify_weight
+                self.update_weight(batch_size, b_predict, b_predict_prob, b_label, b_cluster_output)
                 acc = accuracy_score(b_label.data.cpu().numpy(), b_predict.data.cpu().numpy())
                 self.loss_all.append(float(loss.data.cpu().numpy()))
                 self.acc_all.append(acc)
