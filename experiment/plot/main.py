@@ -4,6 +4,7 @@ from experiment.trainer.cnn_cluster_rl_trainer import CnnClusterRlTrainer
 from experiment.trainer.cnn_cluster_avg_rl_trainer import CnnClusterAvgRlTrainer
 from experiment.trainer.cnn_cluster_diff_rl_trainer import CnnClusterDiffRlTrainer
 import numpy as np
+import torch
 
 batch_size = 40
 digits = np.array([2, 3, 4])
@@ -16,6 +17,9 @@ synaptic_th = 0.8  # 中间层和输出层之间连接矩阵的突触阈值
 use_gpu = True
 early_stopping_step = 100
 valid_interval_step = 2
+torch.manual_seed(1)
+torch.cuda.manual_seed(1)
+np.random.seed(1)
 cnn_bp_trainer = CnnBpTrainer(batch_size,
                               digits,
                               epoch,
@@ -63,7 +67,7 @@ cnn_cluster_diff_rl_trainer = CnnClusterDiffRlTrainer(batch_size,
                                                       early_stopping_step,
                                                       valid_interval_step)
 cnn_bp_trainer.run_training()
-# cnn_cluster_bp_trainer.run_training()
-# cnn_cluster_rl_trainer.run_training()
-# cnn_cluster_avg_rl_trainer.run_training()
-# cnn_cluster_diff_rl_trainer.run_training()
+cnn_cluster_bp_trainer.run_training()
+cnn_cluster_rl_trainer.run_training()
+cnn_cluster_avg_rl_trainer.run_training()
+cnn_cluster_diff_rl_trainer.run_training()
