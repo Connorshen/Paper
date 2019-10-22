@@ -14,13 +14,16 @@ from experiment.static import config
 from os import path
 
 batch_size = 40
-digits = np.array([2, 3, 4])
-cluster_layer_weight_density = 0.1
+digits = np.arange(10)
+cluster_layer_weight_density = np.arange(0.01, 0.11, 0.01, dtype=np.float)
 n_neuron_cluster = 10
 n_features_cluster_layer = 50000
 n_category = len(digits)
 epoch = 10
-use_gpu = True
+use_gpu = False
+torch.manual_seed(1)
+torch.cuda.manual_seed(1)
+np.random.seed(1)
 # 构建模型
 net = Net(n_features_cluster_layer=n_features_cluster_layer,
           n_neuron_cluster=n_neuron_cluster,

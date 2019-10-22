@@ -44,17 +44,24 @@ class Cluster(nn.Module):
         return cluster_layer_out
 
     @staticmethod
-    def sparse_to_dense(sp):
+    def sparse_to_dense(sp, size):
         row = torch.tensor(sp.row).view(1, -1)
         col = torch.tensor(sp.col).view(1, -1)
         indices = torch.cat([row, col])
         values = torch.tensor(sp.data)
-        dense = torch.sparse_coo_tensor(indices=indices, values=values, dtype=torch.float, requires_grad=False)
+        dense = torch.sparse_coo_tensor(indices=indices,
+                                        values=values,
+                                        dtype=torch.float,
+                                        requires_grad=False,
+                                        size=size)
         dense = dense.to_dense()
         return dense
 
     def build_sparse_weight(self, in_features, out_features, density):
-        weight = sparse.rand(out_features, in_features, density, dtype=np.float)
-        weight = self.sparse_to_dense(weight)
-        weight[weight != 0] = 1
+        weight_list = []
+        for i in range(in_features):
+            weight_one_in_sparse = sparse.rand(out_features, 1, np.random.choice(density), dtype=np.float)
+            weight_one_in = self.sparse_to_dense(weight_one_in_sparse, size=(out_features, 1))
+            weight_list.append(weight_one_in)
+        weight = torch.stack(weight_list, dim=1).view(out_features,in_features)
         return weight
