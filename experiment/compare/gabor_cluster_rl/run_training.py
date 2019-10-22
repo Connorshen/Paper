@@ -13,7 +13,7 @@ from torch.nn import CrossEntropyLoss
 
 batch_size = 40
 digits = np.array([2, 3, 4])
-cluster_layer_weight_density = 0.01
+cluster_layer_weight_density = [0.01]
 n_neuron_cluster = 10
 n_features_cluster_layer = 50000
 n_category = len(digits)
