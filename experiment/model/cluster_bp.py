@@ -4,21 +4,19 @@
 @Author  : 比尔丶盖子
 @Email   : 914138410@qq.com
 """
-from torch.nn import BatchNorm2d, ReLU, MaxPool2d, Module, Sequential, BatchNorm1d, Softmax, Sigmoid
+from torch.nn import Linear, BatchNorm2d, ReLU, MaxPool2d, Module, Sequential
 from experiment.layer.gabor import Gabor2d
 from experiment.layer.cluster import Cluster
-from experiment.layer.output import Output
 
 
 class Net(Module):
-    name = "gabor_cluster_batch_diff_rl_net"
+    name = "cluster_bp_net"
 
     def __init__(self,
                  n_features_cluster_layer,
                  n_neuron_cluster,
                  cluster_layer_weight_density,
-                 n_category,
-                 synaptic_th):
+                 n_category):
         super(Net, self).__init__()
         self.conv1 = Sequential(  # input shape (1, 28, 28)
             Gabor2d(
@@ -37,23 +35,15 @@ class Net(Module):
             Gabor2d(16, 8, 4, 5, 1, 2),  # output shape (32, 14, 14)
             MaxPool2d(2),  # output shape (32, 7, 7)
             BatchNorm2d(32),
-            Sigmoid()  # activation
+            ReLU()  # activation
         )
-        self.cluster = Cluster(32 * 7 * 7,
-                               n_features_cluster_layer,
-                               n_neuron_cluster,
-                               cluster_layer_weight_density)
-        self.output = Output(n_features_cluster_layer,
-                             n_category,
-                             synaptic_th)
-        self.prob = Sequential(BatchNorm1d(n_category),
-                               Softmax(dim=1))
+        self.cluster = Cluster(32 * 7 * 7, n_features_cluster_layer, n_neuron_cluster, cluster_layer_weight_density)
+        self.output = Linear(n_features_cluster_layer, n_category)
 
     def forward(self, x):
         x = self.conv1(x)
         x = self.conv2(x)
         x = x.view(x.size(0), -1)  # flatten the output of conv2 to (batch_size, 32 * 7 * 7)
-        cluster_out = self.cluster(x)
-        x = self.output(cluster_out)
-        x = self.prob(x)
-        return x, cluster_out
+        x = self.cluster(x)
+        x = self.output(x)
+        return x
