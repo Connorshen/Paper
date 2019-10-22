@@ -1,7 +1,5 @@
-from experiment.trainer.cnn_bp_trainer import CnnBpTrainer
 from experiment.trainer.cnn_cluster_bp_trainer import CnnClusterBpTrainer
 from experiment.trainer.cnn_cluster_rl_trainer import CnnClusterRlTrainer
-from experiment.trainer.cnn_cluster_avg_rl_trainer import CnnClusterAvgRlTrainer
 from experiment.trainer.cnn_cluster_diff_rl_trainer import CnnClusterDiffRlTrainer
 import numpy as np
 import torch
@@ -20,12 +18,7 @@ valid_interval_step = 2
 torch.manual_seed(1)
 torch.cuda.manual_seed(1)
 np.random.seed(1)
-cnn_bp_trainer = CnnBpTrainer(batch_size,
-                              digits,
-                              epoch,
-                              use_gpu,
-                              early_stopping_step,
-                              valid_interval_step)
+
 cnn_cluster_bp_trainer = CnnClusterBpTrainer(batch_size,
                                              digits,
                                              epoch,
@@ -46,16 +39,7 @@ cnn_cluster_rl_trainer = CnnClusterRlTrainer(batch_size,
                                              use_gpu,
                                              early_stopping_step,
                                              valid_interval_step)
-cnn_cluster_avg_rl_trainer = CnnClusterAvgRlTrainer(batch_size,
-                                                    digits,
-                                                    epoch,
-                                                    cluster_layer_weight_density,
-                                                    n_neuron_cluster,
-                                                    n_features_cluster_layer,
-                                                    synaptic_th,
-                                                    use_gpu,
-                                                    early_stopping_step,
-                                                    valid_interval_step)
+
 cnn_cluster_diff_rl_trainer = CnnClusterDiffRlTrainer(batch_size,
                                                       digits,
                                                       epoch,
@@ -66,8 +50,6 @@ cnn_cluster_diff_rl_trainer = CnnClusterDiffRlTrainer(batch_size,
                                                       use_gpu,
                                                       early_stopping_step,
                                                       valid_interval_step)
-cnn_bp_trainer.run_training()
 cnn_cluster_bp_trainer.run_training()
 cnn_cluster_rl_trainer.run_training()
-cnn_cluster_avg_rl_trainer.run_training()
 cnn_cluster_diff_rl_trainer.run_training()
