@@ -63,5 +63,6 @@ class Cluster(nn.Module):
             weight_one_in_sparse = sparse.rand(out_features, 1, np.random.choice(density), dtype=np.float)
             weight_one_in = self.sparse_to_dense(weight_one_in_sparse, size=(out_features, 1))
             weight_list.append(weight_one_in)
-        weight = torch.stack(weight_list, dim=1).view(out_features,in_features)
+        weight = torch.stack(weight_list, dim=1).view(out_features, in_features)
+        weight[weight != 0] = 1
         return weight

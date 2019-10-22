@@ -13,9 +13,9 @@ from torch.nn import CrossEntropyLoss
 from experiment.static import config
 from os import path
 
-batch_size = 40
+batch_size = 1000
 digits = np.arange(10)
-cluster_layer_weight_density = np.arange(0.01, 0.11, 0.01, dtype=np.float)
+cluster_layer_weight_density = np.arange(0.05, 0.11, 0.01, dtype=np.float)
 n_neuron_cluster = 10
 n_features_cluster_layer = 50000
 n_category = len(digits)

@@ -1,4 +1,4 @@
-from experiment.compare.gabor_cluster_batch_difference_rl.model import Net
+from experiment.model.cluster_diff_rl import Net
 import torch
 from util.data_util import loader, convert_label
 from torch.nn import CrossEntropyLoss
