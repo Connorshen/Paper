@@ -3,6 +3,8 @@ import numpy as np
 import pickle
 from tqdm import tqdm
 import warnings
+from torch.utils.data import DataLoader, TensorDataset
+import torch
 
 warnings.filterwarnings("ignore")
 
@@ -35,14 +37,18 @@ def convert_data():
     fw.close()
 
 
-def load_data():
+def loader(batch_size, shuffle):
     fr = open("../filterdata/data_all.pkl", "rb")
     data_dict = pickle.load(fr)
     train_data = data_dict["train_data"]
     train_label = data_dict["train_label"]
     test_data = data_dict["test_data"]
     test_label = data_dict["test_label"]
-    return train_data, train_label, test_data, test_label
+    train_dataset = TensorDataset(torch.from_numpy(train_data).float(), torch.from_numpy(train_label).long())
+    test_dataset = TensorDataset(torch.from_numpy(test_data).float(), torch.from_numpy(test_label).long())
+    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=shuffle)
+    test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=shuffle)
+    return train_loader, test_loader
 
 
 if __name__ == '__main__':
