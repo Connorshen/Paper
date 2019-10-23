@@ -20,16 +20,13 @@ class Net(Module):
 
     def __init__(self, n_category):
         super(Net, self).__init__()
-        self.dense1 = Sequential(Linear(in_features=2560, out_features=1000),
+        self.dense1 = Sequential(Linear(in_features=2560, out_features=100),
                                  ReLU())
-        self.dense2 = Sequential(Linear(in_features=1000, out_features=100),
-                                 ReLU())
-        self.dense3 = Sequential(Linear(in_features=100, out_features=n_category))
+        self.dense2 = Sequential(Linear(in_features=100, out_features=n_category))
 
     def forward(self, x):
         x = self.dense1(x)
         x = self.dense2(x)
-        x = self.dense3(x)
         return x
 
 
