@@ -52,6 +52,9 @@ for i=1:epoch
             net.weight_out(b_predict(1,k), :) = modify_weight;
             net.weight_filter_out(b_predict(1,k), :) = net.weight_out(b_predict(1,k), :)>init_para.synaptic_th;
         end
-        sprintf("%.2f %.2f",mean(b_reward),mean(b_predict_prob))
+        if rem(j,1)==0
+            acc = run_testing(init_para,net,test_img,test_label);
+            disp(acc);
+        end
     end
 end
