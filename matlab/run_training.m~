@@ -1,0 +1,7 @@
+clear all
+load("test.mat")
+load("train.mat")
+
+init_para = init_paramter();
+% net = init_net(init_para);
+n_batch = length(train_img);

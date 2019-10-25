@@ -1,0 +1,15 @@
+function init_para = init_paramter()
+
+init_para.batch_size = 32;
+init_para.epoch=1;
+init_para.digits = 0:3; 
+
+init_para.in_features_cpl = 1568;
+init_para.out_features_cpl = 50000;
+init_para.n_neuron_cluster = 10;
+init_para.n_category = length(init_para.digits);
+
+init_para.weight_density_cpl = 0.01;
+init_para.learning_rate = 0.1;
+init_para.gain_decision = 0.01;
+init_para.synaptic_th = 0.8;
