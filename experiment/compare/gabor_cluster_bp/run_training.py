@@ -14,10 +14,10 @@ from experiment.static import config
 from os import path
 
 batch_size = 40
-digits = np.arange(5)
-cluster_layer_weight_density = np.arange(0.05, 0.11, 0.01, dtype=np.float)
+digits = np.arange(10)
+cluster_layer_weight_density = 0.01
 n_neuron_cluster = 10
-n_features_cluster_layer = 50000
+n_features_cluster_layer = 100000
 n_category = len(digits)
 epoch = 10
 use_gpu = False

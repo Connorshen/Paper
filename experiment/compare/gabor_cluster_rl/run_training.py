@@ -11,16 +11,16 @@ from util.test_util import run_testing_cluster as run_testing
 import torch
 from torch.nn import CrossEntropyLoss
 
-batch_size = 40
-digits = np.array([2, 3, 4])
-cluster_layer_weight_density = [0.01]
-n_neuron_cluster = 10
-n_features_cluster_layer = 50000
+batch_size = 20
+digits = np.arange(10)
+cluster_layer_weight_density = 0.01
+n_neuron_cluster = 4
+n_features_cluster_layer = 40000
 n_category = len(digits)
 learning_rate = 0.1  # 学习率
 synaptic_th = 0.8  # 中间层和输出层之间连接矩阵的突触阈值
-epoch = 5
-use_gpu = True
+epoch = 1
+use_gpu = False
 # 构建模型
 net = Net(n_features_cluster_layer=n_features_cluster_layer,
           n_neuron_cluster=n_neuron_cluster,
@@ -62,12 +62,19 @@ for e in range(epoch):
             cluster_output = b_cluster_output[i]
             weight = net.state_dict()["output.weight"]  # shape(10,n_features_cluster__layer)
             modify_weight = weight[predict, :]  # shape(n_features_cluster__layer)
-            rand = torch.rand(modify_weight.shape)
-            rand = rand.cuda() if torch.cuda.is_available() and use_gpu else rand
+            rand_potential = torch.rand(modify_weight.shape)
+            rand_potential = rand_potential.cuda() if torch.cuda.is_available() and use_gpu else rand_potential
             # 权重值越大有越大的概率被改变
-            need_modify_weight = (rand < modify_weight).float()
+            need_modify_weight = (rand_potential < modify_weight).float()
             # 中间层值越大改变的值越大
             potential = torch.mul(cluster_output, need_modify_weight)  # shape(n_features_cluster__layer)
+            # # 1%的压制
+            # rand_depress = torch.rand(modify_weight.shape)
+            # rand_depress = rand_depress.cuda() if torch.cuda.is_available() and use_gpu else rand_depress
+            # need_depress = (rand_depress < 0.01).float()
+            # no_activate = cluster_output * 0
+            # no_activate[cluster_output == 0] = 1
+            # depress = torch.mul(no_activate, need_depress)  # shape(n_features_cluster__layer)
             if reward:
                 modify_weight = modify_weight + learning_rate * (reward - predict_prob) * potential
             else:
