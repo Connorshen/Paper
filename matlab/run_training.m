@@ -1,12 +1,12 @@
 clear all
-load("test.mat")
-load("train.mat")
 
 init_para = init_paramter();
 net = init_net(init_para);
+[train_img,train_label,test_img,test_label] = load_data(init_para.digits);
 n_batch = idivide(int32(length(train_img)),int32(init_para.batch_size),"ceil");
 batch_size = init_para.batch_size;
 epoch = init_para.epoch;
+
 for i=1:epoch
     for j=1:n_batch
         start_index = (j-1)*batch_size+1;
@@ -50,8 +50,8 @@ for i=1:epoch
             end
             modify_weight = max(modify_weight, 0);
             net.weight_out(b_predict(1,k), :) = modify_weight;
-            net.weight_filter_out(find(net.weight_out>init_para.synaptic_th)) = 1;
+            net.weight_filter_out(b_predict(1,k), :) = net.weight_out(b_predict(1,k), :)>init_para.synaptic_th;
         end
-        disp(mean(b_reward))
+        sprintf("%.2f %.2f",mean(b_reward),mean(b_predict_prob))
     end
 end

@@ -1,0 +1,4 @@
+function [train_img,train_label,test_img,test_label] = load_data(digits)
+load("test.mat")
+load("train.mat")
+
