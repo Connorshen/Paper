@@ -2,7 +2,7 @@ function init_para = init_paramter()
 
 init_para.batch_size = 32;
 init_para.epoch=1;
-init_para.digits = 0:3; 
+init_para.digits = 0:9; 
 
 init_para.in_features_cpl = 1568;
 init_para.out_features_cpl = 50000;
