@@ -1,4 +1,4 @@
-function acc = run_testing(init_para,net,test_img,test_label)
+function acc = run_testing(init_para,net,test_img,test_label,early_stopping)
 n_batch = idivide(int32(length(test_img)),int32(init_para.batch_size),"ceil");
 batch_size = init_para.batch_size;
 reward_all = [];
@@ -25,5 +25,8 @@ for j=1:n_batch
     b_reward = zeros(size(b_digit_category));
     b_reward(b_digit_category==batch_label)=1;
     reward_all = [reward_all;b_reward'];
+    if j==early_stopping
+        break
+    end
 end
 acc = mean(reward_all);

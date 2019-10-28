@@ -1,4 +1,6 @@
-clear all
+close all
+clc
+clear
 
 init_para = init_paramter();
 net = init_net(init_para);
@@ -53,7 +55,7 @@ for i=1:epoch
             net.weight_filter_out(b_predict(1,k), :) = net.weight_out(b_predict(1,k), :)>init_para.synaptic_th;
         end
         if rem(j,1)==0
-            acc = run_testing(init_para,net,test_img,test_label);
+            acc = run_testing(init_para,net,test_img,test_label,10);
             disp(acc);
         end
     end
