@@ -3,6 +3,7 @@ from tqdm import tqdm
 import h5py
 import scipy.io as scio
 import warnings
+from sklearn.utils import shuffle
 
 warnings.filterwarnings("ignore")
 digits = np.arange(10)
@@ -23,6 +24,8 @@ train_data = np.vstack(train_data)
 train_label = np.reshape(np.squeeze(np.vstack(train_label), axis=1), (-1, 1))
 test_data = np.vstack(test_data)
 test_label = np.reshape(np.squeeze(np.vstack(test_label), axis=1), (-1, 1))
+train_data, train_label = shuffle(train_data, train_label)
+test_data, test_label = shuffle(test_data, test_label)
 train_dict = {"train_img": train_data, "train_label": train_label}
 test_dict = {"test_img": test_data, "test_label": test_label}
 scio.savemat("train_origin.mat", train_dict)

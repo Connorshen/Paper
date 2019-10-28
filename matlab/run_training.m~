@@ -8,7 +8,7 @@ net = init_net(init_para);
 n_batch = idivide(int32(length(train_img)),int32(init_para.batch_size),"ceil");
 batch_size = init_para.batch_size;
 epoch = init_para.epoch;
-train_result = zeros(n_batch*epoch,2);
+train_result = zeros(n_batch*epoch,4);
 step_all = 1;
 for i=1:epoch
     for j=1:n_batch
@@ -43,12 +43,11 @@ for i=1:epoch
             % shape(1,out_features_cpl)
             modify_weight = net.weight_out(b_predict(1,k), :);  % which synapses will be updated
             % shape(1,out_features_cpl)
-            need_modify_weight = rand(1,init_para.out_features_cpl)<modify_weight;
+            need_modify_weight = rand(1,length(modify_weight))<modify_weight;
             % shape(1,out_features_cpl)
             potential = output_cpl(:,k)'.* need_modify_weight;
-            depress = ~output_cpl(:,k)'.* (rand(1,init_para.out_features_cpl)<0.01);
             if reward
-                modify_weight = modify_weight + init_para.learning_rate*(reward - predict_prob)*(potential-depress);
+                modify_weight = modify_weight + init_para.learning_rate*(reward - predict_prob)*potential;
             else
                 modify_weight = modify_weight - init_para.learning_rate*predict_prob*potential;
             end
@@ -56,10 +55,9 @@ for i=1:epoch
             net.weight_out(b_predict(1,k), :) = modify_weight;
             net.weight_filter_out(b_predict(1,k), :) = net.weight_out(b_predict(1,k), :)>init_para.synaptic_th;
         end
-        train_result(step_all,:) = [mean(b_reward),mean(b_predict_prob)];
-        if rem(step_all,60)==0 && step_all>0
-            % acc = run_testing(init_para,net,test_img,test_label,10);
-            acc = mean(train_result(step_all-60+1:step_all,1));
+        train_result(step_all,:) = [rewarddouble(acc),double(batch_size)*double(j)/double(length(train_img))];
+        if rem(step_all,60)==0
+            acc = run_testing(init_para,net,test_img,test_label,10);
             sprintf("epoch:%d| step_all:%d| acc:%.4f",i,step_all,acc)
         end
         step_all = step_all+1;

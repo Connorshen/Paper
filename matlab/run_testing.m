@@ -1,6 +1,6 @@
 function acc = run_testing(init_para,net,test_img,test_label,early_stopping)
 n_batch = idivide(int32(length(test_img)),int32(init_para.batch_size),"ceil");
-batch_size = init_para.batch_size;
+batch_size = 100;
 reward_all = [];
 for j=1:n_batch
     start_index = (j-1)*batch_size+1;
