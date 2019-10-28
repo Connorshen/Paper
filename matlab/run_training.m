@@ -1,5 +1,4 @@
 close all
-clc
 clear
 
 init_para = init_paramter();
@@ -25,7 +24,7 @@ for i=1:epoch
         %shape(out_features_cpl,batch_size)
         input_cpl = net.weight_cpl*batch_img;
         %shape(out_features_cpl,batch_size)
-        output_cpl = set_activity(input_cpl,init_para);
+        output_cpl = set_activity(input_cpl,init_para,net);
         %shape(n_category,batch_size)
         batch_out = net.weight_filter_out * output_cpl;
         %shape(n_category,batch_size)
@@ -60,7 +59,8 @@ for i=1:epoch
         if rem(step_all,60)==0 && step_all>0
             % acc = run_testing(init_para,net,test_img,test_label,10);
             acc = mean(train_result(step_all-60+1:step_all,1));
-            sprintf("epoch:%d| step_all:%d| acc:%.4f",i,step_all,acc)
+            prob = mean(train_result(step_all-60+1:step_all,2));
+            sprintf("epoch:%d | step_all:%d | acc:%.4f | prob:%.4f",i,step_all,acc,prob)
         end
         step_all = step_all+1;
     end

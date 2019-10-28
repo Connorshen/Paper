@@ -1,4 +1,6 @@
 function net = init_net(init_para)
+% cpl随机组合索引
+net.rand_group_index_cpl = randperm(init_para.out_features_cpl);
 %设置输入层和CPL之间的权重
 % shape(out_features_cpl,in_features_cpl)
 % net.weight_cpl = full(sprandn(init_para.out_features_cpl, init_para.in_features_cpl,init_para.weight_density_cpl));

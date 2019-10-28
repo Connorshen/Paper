@@ -17,8 +17,7 @@ init_para.numNeurons_decision = 10;
 init_para.prob_input_CPL = 0.01;
 init_para.hprob_input_CPL = 0.001:0.001:0.01;
 
-init_para.diff_th = 0.1;
-init_para.learning_rate = 0.5;
+init_para.learning_rate = 0.1;
 init_para.gain_decision = 0.01;
 init_para.synaptic_th = 0.8;
 init_para.potential_prob = 0.95;
