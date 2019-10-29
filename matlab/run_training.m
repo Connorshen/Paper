@@ -9,6 +9,7 @@ batch_size = init_para.batch_size;
 epoch = init_para.epoch;
 train_result = zeros(n_batch*epoch,2);
 step_all = 1;
+
 for i=1:epoch
     for j=1:n_batch
         start_index = (j-1)*batch_size+1;
@@ -55,7 +56,7 @@ for i=1:epoch
             net.weight_out(b_predict(1,k), :) = modify_weight;
             net.weight_filter_out(b_predict(1,k), :) = net.weight_out(b_predict(1,k), :)>init_para.synaptic_th;
         end
-        train_result(step_all,:) = [mean(b_reward),mean(b_predict_prob)];
+        train_result(step_all,:) = [b_reward,b_predict_prob];
         if rem(step_all,60)==0 && step_all>0
             % acc = run_testing(init_para,net,test_img,test_label,10);
             acc = mean(train_result(step_all-60+1:step_all,1));

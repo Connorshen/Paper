@@ -8,6 +8,7 @@ training_result = [];
 trials_round = init_para.trials_round;
 step_all = 1;
 
+
 for i = 1:init_para.num_rounds
     disp('the round training...')
     disp(i)
@@ -58,7 +59,7 @@ for i = 1:init_para.num_rounds
         network_init.weightFilter_CPL_decision(ind_decision, :) = network_init.weight_CPL_decision(ind_decision, :)>init_para.synaptic_th; 
         
         % list results
-        result_round(j, :) = [label, digit_decision, reward, prob_decision];
+        result_round(j, :) = [double(label), digit_decision, reward, prob_decision];
         step_all = step_all +1;
     end
     disp('training result in a round...');
