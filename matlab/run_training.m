@@ -60,7 +60,7 @@ for i=1:epoch
             % acc = run_testing(init_para,net,test_img,test_label,10);
             acc = mean(train_result(step_all-60+1:step_all,1));
             prob = mean(train_result(step_all-60+1:step_all,2));
-            sprintf("epoch:%d | step_all:%d | acc:%.4f | prob:%.4f",i,step_all,acc,prob)
+            sprintf("epoch:%d | step:%d | acc:%.4f | prob:%.4f",i,step_all/60,acc,prob)
         end
         step_all = step_all+1;
     end

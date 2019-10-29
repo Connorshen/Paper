@@ -4,7 +4,7 @@ function [training_result, network_trained] = run_training( network_init,  init_
 training_result = [];
 
 % get all training data set
-[train_img,train_label,test_img,test_label] = load_data(init_para.digit_label);
+[train_img,train_label,~,~] = load_data(init_para.digit_label);
 trials_round = init_para.trials_round;
 step_all = 1;
 

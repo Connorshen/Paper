@@ -1,17 +1,16 @@
 function testing_result = run_testing( network_trained, init_para)
 
 % get all training data set
-[ind_digit_data, digit_data] = get_filterdata(init_para.digit_label, 'test');
-num_digit_data = size(ind_digit_data, 1);
+[~,~,test_img,test_label] = load_data(init_para.digit_label);
+num_digit_data = size(test_img, 1);
 
-testing_result = zeros(num_digit_data, 5);
+testing_result = zeros(num_digit_data, 4);
 
 disp('start testing...')
 for j = 1:num_digit_data
     
-    label = ind_digit_data(j, 1);
-    ind_label = ind_digit_data(j, 2);
-    digit_img  = digit_data(ind_label,:)';
+    label = test_label(j, 1);
+    digit_img  = test_img(j,:)';
 
     input_CPL = network_trained.weight_input_CPL * digit_img;
     output_CPL = set_activity_CPL(input_CPL, network_trained.weight_recurrent_CPL, [init_para.numNeurons_CPL,init_para.numNeurons_cluster, init_para.flag_sparse, init_para.diff_th]);
@@ -27,7 +26,7 @@ for j = 1:num_digit_data
         reward = 0;
     end
     
-    testing_result(j, :) = [ind_label, label, digit_decision, reward, prob_decision];
+    testing_result(j, :) = [label, digit_decision, reward, prob_decision];
     
     if reward == 0
         show_error_image(init_para, testing_result(j, :))

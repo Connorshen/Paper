@@ -1,6 +1,6 @@
 function acc = run_testing(init_para,net,test_img,test_label,early_stopping)
 n_batch = idivide(int32(length(test_img)),int32(init_para.batch_size),"ceil");
-batch_size = 100;
+batch_size = 20;
 reward_all = [];
 for j=1:n_batch
     start_index = (j-1)*batch_size+1;
@@ -15,7 +15,7 @@ for j=1:n_batch
     %shape(out_features_cpl,batch_size)
     input_cpl = net.weight_cpl*batch_img;
     %shape(out_features_cpl,batch_size)
-    output_cpl = set_activity(input_cpl,init_para);
+    output_cpl = set_activity(input_cpl,init_para,net);
     %shape(n_category,batch_size)
     batch_out = net.weight_filter_out * output_cpl;
     %shape(n_category,batch_size)
