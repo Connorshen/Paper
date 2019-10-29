@@ -18,5 +18,5 @@ testing_result = run_testing( network_trained, init_para);
 if init_para.flag_saveresult
     results.network_trained = network_trained;
     results.init_para = init_para;
-    save('results_trained_0_9_p98.mat', 'results');
+    save('results_trained_0_9_p98_01.mat', 'results');
 end
