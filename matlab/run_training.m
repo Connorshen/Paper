@@ -1,11 +1,13 @@
 function run_training(init_para,net)
 
-[train_img,train_label,test_img,test_label] = load_data(init_para.digits,0.1);
+[train_img,train_label,test_img,test_label] = load_data(init_para.digits,0.01);
+disp("load data success");
 train_len = size(train_img,1);
 epoch = init_para.epoch;
 % step reward prob verify_acc
 check_points = zeros(train_len*epoch,4);
 verify_step = init_para.verify_step;
+fprintf("train_len:%d \n",train_len)
 for i=1:epoch
     for j=1:train_len
         % img,label
@@ -42,7 +44,7 @@ for i=1:epoch
             % acc = mean(check_points(start_index:end_index,2));
             prob = mean(check_points(start_index:end_index,3));
             check_points(j,4)=acc;
-            sprintf("epoch:%d | step:%d | acc:%.4f | prob:%.4f",i,j,acc,prob)
+            fprintf("epoch:%d | step:%d | acc:%.4f | prob:%.4f\n",i,j,acc,prob)
         end
     end
     save("check_points","check_points")
