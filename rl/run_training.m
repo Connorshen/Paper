@@ -1,6 +1,6 @@
 function run_training(init_para,net)
 
-[train_img,train_label,test_img,test_label] = load_data(init_para.digits,0.01);
+[train_img,train_label,test_img,test_label] = load_data(init_para.digits,0.1);
 disp("load data success");
 train_len = size(train_img,1);
 epoch = init_para.epoch;
@@ -40,7 +40,7 @@ for i=1:epoch
         if rem(j,verify_step)==0
             start_index = j-verify_step+1;
             end_index = j;
-            acc = run_testing(net,init_para,test_img,test_label,-1);
+            acc = run_testing(net,init_para,test_img,test_label,10);
             % acc = mean(check_points(start_index:end_index,2));
             prob = mean(check_points(start_index:end_index,3));
             check_points(j,4)=acc;
