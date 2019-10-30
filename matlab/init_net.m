@@ -1,10 +1,7 @@
 function net = init_net(init_para)
 % cpl随机组合索引
 net.rand_group_index_cpl = randperm(init_para.out_features_cpl);
-%设置输入层和CPL之间的权重
-% shape(out_features_cpl,in_features_cpl)
-% net.weight_cpl = full(sprandn(init_para.out_features_cpl, init_para.in_features_cpl,init_para.weight_density_cpl));
-
+%设置输入层和CPL之间的权重，会生成一个非均匀稀疏矩阵
 
 net.weight_cpl = zeros(init_para.out_features_cpl, init_para.in_features_cpl);
 num_prob = numel(init_para.sparse_prob);
@@ -17,7 +14,6 @@ for i = 1:init_para.n_neuron_cluster:init_para.out_features_cpl
     end
 end
 net.weight_cpl(net.weight_cpl~=0) = 1;
-
 
 %设置CPL和输出层之间的权重
 % shape(n_category,out_features_cpl)
