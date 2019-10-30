@@ -38,9 +38,10 @@ for i=1:epoch
         if rem(j,verify_step)==0
             start_index = j-verify_step+1;
             end_index = j;
-            acc = run_testing(init_para,net,test_img,test_label,-1);
+            acc = run_testing(net,init_para,test_img,test_label,-1);
             % acc = mean(check_points(start_index:end_index,2));
             prob = mean(check_points(start_index:end_index,3));
+            check_points(j,4)=acc;
             sprintf("epoch:%d | step:%d | acc:%.4f | prob:%.4f",i,j,acc,prob)
         end
     end
