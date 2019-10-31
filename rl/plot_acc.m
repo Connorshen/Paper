@@ -6,7 +6,7 @@ verify_acc = check_points(:,4);
 verify_step = step(verify_acc~=0);
 verify_acc = verify_acc(verify_acc~=0);
 % train_acc
-train_interval = 40;
+train_interval = 1000;
 train_len = int32(size(check_points,1));
 n_batch = idivide(train_len,train_interval,"ceil");
 train_step = zeros(n_batch,1);
