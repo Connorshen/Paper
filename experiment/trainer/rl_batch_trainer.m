@@ -1,17 +1,18 @@
-function run_training(init_para,net)
+function [check_points,best_train_result] = rl_batch_trainer(init_para,net,data,test_early_stopping)
 
-[train_img,train_label,test_img,test_label] = load_data(init_para.digits,0.1);
-disp("load data success");
+train_img = data.train_img;
+train_label = data.train_label;
 train_len = size(train_img,1);
 epoch = init_para.epoch;
-n_digit = length(init_para.digits);
 % step reward prob verify_acc
 check_points = zeros(train_len*epoch,4);
 verify_step = init_para.verify_step;
 get_lr_step = init_para.get_lr_step;
 fprintf("train_len:%d \n",train_len)
+best_net = net;
+best_acc = -inf;
 for i=1:epoch
-    learning_rate = init_para.learning_rate;
+    learning_rate = init_para.learning_rate_batch;
     for j=1:train_len
         % img,label
         batch_img = train_img(j,:)';
@@ -45,11 +46,15 @@ for i=1:epoch
         if rem(j,verify_step)==0
             start_index = j-verify_step+1;
             end_index = j;
-            acc = run_testing(net,init_para,test_img,test_label,10);
+            acc = run_testing(net,init_para,data,test_early_stopping);
             % acc = mean(check_points(start_index:end_index,2));
             prob = mean(check_points(start_index:end_index,3));
             check_points(j,4)=acc;
             fprintf("epoch:%d | step:%d | acc:%.4f | prob:%.4f\n",i,j,acc,prob)
+            if best_acc<acc
+                best_acc = acc;
+                best_net = net;
+            end
         end
         % 更新学习率
         if rem(j,get_lr_step)==0
@@ -58,3 +63,5 @@ for i=1:epoch
     end
     save("check_points","check_points")
 end
+best_train_result.net = best_net;
+best_train_result.init_para = init_para;

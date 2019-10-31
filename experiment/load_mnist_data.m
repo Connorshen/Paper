@@ -1,4 +1,4 @@
-function [train_img,train_label,test_img,test_label] = load_data(digits,ratio)
+function data = load_mnist_data(digits,ratio)
 load("test_origin.mat")
 load("train_origin.mat")
 train_img = double(train_img);
@@ -21,3 +21,7 @@ if ratio>0
     test_img = test_img(1:int32(test_len*ratio),:);
     test_label = test_label(1:int32(test_len*ratio),:);
 end
+data.train_img=train_img;
+data.train_label=train_label;
+data.test_img=test_img;
+data.test_label=test_label;

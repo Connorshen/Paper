@@ -1,7 +1,7 @@
-function [check_points,best_train_result] = rl_trainer(init_para,net,data_ratio,test_early_stopping)
+function [check_points,best_train_result] = rl_trainer(init_para,net,data,test_early_stopping)
 
-[train_img,train_label,test_img,test_label] = load_data(init_para.digits,data_ratio);
-disp("load data success");
+train_img = data.train_img;
+train_label = data.train_label;
 train_len = size(train_img,1);
 epoch = init_para.epoch;
 % step reward prob verify_acc
@@ -42,7 +42,7 @@ for i=1:epoch
         if rem(j,verify_step)==0
             start_index = j-verify_step+1;
             end_index = j;
-            acc = run_testing(net,init_para,test_img,test_label,test_early_stopping);
+            acc = run_testing(net,init_para,data,test_early_stopping);
             % acc = mean(check_points(start_index:end_index,2));
             prob = mean(check_points(start_index:end_index,3));
             check_points(j,4)=acc;
