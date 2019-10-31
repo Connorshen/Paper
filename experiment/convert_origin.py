@@ -12,11 +12,11 @@ train_label = []
 test_data = []
 test_label = []
 for digit in tqdm(digits):
-    file_name = "../filterdata/digit{0}.mat".format(digit)
+    file_name = "filterdata/digit{0}.mat".format(digit)
     data = h5py.File(file_name)["D_filtered"][:].T
     train_data.append(data)
     train_label.append(np.expand_dims(np.array([digit] * len(data)), axis=1))
-    file_name = "../filterdata/test{0}.mat".format(digit)
+    file_name = "filterdata/test{0}.mat".format(digit)
     data = h5py.File(file_name)["D_filtered"][:].T
     test_data.append(data)
     test_label.append(np.expand_dims(np.array([digit] * len(data)), axis=1))

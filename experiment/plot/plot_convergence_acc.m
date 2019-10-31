@@ -1,5 +1,5 @@
-function plot_acc()
-load("check_points");
+function plot_convergence_acc(file_name)
+load(file_name);
 step = check_points(:,1);
 % verify_acc
 verify_acc = check_points(:,4);

@@ -1,6 +1,6 @@
-function run_training(init_para,net)
+function [check_points,best_train_result] = rl_trainer(init_para,net,data_ratio,test_early_stopping)
 
-[train_img,train_label,test_img,test_label] = load_data(init_para.digits,1);
+[train_img,train_label,test_img,test_label] = load_data(init_para.digits,data_ratio);
 disp("load data success");
 train_len = size(train_img,1);
 epoch = init_para.epoch;
@@ -8,6 +8,8 @@ epoch = init_para.epoch;
 check_points = zeros(train_len*epoch,4);
 verify_step = init_para.verify_step;
 fprintf("train_len:%d \n",train_len)
+best_net = net;
+best_acc = -inf;
 for i=1:epoch
     for j=1:train_len
         % img,label
@@ -40,12 +42,17 @@ for i=1:epoch
         if rem(j,verify_step)==0
             start_index = j-verify_step+1;
             end_index = j;
-            acc = run_testing(net,init_para,test_img,test_label,-1);
+            acc = run_testing(net,init_para,test_img,test_label,test_early_stopping);
             % acc = mean(check_points(start_index:end_index,2));
             prob = mean(check_points(start_index:end_index,3));
             check_points(j,4)=acc;
             fprintf("epoch:%d | step:%d | acc:%.4f | prob:%.4f\n",i,j,acc,prob)
+            if best_acc<acc
+                best_acc = acc;
+                best_net = net;
+            end
         end
     end
-    save("check_points","check_points")
 end
+best_train_result.net = best_net;
+best_train_result.init_para = init_para;
