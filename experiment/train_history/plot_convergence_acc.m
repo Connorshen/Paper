@@ -1,17 +1,20 @@
 function plot_convergence_acc()
-
-% rl_verify_acc
-load("t_rl_convergence.mat");
-rl_step = rl_check_points(:,1);
-rl_verify_acc = rl_check_points(:,4);
-rl_verify_step = rl_step(rl_verify_acc~=0);
-rl_verify_acc = rl_verify_acc(rl_verify_acc~=0);
-% rl_batch_verify_acc
-load("t_rl_batch_convergence.mat");
-rl_batch_step = rl_batch_check_points(:,1);
-rl_batch_verify_acc = rl_batch_check_points(:,4);
-rl_batch_verify_step = rl_batch_step(rl_batch_verify_acc~=0);
-rl_batch_verify_acc = rl_batch_verify_acc(rl_batch_verify_acc~=0);
-plot(rl_verify_step,rl_verify_acc,'r',rl_batch_verify_step,rl_batch_verify_acc,"b")
-legend("rl verify acc","rl batch verify acc")
+load("compare_convergence.mat")
+len = size(compare_convergence,1);
+rl_acc_all = [];
+batch_acc_all = [];
+for i = 1:len
+    step_all = compare_convergence{i,1}(:,1);
+    step_index = step_all(compare_convergence{i,1}(:,4)~=0);
+    rl_acc = compare_convergence{i,1}(:,4);
+    rl_acc = rl_acc(step_index)';
+    rl_acc_all = [rl_acc_all;rl_acc];
+    batch_acc = compare_convergence{i,3}(:,4);
+    batch_acc = batch_acc(step_index)';
+    batch_acc_all = [batch_acc_all;batch_acc];
+end
+rl_acc_all = mean(rl_acc_all,1);
+batch_acc_all = mean(batch_acc_all,1);
+plot(step_index,rl_acc_all,"r",step_index,batch_acc_all,"b");
+legend("rl acc","rl batch acc");
 axis([-inf,inf,0,1])
