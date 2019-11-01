@@ -1,4 +1,4 @@
-function [check_points,best_train_result] = rl_batch_trainer(init_para,net,data,test_early_stopping)
+function [check_points,best_train_result] = rl_batch_trainer(init_para,net,data,train_early_stopping,test_early_stopping)
 
 train_img = data.train_img;
 train_label = data.train_label;
@@ -43,8 +43,8 @@ for i=1:epoch
         net.weight_filter_out(predict, :) = net.weight_out(predict, :)>init_para.synaptic_th;
         check_points(j,:) = [j,reward,predict_prob,0];
         % 在测试集上验证
-        if rem(j,verify_step)==0
-            start_index = j-verify_step+1;
+        if rem(j,verify_step)==0 || j==1
+            start_index = max(j-verify_step+1,1);
             end_index = j;
             acc = run_testing(net,init_para,data,test_early_stopping);
             % acc = mean(check_points(start_index:end_index,2));
@@ -59,6 +59,9 @@ for i=1:epoch
         % 更新学习率
         if rem(j,get_lr_step)==0
             learning_rate = get_lr(net,init_para,train_img,train_label);
+        end
+        if j==train_early_stopping
+            break
         end
     end
     save("check_points","check_points")

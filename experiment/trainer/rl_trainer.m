@@ -1,4 +1,4 @@
-function [check_points,best_train_result] = rl_trainer(init_para,net,data,test_early_stopping)
+function [check_points,best_train_result] = rl_trainer(init_para,net,data,train_early_stopping,test_early_stopping)
 
 train_img = data.train_img;
 train_label = data.train_label;
@@ -39,8 +39,8 @@ for i=1:epoch
         net.weight_out(predict, :) = modify_weight;
         net.weight_filter_out(predict, :) = net.weight_out(predict, :)>init_para.synaptic_th;
         check_points(j,:) = [j,reward,predict_prob,0];
-        if rem(j,verify_step)==0
-            start_index = j-verify_step+1;
+        if rem(j,verify_step)==0 || j==1
+            start_index = max(j-verify_step+1,1);
             end_index = j;
             acc = run_testing(net,init_para,data,test_early_stopping);
             % acc = mean(check_points(start_index:end_index,2));
@@ -51,6 +51,9 @@ for i=1:epoch
                 best_acc = acc;
                 best_net = net;
             end
+        end
+        if j==train_early_stopping
+            break
         end
     end
 end
