@@ -29,5 +29,5 @@ for i=1:n_digit
     ratio{i} = self_act_sum{i}./self_sum{i}-other_act_sum{i}./other_sum{i};
 end
 for i=1:n_digit
-    lr{i} = 1./(1+exp(-ratio{i}));
+    lr{i} = 1./(1+exp(-ratio{i}))*0.2;
 end

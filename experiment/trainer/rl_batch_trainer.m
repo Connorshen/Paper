@@ -5,7 +5,7 @@ train_label = data.train_label;
 train_len = size(train_img,1);
 epoch = init_para.epoch;
 % step reward prob verify_acc
-check_points = zeros(train_len*epoch,4);
+check_points = zeros(train_len*epoch,5);
 verify_step = init_para.verify_step;
 get_lr_step = init_para.get_lr_step;
 fprintf("train_len:%d \n",train_len)
@@ -41,15 +41,15 @@ for i=1:epoch
         modify_weight = max(modify_weight, 0);
         net.weight_out(predict, :) = modify_weight;
         net.weight_filter_out(predict, :) = net.weight_out(predict, :)>init_para.synaptic_th;
-        check_points(j,:) = [j,reward,predict_prob,0];
+        check_points(j,:) = [j,reward,predict_prob,0,0];
         % 在测试集上验证
         if rem(j,verify_step)==0 || j==1
             start_index = max(j-verify_step+1,1);
             end_index = j;
-            acc = run_testing(net,init_para,data,test_early_stopping);
-            % acc = mean(check_points(start_index:end_index,2));
+            [acc,loss] = run_testing(net,init_para,data,test_early_stopping);
             prob = mean(check_points(start_index:end_index,3));
             check_points(j,4)=acc;
+            check_points(j,5)=loss;
             fprintf("epoch:%d | step:%d | acc:%.4f | prob:%.4f\n",i,j,acc,prob)
             if best_acc<acc
                 best_acc = acc;
@@ -64,7 +64,6 @@ for i=1:epoch
             break
         end
     end
-    save("check_points","check_points")
 end
 best_train_result.net = best_net;
 best_train_result.init_para = init_para;
