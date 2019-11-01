@@ -1,7 +1,7 @@
 clear
 clc
 % 无关的参数
-trial = 1;
+trial = 3;
 data_ratio = 0.1;% 数据集比例
 test_early_stopping = 100;% 测试的时候提早break的step，不想提早结束的话取-1
 train_early_stopping = 300;% 训练的时候提早break的step，不想提早结束的话取-1
