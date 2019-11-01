@@ -24,4 +24,4 @@ for i=1:n_batch
     end
 end
 acc = mean(reward_all);
-loss = mean(log_all);
+loss = sum(log_all)/double(test_len);
