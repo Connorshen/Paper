@@ -17,11 +17,11 @@ for i=1:n_batch
     batch_label = test_label(start_index:end_index,:)';
     %forward
     [~,b_reward,~,b_predict_prob,~]=forward(net,init_para,batch_img,batch_label);
-    reward_all = [reward_all;b_reward'];
+    reward_all = [reward_all;sum(b_reward)];
     log_all = [log_all;sum(-log(b_predict_prob))];
     if i==early_stopping
         break
     end
 end
-acc = mean(reward_all);
+acc = sum(reward_all)/double(test_len);
 loss = sum(log_all)/double(test_len);
