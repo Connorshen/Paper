@@ -65,5 +65,6 @@ for i=1:epoch
         end
     end
 end
+init_para.trainer = "rl_batch_trainer";
 best_train_result.net = best_net;
 best_train_result.init_para = init_para;
