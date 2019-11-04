@@ -152,7 +152,6 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
-/data
 /preprocess_data
 /.idea
 /experiment/mnist/filterdata
