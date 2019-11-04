@@ -1,11 +1,11 @@
-function init_para = init_paramter(digits,in_features_cpl,out_features_cpl,verify_step,get_lr_step,get_lr_batch)
+function init_para = init_paramter(digits,in_features_cpl,out_features_cpl,n_neuron_cluster,verify_step,get_lr_step,get_lr_batch)
 init_para.epoch=1;
 init_para.verify_step = verify_step;
 %每隔get_lr_step次，获取一次lr
 init_para.get_lr_step = get_lr_step;
 %每次获取lr的batch的大小为get_lr_batch
 init_para.get_lr_batch = get_lr_batch;
-init_para.digits = digits; 
+init_para.digits = digits;
 
 init_para.in_features_cpl = in_features_cpl;
 init_para.out_features_cpl = out_features_cpl;

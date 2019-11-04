@@ -155,7 +155,7 @@ dmypy.json
 /data
 /preprocess_data
 /.idea
-/experiment/filterdata
-/experiment/test_origin.mat
-/experiment/train_origin.mat
+/experiment/mnist/filterdata
+/experiment/mnist/test_origin.mat
+/experiment/mnist/train_origin.mat
 *.pkl
