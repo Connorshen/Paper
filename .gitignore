@@ -157,4 +157,6 @@ dmypy.json
 /experiment/mnist/filterdata
 /experiment/mnist/test_origin.mat
 /experiment/mnist/train_origin.mat
+/experiment/fashion_mnist/test.mat
+/experiment/fashion_mnist/train.mat
 *.pkl
