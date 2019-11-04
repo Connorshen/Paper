@@ -1,0 +1,7 @@
+digits = 0:9;
+in_features_cpl = 2560;
+out_features_cpl = 100000;
+verify_step = 60;
+get_lr_step = 60;
+get_lr_batch = 100;
+n_neuron_cluster = 10;

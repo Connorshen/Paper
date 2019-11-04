@@ -1,18 +1,18 @@
 clear
 clc
 % 无关的参数
-trial = 3;
+trial = 5;
 data_ratio = 0.1;% 数据集比例
-test_early_stopping = 100;% 测试的时候提早break的step，不想提早结束的话取-1
-train_early_stopping = 300;% 训练的时候提早break的step，不想提早结束的话取-1
+test_early_stopping = -1;% 测试的时候提早break的step，不想提早结束的话取-1
+train_early_stopping = -1;% 训练的时候提早break的step，不想提早结束的话取-1
 file_name = "train_history/compare_convergence.mat";
 compare_convergence = cell(trial,2);% [rl_check_points,rl_best_train_result,rl_batch_check_points,rl_batch_best_train_result]
 % 初始化参数
-digits = 0:2;
+digits = 0:9;
 in_features_cpl = 2560;
-out_features_cpl = 5000;
-verify_step = 20;
-get_lr_step = 10;
+out_features_cpl = 100000;
+verify_step = 60;
+get_lr_step = 60;
 get_lr_batch = 100;
 init_para = init_paramter(digits,in_features_cpl,out_features_cpl,verify_step,get_lr_step,get_lr_batch);
 disp("init para success")
