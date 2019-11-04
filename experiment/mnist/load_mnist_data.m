@@ -11,6 +11,7 @@ for i = 0:9
         index = test_label==i;
         test_img(index,:)=[];
         test_label(index,:)=[];
+        test_data_origin(index,:)=[];
     end
 end
 if ratio>0
@@ -20,8 +21,10 @@ if ratio>0
     train_label = train_label(1:int32(train_len*ratio),:);
     test_img = test_img(1:int32(test_len*ratio),:);
     test_label = test_label(1:int32(test_len*ratio),:);
+    test_data_origin = test_data_origin(1:int32(test_len*ratio),:);
 end
 data.train_img=train_img;
 data.train_label=train_label;
 data.test_img=test_img;
 data.test_label=test_label;
+data.test_origin=test_data_origin;

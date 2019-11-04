@@ -1,7 +1,7 @@
 clear
 clc
 % 无关的参数
-trial = 2;
+trial = 1;
 data_ratio = 0.1;% 数据集比例
 test_early_stopping = 10;% 测试的时候提早break的step，不想提早结束的话取-1
 train_early_stopping = 1000;% 训练的时候提早break的step，不想提早结束的话取-1
@@ -10,7 +10,7 @@ compare_convergence = cell(trial,4);% [rl_check_points,rl_batch_check_points,rl_
 % 初始化参数
 digits = 0:2;
 in_features_cpl = 2560;
-out_features_cpl = 5000;
+out_features_cpl = 20000;
 verify_step = 100;
 get_lr_step = 50;
 get_lr_batch = 100;
