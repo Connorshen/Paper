@@ -8,9 +8,9 @@ train_early_stopping = 1000;% 训练的时候提早break的step，不想提早�
 file_name = "train_history/compare_acc.mat";
 compare_convergence = cell(1,4);% [rl_check_points,rl_batch_check_points,rl_best_train_result,rl_batch_best_train_result]
 % 初始化参数
-digits = 0:2;
+digits = 0:5;
 in_features_cpl = 2560;
-out_features_cpl = 5000;
+out_features_cpl = 50000;
 verify_step = 100;
 get_lr_step = 50;
 get_lr_batch = 100;
