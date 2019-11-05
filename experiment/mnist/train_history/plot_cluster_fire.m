@@ -9,6 +9,7 @@ early_stopping = 10;% 测试的时候提早break的step，不想提早结束的�
 data = load_mnist_data(init_para.digits,data_ratio);
 [predict_result]=run_predicting(net,init_para,data,early_stopping);
 input_cpl = predict_result.input_cpl;
+output_cpl = predict_result.output_cpl;
 img_origin = predict_result.img_origin;
 labels = predict_result.label;
 indexs = 1:size(labels,1);
@@ -16,6 +17,7 @@ digits = init_para.digits;
 n_neuron_cluster = init_para.n_neuron_cluster;
 rand_group_index_cpl = net.rand_group_index_cpl;
 digit_cluster1 = [];
+digit_cluster1_fire = [];
 imgs_origin= [];
 imgs_label = [];
 for digit=digits
@@ -23,11 +25,14 @@ for digit=digits
     ind = indexs(ind);
     ind = ind(1);
     img = img_origin(ind,:);
-    cpl = input_cpl(ind,:);
+    i_cpl = input_cpl(ind,:);
+    o_cpl = output_cpl(ind,:);
     label = labels(ind,:);
     cluster1_index = rand_group_index_cpl(1:n_neuron_cluster);
-    cluster1 = cpl(cluster1_index);
+    cluster1 = i_cpl(cluster1_index);
+    cluster1_fire = o_cpl(cluster1_index);
     digit_cluster1 = [digit_cluster1;cluster1];
+    digit_cluster1_fire=[digit_cluster1_fire;cluster1_fire];
     imgs_origin = [imgs_origin;img];
     imgs_label = [imgs_label;label];
 end
@@ -40,4 +45,13 @@ for digit=digits
     imshow(reshape(imgs_origin(ind,:),28,28)')
     subplot(2,10,ind*2);
     bar(digit_cluster1(ind,:));
+end
+figure(2);
+set(gcf,'Position',[500,300,1200,200], 'color','w')
+for digit=digits
+    ind = digit+1;
+    subplot(2,10,ind*2-1);
+    imshow(reshape(imgs_origin(ind,:),28,28)')
+    subplot(2,10,ind*2);
+    bar(digit_cluster1_fire(ind,:));
 end

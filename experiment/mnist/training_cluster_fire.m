@@ -14,7 +14,7 @@ out_features_cpl = 5000;
 verify_step = 100;
 get_lr_step = 50;
 get_lr_batch = 100;
-n_neuron_cluster = 10;
+n_neuron_cluster = 5;
 init_para = init_paramter(digits,in_features_cpl,out_features_cpl,n_neuron_cluster,verify_step,get_lr_step,get_lr_batch);
 disp("init para success")
 init_para
