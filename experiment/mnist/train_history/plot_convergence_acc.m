@@ -40,6 +40,6 @@ subplot(1,2,2);
 plot(step_index_loss,rl_loss_all,"r",step_index_loss,batch_loss_all,"b");
 legend("rl","rl batch");
 xlabel("step");
-ylabel("loss");
+ylabel("cross entropy loss ");
 axis([-inf,inf,0,1])
 title("loss compare")
