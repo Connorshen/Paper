@@ -1,18 +1,18 @@
 clear
 clc
 % 无关的参数
-data_ratio = 0.1;% 数据集比例
+data_ratio = 1;% 数据集比例
 rand('state',1);
-test_early_stopping = 10;% 测试的时候提早break的step，不想提早结束的话取-1
-train_early_stopping = 1000;% 训练的时候提早break的step，不想提早结束的话取-1
+test_early_stopping = -1;% 测试的时候提早break的step，不想提早结束的话取-1
+train_early_stopping = -1;% 训练的时候提早break的step，不想提早结束的话取-1
 file_name = "train_history/compare_acc.mat";
-compare_convergence = cell(1,4);% [rl_check_points,rl_batch_check_points,rl_best_train_result,rl_batch_best_train_result]
+compare_acc = cell(1,4);% [rl_check_points,rl_batch_check_points,rl_best_train_result,rl_batch_best_train_result]
 % 初始化参数
-digits = 0:5;
+digits = 0:9;
 in_features_cpl = 2560;
-out_features_cpl = 50000;
-verify_step = 100;
-get_lr_step = 50;
+out_features_cpl = 200000;
+verify_step = 400;
+get_lr_step = 100;
 get_lr_batch = 100;
 n_neuron_cluster = 10;
 init_para = init_paramter(digits,in_features_cpl,out_features_cpl,n_neuron_cluster,verify_step,get_lr_step,get_lr_batch);
@@ -29,9 +29,9 @@ disp("init net success")
 net = init_net(init_para);
 disp("init net success")
 [rl_batch_check_points,rl_batch_best_train_result] = rl_batch_trainer(init_para,net,data,train_early_stopping,test_early_stopping);
-compare_convergence{1,1} = rl_check_points;
-compare_convergence{1,2} = rl_batch_check_points;
-compare_convergence{1,3} = rl_best_train_result;
-compare_convergence{1,4} = rl_batch_best_train_result;
-save(file_name,"compare_convergence","-v7.3");
+compare_acc{1,1} = rl_check_points;
+compare_acc{1,2} = rl_batch_check_points;
+compare_acc{1,3} = rl_best_train_result;
+compare_acc{1,4} = rl_batch_best_train_result;
+save(file_name,"compare_acc","-v7.3");
 plot_acc()
