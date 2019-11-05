@@ -33,12 +33,12 @@ subplot(1,2,1);
 bar(step_index_acc,acc);
 xlabel("step");
 ylabel("acc");
-legend('rl','batch rl')
+legend('rl','rl batch')
 axis([-inf,inf,0.8,0.95])
 title("acc compare")
 subplot(1,2,2);
 plot(step_index_loss,rl_loss_all,"r",step_index_loss,batch_loss_all,"b");
-legend("rl loss","rl batch loss");
+legend("rl","rl batch");
 xlabel("step");
 ylabel("loss");
 axis([-inf,inf,0,1])
