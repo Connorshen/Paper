@@ -19,7 +19,7 @@ for i=1:epoch
         batch_label = train_label(j,:)';
         %forward
         %shape(out_features_cpl,batch_size)
-        [output_cpl,b_reward,~,b_predict_prob,b_predict,~]=forward(net,init_para,batch_img,batch_label);
+        [input_cpl,output_cpl,b_reward,~,b_predict_prob,b_predict,~]=forward(net,init_para,batch_img,batch_label);
         %backward
         % update the weights on the final layer
         reward = b_reward;

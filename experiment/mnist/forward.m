@@ -1,4 +1,4 @@
-function [output_cpl,b_reward,b_digit_category,b_predict_prob,b_predict,b_predict_prob_all]=forward(net,init_para,batch_img,batch_label)
+function [input_cpl,output_cpl,b_reward,b_digit_category,b_predict_prob,b_predict,b_predict_prob_all]=forward(net,init_para,batch_img,batch_label)
 %shape(out_features_cpl,batch_size)
 input_cpl = net.weight_cpl*batch_img;
 %shape(out_features_cpl,batch_size)

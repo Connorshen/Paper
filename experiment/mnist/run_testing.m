@@ -16,7 +16,7 @@ for i=1:n_batch
     batch_img = test_img(start_index:end_index,:)';
     batch_label = test_label(start_index:end_index,:)';
     %forward
-    [~,b_reward,~,b_predict_prob,~,~]=forward(net,init_para,batch_img,batch_label);
+    [input_cpl,~,b_reward,~,b_predict_prob,~,~]=forward(net,init_para,batch_img,batch_label);
     reward_all = [reward_all;sum(b_reward)];
     log_all = [log_all;sum(-log(b_predict_prob))];
     if i==early_stopping

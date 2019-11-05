@@ -1,18 +1,18 @@
 clear
 clc
 % 无关的参数
-trial = 5;
-data_ratio = 1;% 数据集比例
-test_early_stopping = -1;% 测试的时候提早break的step，不想提早结束的话取-1
-train_early_stopping = -1;% 训练的时候提早break的step，不想提早结束的话取-1
-file_name = "train_history/compare_convergence.mat";
-compare_convergence = cell(trial,4);% [rl_check_points,rl_batch_check_points,rl_best_train_result,rl_batch_best_train_result]
+trial = 1;
+data_ratio = 0.1;% 数据集比例
+test_early_stopping = 10;% 测试的时候提早break的step，不想提早结束的话取-1
+train_early_stopping = 1;% 训练的时候提早break的step，不想提早结束的话取-1
+file_name = "train_history/compare_cluster_fire.mat";
+compare_cluster_fire = cell(trial,4);% [rl_check_points,rl_batch_check_points,rl_best_train_result,rl_batch_best_train_result]
 % 初始化参数
 digits = 0:9;
 in_features_cpl = 2560;
-out_features_cpl = 100000;
-verify_step = 60;
-get_lr_step = 60;
+out_features_cpl = 5000;
+verify_step = 100;
+get_lr_step = 50;
 get_lr_batch = 100;
 n_neuron_cluster = 10;
 init_para = init_paramter(digits,in_features_cpl,out_features_cpl,n_neuron_cluster,verify_step,get_lr_step,get_lr_batch);
@@ -27,14 +27,14 @@ for i = 1:trial
     net = init_net(init_para);
     disp("init net success")
     [rl_check_points,rl_best_train_result] = rl_trainer(init_para,net,data,train_early_stopping,test_early_stopping);
-    compare_convergence{i,1} = rl_check_points;
+    compare_cluster_fire{i,1} = rl_check_points;
     % 训练rl_batch
     net = init_net(init_para);
     disp("init net success")
     [rl_batch_check_points,rl_batch_best_train_result] = rl_batch_trainer(init_para,net,data,train_early_stopping,test_early_stopping);
-    compare_convergence{i,2} = rl_batch_check_points;
+    compare_cluster_fire{i,2} = rl_batch_check_points;
 end
-compare_convergence{i,3} = rl_best_train_result;
-compare_convergence{i,4} = rl_batch_best_train_result;
-save(file_name,"compare_convergence","-v7.3");
-plot_convergence_acc()
+compare_cluster_fire{i,3} = rl_best_train_result;
+compare_cluster_fire{i,4} = rl_batch_best_train_result;
+save(file_name,"compare_cluster_fire","-v7.3");
+plot_cluster_fire()
