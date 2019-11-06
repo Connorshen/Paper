@@ -11,8 +11,8 @@ compare_acc = cell(1,4);% [rl_check_points,rl_batch_check_points,rl_best_train_r
 digits = 0:9;
 in_features_cpl = 2560;
 out_features_cpl = 200000;
-verify_step = 400;
-get_lr_step = 100;
+verify_step = 200;
+get_lr_step = 200;
 get_lr_batch = 100;
 n_neuron_cluster = 10;
 init_para = init_paramter(digits,in_features_cpl,out_features_cpl,n_neuron_cluster,verify_step,get_lr_step,get_lr_batch);
@@ -26,12 +26,12 @@ net = init_net(init_para);
 disp("init net success")
 [rl_check_points,rl_best_train_result] = rl_trainer(init_para,net,data,train_early_stopping,test_early_stopping);
 % 训练rl_batch
-net = init_net(init_para);
-disp("init net success")
-[rl_batch_check_points,rl_batch_best_train_result] = rl_batch_trainer(init_para,net,data,train_early_stopping,test_early_stopping);
+% net = init_net(init_para);
+% disp("init net success")
+% [rl_batch_check_points,rl_batch_best_train_result] = rl_batch_trainer(init_para,net,data,train_early_stopping,test_early_stopping);
 compare_acc{1,1} = rl_check_points;
-compare_acc{1,2} = rl_batch_check_points;
+% compare_acc{1,2} = rl_batch_check_points;
 compare_acc{1,3} = rl_best_train_result;
-compare_acc{1,4} = rl_batch_best_train_result;
+%compare_acc{1,4} = rl_batch_best_train_result;
 save(file_name,"compare_acc","-v7.3");
 plot_acc()
