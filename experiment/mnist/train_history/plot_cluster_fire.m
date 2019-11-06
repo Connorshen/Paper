@@ -16,7 +16,7 @@ indexs = 1:size(labels,1);
 digits = init_para.digits;
 n_neuron_cluster = init_para.n_neuron_cluster;
 rand_group_index_cpl = net.rand_group_index_cpl;
-digit_cluster1 = [];
+digits_cluster1 = [];
 digit_cluster1_fire_ratio = [];
 imgs_origin= [];
 imgs_label = [];
@@ -36,7 +36,7 @@ for digit=digits
     cluster1_fire_digit_all = output_cpl_digit(cluster1_index);
     cluster1_fire_all = [cluster1_fire_all;cluster1_fire_digit_all];
     cluster1_fire_ratio = cluster1_fire_digit_all/sum(cluster1_fire_digit_all);
-    digit_cluster1 = [digit_cluster1;cluster1];
+    digits_cluster1 = [digits_cluster1;cluster1];
     digit_cluster1_fire_ratio=[digit_cluster1_fire_ratio;cluster1_fire_ratio];
     imgs_origin = [imgs_origin;img];
     imgs_label = [imgs_label;label];
@@ -51,7 +51,14 @@ for digit=digits
     subplot(2,10,ind*2-1);
     imshow(reshape(imgs_origin(ind,:),28,28)')
     subplot(2,10,ind*2);
-    bar(digit_cluster1(ind,:));
+    digit_cluster1 = digits_cluster1(ind,:);
+    [~, max_ind] = max(digit_cluster1);
+    digit_cluster1 = diag(digit_cluster1);
+    bar_fig = bar(digit_cluster1,"stack");
+    for i = 1:n_neuron_cluster
+        set(bar_fig(i),"FaceColor","b");
+    end
+    set(bar_fig(max_ind),"FaceColor","r");
     axis([-inf,inf,1,4])
     xlabel("pos")
     ylabel("value")
