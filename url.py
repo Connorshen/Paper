@@ -5,7 +5,7 @@ from os import path
 
 class DataConfig:
     ROOT = path.dirname(path.realpath(__file__))
-    DATA_PATH = path.join(ROOT, "data")
+    DATA_PATH = path.join(ROOT, "preprocess")
     MNIST_PATH = path.join(DATA_PATH, "mnist")
     FASHION_PATH = path.join(DATA_PATH, "fashion_mnist")
     MNIST_TRAIN_IMAGE_PATH = path.join(MNIST_PATH, "train-images-idx3-ubyte")

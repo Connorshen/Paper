@@ -28,7 +28,7 @@ disp("init net success")
 % 训练rl_batch
 % net = init_net(init_para);
 % disp("init net success")
-% [rl_batch_check_points,rl_batch_best_train_result] = rl_batch_trainer(init_para,net,data,train_early_stopping,test_early_stopping);
+% [rl_batch_check_points,rl_batch_best_train_result] = rl_batch_trainer(init_para,net,preprocess,train_early_stopping,test_early_stopping);
 compare_acc{1,1} = rl_check_points;
 % compare_acc{1,2} = rl_batch_check_points;
 compare_acc{1,3} = rl_best_train_result;
