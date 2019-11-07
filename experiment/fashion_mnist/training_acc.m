@@ -1,17 +1,17 @@
 clear
 clc
 % 无关的参数
-data_ratio = 1;% 数据集比例
+data_ratio = 0.1;% 数据集比例
 rand('state',1);
-test_early_stopping = -1;% 测试的时候提早break的step，不想提早结束的话取-1
-train_early_stopping = -1;% 训练的时候提早break的step，不想提早结束的话取-1
+test_early_stopping = 10;% 测试的时候提早break的step，不想提早结束的话取-1
+train_early_stopping = 1000;% 训练的时候提早break的step，不想提早结束的话取-1
 file_name = "train_history/compare_acc.mat";
 compare_acc = cell(1,4);% [rl_check_points,rl_batch_check_points,rl_best_train_result,rl_batch_best_train_result]
 % 初始化参数
-digits = 0:9;
+digits = 0:5;
 in_features_cpl = 2560;
-out_features_cpl = 200000;
-verify_step = 200;
+out_features_cpl = 50000;
+verify_step = 50;
 get_lr_step = 200;
 get_lr_batch = 100;
 n_neuron_cluster = 10;

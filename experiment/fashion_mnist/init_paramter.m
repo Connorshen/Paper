@@ -9,7 +9,7 @@ init_para.digits = digits;
 
 init_para.in_features_cpl = in_features_cpl;
 init_para.out_features_cpl = out_features_cpl;
-init_para.n_neuron_cluster = 10;
+init_para.n_neuron_cluster = n_neuron_cluster;
 init_para.n_category = length(init_para.digits);
 init_para.sparse_prob = 0.001:0.001:0.01;
 
