@@ -49,7 +49,7 @@ set(gcf,'Position',[500,500,1200,200], 'color','w')
 for digit=digits
     ind = digit+1;
     subplot(2,10,ind*2-1);
-    imshow(reshape(imgs_origin(ind,:),28,28)')
+    imshow(reshape(imgs_origin(ind,:),28,28))
     subplot(2,10,ind*2);
     digit_cluster1 = digits_cluster1(ind,:);
     [~, max_ind] = max(digit_cluster1);
@@ -68,7 +68,7 @@ set(gcf,'Position',[500,300,1200,200], 'color','w')
 for digit=digits
     ind = digit+1;
     subplot(2,10,ind*2-1);
-    imshow(reshape(imgs_origin(ind,:),28,28)')
+    imshow(reshape(imgs_origin(ind,:),28,28))
     subplot(2,10,ind*2);
     bar(digit_cluster1_fire_ratio(ind,:));
     axis([-inf,inf,0,0.6])

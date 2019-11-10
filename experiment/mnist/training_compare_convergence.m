@@ -4,15 +4,15 @@ clc
 trial = 5;
 data_ratio = 1;% 数据集比例
 test_early_stopping = -1;% 测试的时候提早break的step，不想提早结束的话取-1
-train_early_stopping = -1;% 训练的时候提早break的step，不想提早结束的话取-1
+train_early_stopping = 1000;% 训练的时候提早break的step，不想提早结束的话取-1
 file_name = "train_history/compare_convergence.mat";
 compare_convergence = cell(trial,4);% [rl_check_points,rl_batch_check_points,rl_best_train_result,rl_batch_best_train_result]
 % 初始化参数
-digits = 0:9;
+digits = 0:4;
 in_features_cpl = 2560;
-out_features_cpl = 100000;
-verify_step = 60;
-get_lr_step = 60;
+out_features_cpl = 50000;
+verify_step = 10;
+get_lr_step = 10;
 get_lr_batch = 100;
 n_neuron_cluster = 10;
 init_para = init_paramter(digits,in_features_cpl,out_features_cpl,n_neuron_cluster,verify_step,get_lr_step,get_lr_batch);
