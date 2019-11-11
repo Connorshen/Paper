@@ -6,6 +6,7 @@ rl_loss_all = [];
 for i = 1:len
     step_all = compare_acc{i,1}(:,1);
     step_index = step_all(compare_acc{i,1}(:,4)~=0);
+    step_index = step_index(1:100);
     rl_acc = compare_acc{i,1}(:,4);
     rl_acc = rl_acc(step_index)';
     rl_acc_all = [rl_acc_all;rl_acc];

@@ -1,7 +1,7 @@
 function plot_convergence_acc()
 load("compare_convergence.mat")
 len = size(compare_convergence,1);
-step_index_acc = [300,350,400,450,500,550,600];
+step_index_acc = [300,350,400,450,500];
 rl_acc_all = [];
 batch_acc_all = [];
 rl_loss_all = [];
@@ -34,7 +34,7 @@ bar(step_index_acc,acc);
 xlabel("step");
 ylabel("acc");
 legend('rl','rl batch')
-axis([-inf,inf,0.7,1])
+axis([-inf,inf,0.8,1])
 title("acc compare")
 subplot(1,2,2);
 plot(step_index_loss,rl_loss_all,"r",step_index_loss,batch_loss_all,"b");
