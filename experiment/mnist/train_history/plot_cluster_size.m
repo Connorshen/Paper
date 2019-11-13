@@ -26,4 +26,7 @@ for i=1:len
     text(i,rl_acc_all(i),num2str(rl_acc_all(i)),'VerticalAlignment','bottom','HorizontalAlignment','center');
 end
 set(gca,'xticklabel',n_neuron_clusters);
-axis([-inf,inf,0.7,1])
+axis([-inf,inf,0.75,1])
+ylabel("acc");
+xlabel("cluster size");
+title("compare cluster size");
