@@ -14,7 +14,7 @@ out_features_cpl = 100000;
 verify_step = 1000;
 get_lr_step = 100;
 get_lr_batch = 100;
-n_neuron_clusters = [2,4,5,10,20,40];
+n_neuron_clusters = [2,5,10,20,40];
 % 加载数据集
 data = load_mnist_data(digits,data_ratio);
 disp("load data success");
