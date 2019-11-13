@@ -10,7 +10,7 @@ compare_cluster_size = cell(4,2);% [rl_check_points,rl_batch_check_points]
 % 初始化参数
 digits = 0:9;
 in_features_cpl = 2560;
-out_features_cpl = 200000;
+out_features_cpl = 100000;
 verify_step = 1000;
 get_lr_step = 100;
 get_lr_batch = 100;
