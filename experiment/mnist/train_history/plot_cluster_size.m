@@ -20,7 +20,7 @@ for i = 1:len
 end
 rl_acc_all = max(rl_acc_all')';
 figure(1)
-set(gcf,'Position',[500,500,1200,500], 'color','w')
+set(gcf,'Position',[500,500,600,400], 'color','w')
 bar(rl_acc_all);
 for i=1:len
     text(i,rl_acc_all(i),num2str(rl_acc_all(i)),'VerticalAlignment','bottom','HorizontalAlignment','center');
