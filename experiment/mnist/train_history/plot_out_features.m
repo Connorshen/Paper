@@ -22,13 +22,18 @@ rl_acc_all_max = max(rl_acc_all')';
 figure(1)
 subplot(1,2,1);
 plot(step_index,rl_acc_all);
+hold on;
+plot(step_index,0.1*ones(size(step_index)),"black--");
 ylabel("acc");
 xlabel("step");
 title("compare cpl out features");
-legend(num2str(out_features_cpls),"Location","NorthWest");
+legend([num2str(out_features_cpls);"random"],"Location","NorthWest");
 subplot(1,2,2);
 set(gcf,"Position",[500,500,1200,500], "color","w")
 bar(rl_acc_all_max);
+hold on;
+plot(0.1*ones(len),"black--");
+legend(["final acc","random"],"Location","NorthWest");
 for i=1:len
     text(i,rl_acc_all_max(i),num2str(rl_acc_all_max(i)),"VerticalAlignment","bottom","HorizontalAlignment","center");
 end
