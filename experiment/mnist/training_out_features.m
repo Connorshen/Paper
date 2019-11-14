@@ -4,7 +4,7 @@ clc
 trial = 1;
 data_ratio = 1;% 数据集比例
 test_early_stopping = -1;% 测试的时候提早break的step，不想提早结束的话取-1
-train_early_stopping = 1000;% 训练的时候提早break的step，不想提早结束的话取-1
+train_early_stopping = 10000;% 训练的时候提早break的step，不想提早结束的话取-1
 file_name = "train_history/compare_out_features.mat";
 compare_out_features = cell(1,2);% [rl_check_points,rl_batch_check_points]
 % 初始化参数
