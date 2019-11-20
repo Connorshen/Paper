@@ -24,8 +24,8 @@ figure(1)
 set(gcf,"Position",[500,500,1200,500], "color","w")
 errorbar(out_features_cpls,rl_acc_all_mean,rl_acc_all_std,'-b','LineWidth',1)  
 axis([5000,100000,0,1])
-hold on;
-legend(["final acc"],"Location","NorthWest");
+set(gca,'XTick',out_features_cpls);
+set(gca,'xticklabel',out_features_cpls);
 ylabel("acc");
 xlabel("cpl out features");
 title("compare cpl out features");
