@@ -31,3 +31,4 @@ for i=1:length(n_neuron_clusters)
     compare_size_corr{i,3} = rl_best_train_result;
 end
 save(file_name,"compare_size_corr","-v7.3");
+plot_size_corr()
