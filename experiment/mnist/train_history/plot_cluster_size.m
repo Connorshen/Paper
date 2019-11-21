@@ -26,16 +26,16 @@ for i = 1:len
     acc_all_std = [acc_all_std;std(acc_all)];
 end
 figure(1)
-set(gcf,"Position",[500,500,1200,500], "color","w")
-subplot(1,2,2);
-errorbar(cluster_sizes,acc_final_mean,acc_final_std,'-b','LineWidth',1)
-axis([1,45,0.3,1])
-set(gca,'XTick',cluster_sizes);
+set(gcf,"Position",[500,500,1200,1200], "color","w")
+subplot(2,2,2);
+errorbar(1:size(cluster_sizes,1),acc_final_mean,acc_final_std,'-b','LineWidth',1)
+axis([0,6,0.6,1])
+set(gca,'XTick',1:size(cluster_sizes,1));
 set(gca,'xticklabel',cluster_sizes);
 ylabel("acc");
 xlabel("cpl cluster size");
 title("compare cpl cluster size");
-subplot(1,2,1);
+subplot(2,2,1);
 colors = ['k','c','m','r','b'];
 for i=1:len
     acc_mean = acc_all_mean(i,:);

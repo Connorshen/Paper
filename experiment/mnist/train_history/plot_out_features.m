@@ -26,7 +26,7 @@ for i = 1:len
     acc_all_std = [acc_all_std;std(acc_all)];
 end
 figure(1)
-set(gcf,"Position",[500,500,1200,500], "color","w")
+set(gcf,"Position",[500,500,1200,400], "color","w")
 subplot(1,2,2);
 errorbar(out_features_cpls,acc_final_mean,acc_final_std,'-b','LineWidth',1)
 axis([5000,100000,0.3,1])

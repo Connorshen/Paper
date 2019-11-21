@@ -1,8 +1,8 @@
-function plot_size_corr()
+function plot_size_self_corr()
 load("compare_size_corr.mat")
 len = size(compare_size_corr,1);
-corr_all = [];
 cluster_sizes = [];
+cos_sim_all = [];
 for i=1:len
     net = compare_size_corr{i,3}.net;
     init_para = compare_size_corr{i,3}.init_para;
@@ -16,30 +16,27 @@ for i=1:len
     labels = predict_result.label;
     indexs = 1:size(labels,1);
     digits = init_para.digits;
-    corr_digits_all = [];
+    cos_sim_digit = [];
     for digit=digits
         ind = labels==digit;
         ind = indexs(ind);
         output_cpl_digit_all = output_cpl(ind,:);
-        corr_digit_all=[];
-        first_output_cpl_digit = output_cpl_digit_all(1,:);
-        for j = 2:size(output_cpl_digit_all,1)
-            current_output_cpl_digit = output_cpl_digit_all(j,:);
-            corr_digit_all=[corr_digit_all;corr2(first_output_cpl_digit,current_output_cpl_digit)];
+        y = [];
+        for j=1:size(output_cpl_digit_all,1)
+            x = output_cpl_digit_all(j,:);
+            y = [y;x/norm(x)];
         end
-        corr_digit = mean(corr_digit_all);
-        corr_digits_all = [corr_digits_all;corr_digit];
+        cos_sim_n = (svds(y,1)^2-1)/(size(y,1)-1);
+        cos_sim_digit = [cos_sim_digit;cos_sim_n];
     end
-    corr_all = [corr_all;corr_digits_all'];
+    cos_sim_all = [cos_sim_all;cos_sim_digit'];
 end
-corr_all_mean = mean(corr_all,2);
-corr_all_std = std(corr_all,0,2);
 figure(1)
 set(gcf,"Position",[500,500,600,400], "color","w")
-errorbar(cluster_sizes,corr_all_mean,corr_all_std,'-b','LineWidth',1)
-axis([1,40,0.3,0.7])
-set(gca,'XTick',cluster_sizes);
+plot(1:size(cluster_sizes,1),cos_sim_all)
+axis([0,6,0,1])
+set(gca,'XTick',1:size(cluster_sizes,1));
 set(gca,'xticklabel',cluster_sizes);
-ylabel("cpl corr");
+ylabel("cpl self corr");
 xlabel("cpl cluster size");
 title("compare cpl cluster size");
