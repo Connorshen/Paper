@@ -6,6 +6,7 @@ cluster_sizes = [];
 acc_final_mean = [];
 acc_final_std = [];
 acc_all_mean = [];
+loss_all_mean = [];
 acc_all_std =[];
 for i = 1:len
     step_all = compare_cluster_size{i,1}(:,1);
@@ -14,19 +15,24 @@ for i = 1:len
     cluster_sizes = [cluster_sizes;cluster_size];
     acc_max = [];
     acc_all = [];
+    loss_all = [];
     for j = 1:trial
         rl_acc = compare_cluster_size{i,j*2-1}(:,4);
         rl_acc = rl_acc(step_index)';
+        rl_loss = compare_cluster_size{i,j*2-1}(:,5);
+        rl_loss = rl_loss(step_index)';
         acc_all = [acc_all;rl_acc];
+        loss_all = [loss_all;rl_loss];
         acc_max = [acc_max;max(rl_acc)];
     end
     acc_final_mean = [acc_final_mean;mean(acc_max)];
     acc_final_std = [acc_final_std;std(acc_max)];
     acc_all_mean = [acc_all_mean;mean(acc_all)];
     acc_all_std = [acc_all_std;std(acc_all)];
+    loss_all_mean =[loss_all_mean;mean(loss_all)];
 end
 figure(1)
-set(gcf,"Position",[500,500,1200,1200], "color","w")
+set(gcf,"Position",[500,500,1200,800], "color","w")
 subplot(2,2,2);
 errorbar(1:size(cluster_sizes,1),acc_final_mean,acc_final_std,'-b','LineWidth',1)
 axis([0,6,0.6,1])
@@ -48,3 +54,9 @@ legend(num2str(cluster_sizes),"Location","SouthEast");
 ylabel("acc");
 xlabel("step");
 title("compare cpl cluster size");
+subplot(2,2,3);
+plot(step_index,loss_all_mean)
+ylabel("loss");
+xlabel("step");
+title("compare cpl cluster size");
+legend(num2str(cluster_sizes),"Location","NorthEast");
