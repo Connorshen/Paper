@@ -8,10 +8,10 @@ train_early_stopping = 10000;% 训练的时候提早break的step，不想提早�
 file_name = "train_history/compare_cluster_size.mat";
 compare_cluster_size = cell(1,2);% [rl_check_points,rl_batch_check_points]
 % 初始化参数
-digits = 0:5;
+digits = 0:9;
 in_features_cpl = 2560;
-out_features_cpl = 6000;
-verify_step = 100;
+out_features_cpl = 60000;
+verify_step = 500;
 get_lr_step = 100;
 get_lr_batch = 100;
 n_neuron_clusters = [2,5,10,15,30];
