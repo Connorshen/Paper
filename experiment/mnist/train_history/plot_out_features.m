@@ -60,3 +60,6 @@ ylabel("loss");
 xlabel("step");
 title("compare cpl cluster size");
 legend(num2str(out_features_cpls),"Location","NorthEast");
+xlabel("step");
+title("compare cpl cluster size");
+legend(num2str(out_features_cpls),"Location","NorthEast");
