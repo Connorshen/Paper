@@ -7,8 +7,11 @@ x: 中间层大小
 
 y: acc
 # Fig3
-x:  类别个数
+x:  cluster大小
 
-y: 中间层大小
+y: 每类相关系数均值，方差
 
-z: acc
+# Fig4
+x: cluster大小
+
+y: 激活比例
