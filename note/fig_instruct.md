@@ -1,17 +1,9 @@
-#  Fig1
-x: cluster大小
-
-y: acc
-# Fig2
-x: 中间层大小
-
-y: acc
-# Fig3
-x:  cluster大小
-
-y: 每类相关系数均值，方差
-
-# Fig4
-x: cluster大小
-
-y: 激活比例
+# 论文创新点
+## CPL
+1. cluster size与准确率
+2. cluster size类间相关度
+3. cluster size类内相关度
+4. cpl大小与准确率
+5. cpl大小，分类类别与准确率
+## Batch Learning Rate
+## 中间层抑制
