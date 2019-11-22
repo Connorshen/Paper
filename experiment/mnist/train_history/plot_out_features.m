@@ -58,8 +58,5 @@ subplot(2,2,3);
 plot(step_index,loss_all_mean)
 ylabel("loss");
 xlabel("step");
-title("compare cpl cluster size");
-legend(num2str(out_features_cpls),"Location","NorthEast");
-xlabel("step");
-title("compare cpl cluster size");
+title("compare cpl out features");
 legend(num2str(out_features_cpls),"Location","NorthEast");
