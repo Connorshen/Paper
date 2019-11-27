@@ -39,4 +39,5 @@ set(gcf, 'PaperUnits', 'inches');
 set(gcf, 'PaperSize', [5 4]);
 set(gcf, 'PaperPositionMode', 'manual');
 set(gcf, 'PaperPosition', [0 0 5 4]);
+set(gca, 'FontWeight', fig_para.fontweight);
 print(gcf, '-depsc2', 'CPLScaleWithCategories.eps');
