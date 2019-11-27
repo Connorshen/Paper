@@ -1,4 +1,5 @@
 function plot_convergence_acc()
+close all
 load("compare_convergence.mat")
 len = size(compare_convergence,1);
 rl_acc_all = [];
@@ -28,20 +29,31 @@ batch_acc_all_std = std(batch_acc_all,1);
 rl_loss_all = mean(rl_loss_all,1);
 batch_loss_all = mean(batch_loss_all,1);
 figure(1)
-set(gcf,'Position',[500,500,1200,400], 'color','w')
+fig_para = fig_paramter();
 subplot(1,2,1);
-shadedErrorBar(step_index,rl_acc_all_mean,rl_acc_all_std,"lineprops",'r')
+s = shadedErrorBar(step_index,rl_acc_all_mean,rl_acc_all_std,"lineprops",'r');
+set(s.mainLine,"LineWidth",fig_para.linewidth)
 hold on;
-shadedErrorBar(step_index,batch_acc_all_mean,batch_acc_all_std,"lineprops",'b')
-xlabel("step");
-ylabel("acc");
-legend('rl','rl batch')
+s = shadedErrorBar(step_index,batch_acc_all_mean,batch_acc_all_std,"lineprops",'b');
+set(s.mainLine,"LineWidth",fig_para.linewidth)
+xlabel("Step","FontSize", fig_para.fontsize);
+ylabel("Accuracy","FontSize", fig_para.fontsize);
+set(gca, "FontSize", fig_para.fontsize);
+legend("rl","rl batch","Location","SouthEast")
 axis([-inf,inf,0,1])
-title("acc compare")
+title("Convergence speed of accuracy")
 subplot(1,2,2);
-plot(step_index,rl_loss_all,"r",step_index,batch_loss_all,"b");
+plot(step_index,rl_loss_all,"r",step_index,batch_loss_all,"b","LineWidth",fig_para.linewidth);
 legend("rl","rl batch");
-xlabel("step");
-ylabel("cross entropy loss ");
+xlabel("Step","FontSize", fig_para.fontsize);
+ylabel("Cross entropy loss","FontSize", fig_para.fontsize);
+set(gca, "FontSize", fig_para.fontsize);
 axis([-inf,inf,0,1])
-title("loss compare")
+title("Convergence speed of loss")
+
+set(gcf, "PaperUnits", "inches");
+set(gcf, "PaperSize", [12 4]);
+set(gcf, "PaperPositionMode", "manual");
+set(gcf, "PaperPosition", [0 0 12 4]);
+
+print(gcf, "-depsc2", "ConvergenceSpeedOfTwoAlgorithm.eps");
