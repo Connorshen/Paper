@@ -1,4 +1,4 @@
-function acc_final = get_final_acc()
+function [acc_final,acc_std] = get_final_acc()
 load("compare_final_acc")
 n_trial = size(compare_final_acc,1);
 acc_max_all = [];
@@ -10,4 +10,5 @@ for i = 1:n_trial
     acc_max = max(acc_all);
     acc_max_all = [acc_max_all;acc_max];
 end
-acc_final = max(acc_max_all);
+acc_final = roundn(max(acc_max_all),-5);
+acc_std = roundn(std(acc_max_all),-5);
