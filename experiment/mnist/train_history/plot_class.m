@@ -36,8 +36,8 @@ ylabel("Accuracy","FontSize", fig_para.fontsize)
 legend(num2str(out_features_cpls),"Location","SouthWest");
 title("CPL scale with number of categories")
 set(gcf, "PaperUnits", "inches");
-set(gcf, "PaperSize", [5 4]);
+set(gcf, "PaperSize", [6 4]);
 set(gcf, "PaperPositionMode", "manual");
-set(gcf, "PaperPosition", [0 0 5 4]);
+set(gcf, "PaperPosition", [0 0 6 4]);
 set(gca, "FontWeight", fig_para.fontweight);
 print(gcf, "-depsc2", "CPLScaleWithCategories.eps");

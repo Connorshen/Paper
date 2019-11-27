@@ -67,8 +67,8 @@ title("Accuracy of different cluster sizes");
 
 
 set(gcf, 'PaperUnits', 'inches');
-set(gcf, 'PaperSize', [10 8]);
+set(gcf, 'PaperSize', [12 8]);
 set(gcf, 'PaperPositionMode', 'manual');
-set(gcf, 'PaperPosition', [0 0 10 8]);
+set(gcf, 'PaperPosition', [0 0 12 8]);
 
 print(gcf, '-depsc2', 'ImpactOfClusterSizeOnAccuracy.eps');
