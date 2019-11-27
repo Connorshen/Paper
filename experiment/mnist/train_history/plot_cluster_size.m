@@ -1,4 +1,4 @@
-function plot_out_features()
+function plot_cluster_size()
 close all
 load("compare_cluster_size.mat")
 len = size(compare_cluster_size,1);
