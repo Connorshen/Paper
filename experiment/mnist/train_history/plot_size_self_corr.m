@@ -1,4 +1,5 @@
 function plot_size_self_corr()
+close all
 load("compare_size_corr.mat")
 len = size(compare_size_corr,1);
 cluster_sizes = [];
@@ -40,7 +41,7 @@ set(gca,'XTickLabel',cluster_sizes);
 set(gca, "FontSize", fig_para.fontsize);
 ylabel("Correlation coefficient","FontSize", fig_para.fontsize);
 xlabel("Cluster size of CPL","FontSize", fig_para.fontsize);
-title("Correlation coefficient  intra-class with different cluster sizes");
+title("Correlation coefficient of intra-class");
 legend(num2str((0:9)'),"Location","NorthEast");
 
 set(gcf, "PaperUnits", "inches");

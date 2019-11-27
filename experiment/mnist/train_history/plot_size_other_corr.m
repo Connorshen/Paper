@@ -41,7 +41,7 @@ set(gca,"XTickLabel",cluster_sizes);
 ylabel("Correlation coefficient","FontSize", fig_para.fontsize);
 xlabel("Cluster size of CPL","FontSize", fig_para.fontsize);
 set(gca, "FontSize", fig_para.fontsize);
-title("Correlation coefficient between classes with different cluster sizes");
+title("Correlation coefficient between classes");
 
 set(gcf, "PaperUnits", "inches");
 set(gcf, "PaperSize", [6 4]);
