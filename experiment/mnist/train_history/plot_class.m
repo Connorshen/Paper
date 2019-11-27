@@ -2,7 +2,7 @@ function plot_class()
 load("compare_class.mat")
 n_classes = size(compare_class,1);
 n_out_features = size(compare_class,2)/2;
-n_categorys = [];
+n_categoryies = [];
 out_features_cpls = [];
 acc_all = [];
 for i=1:n_classes
@@ -21,16 +21,22 @@ for i=1:n_classes
             out_features_cpls = [out_features_cpls;out_features_cpl];
         end
     end
-    n_categorys = [n_categorys;n_category];
+    n_categoryies = [n_categoryies;n_category];
     acc_all = [acc_all;acc_class'];
 end
 figure(1)
-set(gcf,"Position",[500,500,600,400], "color","w")
-plot(1:size(n_categorys,1),acc_all);
+fig_para = fig_paramter();
+plot(1:size(n_categoryies,1),acc_all,"linewidth",fig_para.linewidth);
 axis([0.5,5.5,0,1.1])
-set(gca,'XTick',1:size(n_categorys,1));
-set(gca,'xticklabel',n_categorys);
-xlabel("n category")
-ylabel("acc")
+set(gca,'XTick',1:size(n_categoryies,1));
+set(gca,'xticklabel',n_categoryies);
+set(gca, 'FontSize', fig_para.fontsize);
+xlabel("Number of categories",'FontSize', fig_para.fontsize)
+ylabel("Accuracy",'FontSize', fig_para.fontsize)
 legend(num2str(out_features_cpls),"Location","SouthWest");
-title("compare category with cpl out features")
+title("CPL scale with number of categories")
+set(gcf, 'PaperUnits', 'inches');
+set(gcf, 'PaperSize', [5 4]);
+set(gcf, 'PaperPositionMode', 'manual');
+set(gcf, 'PaperPosition', [0 0 5 4]);
+print(gcf, '-depsc2', 'CPLScaleWithCategories.eps');
