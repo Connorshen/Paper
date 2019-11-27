@@ -32,31 +32,43 @@ for i = 1:len
     loss_all_mean =[loss_all_mean;mean(loss_all)];
 end
 figure(1)
-set(gcf,"Position",[500,500,1200,800], "color","w")
-subplot(2,2,2);
-errorbar(1:size(cluster_sizes,1),acc_final_mean,acc_final_std,'-b','LineWidth',1)
-axis([0,6,0.6,1])
-set(gca,'XTick',1:size(cluster_sizes,1));
-set(gca,'xticklabel',cluster_sizes);
-ylabel("acc");
-xlabel("cpl cluster size");
-title("compare cpl cluster size");
+fig_para = fig_paramter();
 subplot(2,2,1);
 colors = ['k','c','m','r','b'];
 for i=1:len
     acc_mean = acc_all_mean(i,:);
     acc_std = acc_all_std(i,:);
     color = colors(i);
-    shadedErrorBar(step_index,acc_mean,acc_std,"lineprops",color);
+    s = shadedErrorBar(step_index,acc_mean,acc_std,"LineProps",color);
+    set(s.mainLine,"LineWidth",fig_para.linewidth)
     hold on;
 end
 legend(num2str(cluster_sizes),"Location","SouthEast");
-ylabel("acc");
-xlabel("step");
-title("compare cpl cluster size");
-subplot(2,2,3);
-plot(step_index,loss_all_mean)
-ylabel("loss");
-xlabel("step");
-title("compare cpl cluster size");
+ylabel("Accuracy","FontSize", fig_para.fontsize);
+xlabel("Step","FontSize", fig_para.fontsize);
+set(gca, "FontSize", fig_para.fontsize);
+title("Training process of different cluster sizes");
+subplot(2,2,2);
+plot(step_index,loss_all_mean,"LineWidth",fig_para.linewidth)
+ylabel("Cross entropy loss","FontSize", fig_para.fontsize);
+xlabel("Step","FontSize", fig_para.fontsize);
+set(gca, "FontSize", fig_para.fontsize);
+title("Training process of different cluster sizes");
 legend(num2str(cluster_sizes),"Location","NorthEast");
+subplot(2,2,[3 4]);
+errorbar(1:size(cluster_sizes,1),acc_final_mean,acc_final_std,"-b","LineWidth",fig_para.linewidth)
+axis([0,6,0.6,1])
+set(gca,"XTick",1:size(cluster_sizes,1));
+set(gca,"XTickLabel",cluster_sizes);
+set(gca, "FontSize", fig_para.fontsize);
+ylabel("Accuracy","FontSize", fig_para.fontsize);
+xlabel("Cluster size of CPL","FontSize", fig_para.fontsize);
+title("Accuracy of different cluster sizes");
+
+
+set(gcf, 'PaperUnits', 'inches');
+set(gcf, 'PaperSize', [10 8]);
+set(gcf, 'PaperPositionMode', 'manual');
+set(gcf, 'PaperPosition', [0 0 10 8]);
+
+print(gcf, '-depsc2', 'ImpactOfClusterSizeOnAccuracy.eps');

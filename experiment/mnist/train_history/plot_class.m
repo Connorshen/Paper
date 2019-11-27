@@ -26,18 +26,18 @@ for i=1:n_classes
 end
 figure(1)
 fig_para = fig_paramter();
-plot(1:size(n_categoryies,1),acc_all,"linewidth",fig_para.linewidth);
+plot(1:size(n_categoryies,1),acc_all,"LineWidth",fig_para.linewidth);
 axis([0.5,5.5,0,1.1])
-set(gca,'XTick',1:size(n_categoryies,1));
-set(gca,'xticklabel',n_categoryies);
-set(gca, 'FontSize', fig_para.fontsize);
-xlabel("Number of categories",'FontSize', fig_para.fontsize)
-ylabel("Accuracy",'FontSize', fig_para.fontsize)
+set(gca,"XTick",1:size(n_categoryies,1));
+set(gca,"XTickLabel",n_categoryies);
+set(gca, "FontSize", fig_para.fontsize);
+xlabel("Number of categories","FontSize", fig_para.fontsize)
+ylabel("Accuracy","FontSize", fig_para.fontsize)
 legend(num2str(out_features_cpls),"Location","SouthWest");
 title("CPL scale with number of categories")
-set(gcf, 'PaperUnits', 'inches');
-set(gcf, 'PaperSize', [5 4]);
-set(gcf, 'PaperPositionMode', 'manual');
-set(gcf, 'PaperPosition', [0 0 5 4]);
-set(gca, 'FontWeight', fig_para.fontweight);
-print(gcf, '-depsc2', 'CPLScaleWithCategories.eps');
+set(gcf, "PaperUnits", "inches");
+set(gcf, "PaperSize", [5 4]);
+set(gcf, "PaperPositionMode", "manual");
+set(gcf, "PaperPosition", [0 0 5 4]);
+set(gca, "FontWeight", fig_para.fontweight);
+print(gcf, "-depsc2", "CPLScaleWithCategories.eps");
