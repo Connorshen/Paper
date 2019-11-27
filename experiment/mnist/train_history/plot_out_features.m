@@ -1,4 +1,5 @@
 function plot_out_features()
+close all
 load("compare_out_features.mat")
 len = size(compare_out_features,1);
 trial = size(compare_out_features,2)/2;

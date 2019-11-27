@@ -1,4 +1,5 @@
 function plot_out_features()
+close all
 load("compare_cluster_size.mat")
 len = size(compare_cluster_size,1);
 trial = size(compare_cluster_size,2)/2;

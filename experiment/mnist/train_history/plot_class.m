@@ -1,4 +1,5 @@
 function plot_class()
+close all
 load("compare_class.mat")
 n_classes = size(compare_class,1);
 n_out_features = size(compare_class,2)/2;
