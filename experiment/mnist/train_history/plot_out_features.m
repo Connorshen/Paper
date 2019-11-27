@@ -32,31 +32,42 @@ for i = 1:len
     loss_all_mean =[loss_all_mean;mean(loss_all)];
 end
 figure(1)
-set(gcf,"Position",[500,500,1200,800], "color","w")
-subplot(2,2,2);
-errorbar(out_features_cpls,acc_final_mean,acc_final_std,'-b','LineWidth',1)
-axis([5000,100000,0.3,1])
-set(gca,'XTick',out_features_cpls);
-set(gca,'xticklabel',out_features_cpls);
-ylabel("acc");
-xlabel("cpl out features");
-title("compare cpl out features");
+fig_para = fig_paramter();
 subplot(2,2,1);
 colors = ['k','c','m','r','b'];
 for i=1:len
     acc_mean = acc_all_mean(i,:);
     acc_std = acc_all_std(i,:);
     color = colors(i);
-    shadedErrorBar(step_index,acc_mean,acc_std,"lineprops",color);
+    s = shadedErrorBar(step_index,acc_mean,acc_std,"lineprops",color);
+    set(s.mainLine,"LineWidth",fig_para.linewidth)
     hold on;
 end
 legend(num2str(out_features_cpls),"Location","SouthEast");
-ylabel("acc");
-xlabel("step");
-title("compare cpl out features");
-subplot(2,2,3);
-plot(step_index,loss_all_mean)
-ylabel("loss");
-xlabel("step");
-title("compare cpl out features");
+ylabel("Accuracy","FontSize", fig_para.fontsize);
+xlabel("Step","FontSize", fig_para.fontsize);
+set(gca, "FontSize", fig_para.fontsize);
+title("Training process of different CPL scales");
+subplot(2,2,2);
+plot(step_index,loss_all_mean,"LineWidth",fig_para.linewidth)
+ylabel("Cross entropy loss","FontSize", fig_para.fontsize);
+xlabel("Step","FontSize", fig_para.fontsize);
+set(gca, "FontSize", fig_para.fontsize);
+title("Training process of different CPL scales");
 legend(num2str(out_features_cpls),"Location","NorthEast");
+subplot(2,2,[3 4]);
+errorbar(out_features_cpls,acc_final_mean,acc_final_std,"-b","LineWidth",fig_para.linewidth)
+axis([5000,100000,0.3,1])
+set(gca,"XTick",out_features_cpls);
+set(gca,"XTickLabel",out_features_cpls);
+set(gca, "FontSize", fig_para.fontsize);
+ylabel("Accuracy","FontSize", fig_para.fontsize);
+xlabel("Scales of CPL","FontSize", fig_para.fontsize);
+title("Accuracy of different CPL scales");
+
+set(gcf, "PaperUnits", "inches");
+set(gcf, "PaperSize", [12 8]);
+set(gcf, "PaperPositionMode", "manual");
+set(gcf, "PaperPosition", [0 0 12 8]);
+
+print(gcf, "-depsc2", "ImpactOfCPLScaleOnAccuracy.eps");
