@@ -1,4 +1,5 @@
 function plot_size_other_corr()
+close all
 load("compare_size_corr.mat")
 len = size(compare_size_corr,1);
 cluster_sizes = [];
@@ -32,11 +33,19 @@ for i=1:len
     cos_sim_all = [cos_sim_all;cos_sim_n];
 end
 figure(1)
-set(gcf,"Position",[500,500,600,400], "color","w")
-plot(1:size(cluster_sizes,1),cos_sim_all,'-b')
+fig_para = fig_paramter();
+plot(1:size(cluster_sizes,1),cos_sim_all,"-b","LineWidth",fig_para.linewidth)
 axis([0,6,0.6,1])
-set(gca,'XTick',1:size(cluster_sizes,1));
-set(gca,'xticklabel',cluster_sizes);
-ylabel("cpl other corr");
-xlabel("cpl cluster size");
-title("compare cpl cluster size");
+set(gca,"XTick",1:size(cluster_sizes,1));
+set(gca,"XTickLabel",cluster_sizes);
+ylabel("Correlation coefficient","FontSize", fig_para.fontsize);
+xlabel("Cluster size of CPL","FontSize", fig_para.fontsize);
+set(gca, "FontSize", fig_para.fontsize);
+title("Correlation coefficient between classes with different cluster sizes");
+
+set(gcf, "PaperUnits", "inches");
+set(gcf, "PaperSize", [6 4]);
+set(gcf, "PaperPositionMode", "manual");
+set(gcf, "PaperPosition", [0 0 6 4]);
+
+print(gcf, "-depsc2", "CorrelationCoefficientBetweenClasses.eps");
