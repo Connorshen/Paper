@@ -50,7 +50,11 @@ xlabel("Step","FontSize", fig_para.fontsize);
 set(gca, "FontSize", fig_para.fontsize);
 title("Training process of different CPL scales");
 subplot(2,2,2);
-plot(step_index,loss_all_mean,"LineWidth",fig_para.linewidth)
+for i=1:len
+    plot(step_index,loss_all_mean(i,:),"LineWidth",fig_para.linewidth,"Color",colors(i))
+    hold on;
+end
+
 ylabel("Cross entropy loss","FontSize", fig_para.fontsize);
 xlabel("Step","FontSize", fig_para.fontsize);
 set(gca, "FontSize", fig_para.fontsize);

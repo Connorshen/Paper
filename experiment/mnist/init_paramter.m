@@ -6,6 +6,8 @@ init_para.get_lr_step = get_lr_step;
 %每次获取lr的batch的大小为get_lr_batch
 init_para.get_lr_batch = get_lr_batch;
 init_para.digits = digits;
+init_para.inhibition_activity = false;
+init_para.inhibition_threshold = 0.3;
 
 init_para.in_features_cpl = in_features_cpl;
 init_para.out_features_cpl = out_features_cpl;

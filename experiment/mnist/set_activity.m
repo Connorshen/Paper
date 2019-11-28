@@ -10,13 +10,30 @@ base_index_rand = reshape(base_index_rand,[],1);
 rand_group_index_cpl = repmat(net.rand_group_index_cpl',batch_size,1);
 rand_group_index_cpl = rand_group_index_cpl + base_index_rand;
 input_cpl_rand = input_cpl(rand_group_index_cpl);
-%shape(n_neuron_cluster,n_cluster,batch_size)
-input_cpl_group = reshape(input_cpl_rand,n_neuron_cluster,n_cluster,batch_size);
-[~,max_index_local] = max(input_cpl_group,[],1);
-max_index_local = reshape(max_index_local,n_cluster*batch_size,1);
-base_index = linspace(0,out_features_cpl*batch_size-n_neuron_cluster,n_cluster*batch_size)';
-%shape(n_cluster*batch_size,1)
-max_index = base_index + max_index_local;
-%shape(out_features_cpl,batch_size)
-output_cpl=zeros(size(input_cpl));
-output_cpl(rand_group_index_cpl(max_index)) = 1;
+if isfield(init_para,"inhibition_activity") && init_para.inhibition_activity == true
+    %shape(n_neuron_cluster,n_cluster,batch_size)
+    input_cpl_group = reshape(input_cpl_rand,n_neuron_cluster,n_cluster,batch_size);
+    [max_value_local,max_index_local] = max(input_cpl_group,[],1);
+    mean_value_local = mean(input_cpl_group,1);
+    inhibition_local_index = (max_value_local-mean_value_local)<init_para.inhibition_threshold;
+    max_index_local(inhibition_local_index) = -inf;
+    max_index_local = reshape(max_index_local,n_cluster*batch_size,1);
+    base_index = linspace(0,out_features_cpl*batch_size-n_neuron_cluster,n_cluster*batch_size)';
+    %shape(n_cluster*batch_size,1)
+    max_index = base_index + max_index_local;
+    max_index = max_index(max_index>0);
+    %shape(out_features_cpl,batch_size)
+    output_cpl=zeros(size(input_cpl));
+    output_cpl(rand_group_index_cpl(max_index)) = 1;
+else
+    %shape(n_neuron_cluster,n_cluster,batch_size)
+    input_cpl_group = reshape(input_cpl_rand,n_neuron_cluster,n_cluster,batch_size);
+    [~,max_index_local] = max(input_cpl_group,[],1);
+    max_index_local = reshape(max_index_local,n_cluster*batch_size,1);
+    base_index = linspace(0,out_features_cpl*batch_size-n_neuron_cluster,n_cluster*batch_size)';
+    %shape(n_cluster*batch_size,1)
+    max_index = base_index + max_index_local;
+    %shape(out_features_cpl,batch_size)
+    output_cpl=zeros(size(input_cpl));
+    output_cpl(rand_group_index_cpl(max_index)) = 1;
+end
