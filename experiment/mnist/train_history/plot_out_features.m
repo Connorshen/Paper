@@ -71,4 +71,4 @@ set(gcf, "PaperSize", [12 8]);
 set(gcf, "PaperPositionMode", "manual");
 set(gcf, "PaperPosition", [0 0 12 8]);
 
-print(gcf, "-depsc2", "ImpactOfCPLScaleOnAccuracy.eps");
+print(gcf, "-dpng", "ImpactOfCPLScaleOnAccuracy.png");

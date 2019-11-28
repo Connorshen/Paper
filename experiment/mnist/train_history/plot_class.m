@@ -41,4 +41,4 @@ set(gcf, "PaperSize", [6 4]);
 set(gcf, "PaperPositionMode", "manual");
 set(gcf, "PaperPosition", [0 0 6 4]);
 set(gca, "FontWeight", fig_para.fontweight);
-print(gcf, "-depsc2", "CPLScaleWithCategories.eps");
+print(gcf, "-dpng", "CPLScaleWithCategories.png");

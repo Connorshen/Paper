@@ -40,7 +40,7 @@ xlabel("Step","FontSize", fig_para.fontsize);
 ylabel("Accuracy","FontSize", fig_para.fontsize);
 set(gca, "FontSize", fig_para.fontsize);
 legend("rl","rl batch","Location","SouthEast")
-axis([-inf,inf,0,1])
+axis([200,inf,0.7,1])
 title("Convergence speed of accuracy")
 subplot(1,2,2);
 plot(step_index,rl_loss_all,"r",step_index,batch_loss_all,"b","LineWidth",fig_para.linewidth);
@@ -56,4 +56,4 @@ set(gcf, "PaperSize", [12 4]);
 set(gcf, "PaperPositionMode", "manual");
 set(gcf, "PaperPosition", [0 0 12 4]);
 
-print(gcf, "-depsc2", "ConvergenceSpeedOfTwoAlgorithm.eps");
+print(gcf, "-dpng", "ConvergenceSpeedOfTwoAlgorithm.png");

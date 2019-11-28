@@ -48,4 +48,4 @@ set(gcf, "PaperSize", [6 4]);
 set(gcf, "PaperPositionMode", "manual");
 set(gcf, "PaperPosition", [0 0 6 4]);
 
-print(gcf, "-depsc2", "CorrelationCoefficientBetweenClasses.eps");
+print(gcf, "-dpng", "CorrelationCoefficientBetweenClasses.png");
