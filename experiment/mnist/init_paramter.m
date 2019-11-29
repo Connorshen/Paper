@@ -14,6 +14,7 @@ init_para.out_features_cpl = out_features_cpl;
 init_para.n_neuron_cluster = n_neuron_cluster;
 init_para.n_category = length(init_para.digits);
 init_para.sparse_prob = 0.001:0.001:0.01;
+init_para.is_testing = false;
 
 init_para.weight_density_cpl = 0.01;
 init_para.learning_rate = 0.1;

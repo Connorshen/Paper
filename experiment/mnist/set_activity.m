@@ -13,9 +13,13 @@ input_cpl_rand = input_cpl(rand_group_index_cpl);
 if isfield(init_para,"inhibition_activity") && init_para.inhibition_activity == true
     %shape(n_neuron_cluster,n_cluster,batch_size)
     input_cpl_group = reshape(input_cpl_rand,n_neuron_cluster,n_cluster,batch_size);
-    [max_value_local,max_index_local] = max(input_cpl_group,[],1);
-    mean_value_local = mean(input_cpl_group,1);
-    inhibition_local_index = (max_value_local-mean_value_local)<init_para.inhibition_threshold;
+    [~,max_index_local] = max(input_cpl_group,[],1);
+    inhibition_rate = init_para.inhibition_threshold;
+    inhibition_local_index = false(size(max_index_local));
+    if isfield(init_para,"is_testing") && init_para.is_testing==false
+        rand_inhibition_index = randperm(n_cluster);
+        inhibition_local_index(rand_inhibition_index(1:int32(inhibition_rate*n_cluster))) = 1;
+    end
     max_index_local(inhibition_local_index) = -inf;
     max_index_local = reshape(max_index_local,n_cluster*batch_size,1);
     base_index = linspace(0,out_features_cpl*batch_size-n_neuron_cluster,n_cluster*batch_size)';

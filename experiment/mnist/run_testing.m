@@ -1,4 +1,5 @@
 function [acc,loss] = run_testing(net,init_para,data,early_stopping)
+init_para.is_testing = true;
 test_img = data.test_img;
 test_label = data.test_label;
 batch_size = 100;
@@ -23,5 +24,6 @@ for i=1:n_batch
         break
     end
 end
+init_para.is_testing = false;
 acc = sum(reward_all)/double(size(reward_all,1));
 loss = sum(log_all)/double(size(log_all,1));
