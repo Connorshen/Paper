@@ -9,14 +9,14 @@ file_name = "train_history/compare_inhibition.mat";
 compare_inhibition = cell(1,1);
 % 初始化参数
 inhibition_activity = false;
-inhibition_threshold = 0.5;
+inhibition_threshold = 0.7;
 in_features_cpl = 2560;
 out_features_cpl = 500;
 verify_step = 500;
 get_lr_step = 10;
 get_lr_batch = 100;
 n_neuron_cluster = 10;
-n_classes = [2,4,6,8,10];
+n_classes = 2;
 % 开始训练
 for i=1:length(n_classes)
     n_class = n_classes(i);
