@@ -14,8 +14,10 @@ if isfield(init_para,"inhibition_activity") && init_para.inhibition_activity == 
     %shape(n_neuron_cluster,n_cluster,batch_size)
     input_cpl_group = reshape(input_cpl_rand,n_neuron_cluster,n_cluster,batch_size);
     [max_value_local,max_index_local] = max(input_cpl_group,[],1);
-    mean_value_local = mean(input_cpl_group,1);
-    inhibition_local_index = (max_value_local-mean_value_local)<init_para.inhibition_threshold;
+    max_value_local_sorted = sort(max_value_local,2);
+    threshold_index = int32(size(max_value_local,2)*init_para.inhibition_threshold);
+    inhibition_threshold = max_value_local_sorted(1,threshold_index,:);
+    inhibition_local_index = max_value_local<=inhibition_threshold;
     max_index_local(inhibition_local_index) = -inf;
     max_index_local = reshape(max_index_local,n_cluster*batch_size,1);
     base_index = linspace(0,out_features_cpl*batch_size-n_neuron_cluster,n_cluster*batch_size)';
