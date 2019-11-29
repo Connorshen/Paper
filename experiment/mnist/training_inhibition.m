@@ -1,7 +1,7 @@
 clear
 clc
 % 无关的参数
-trial = 1;
+trial = 5;
 data_ratio = 1;% 数据集比例
 test_early_stopping = -1;% 测试的时候提早break的step，不想提早结束的话取-1
 train_early_stopping = 10000;% 训练的时候提早break的step，不想提早结束的话取-1
@@ -11,12 +11,12 @@ compare_inhibition = cell(1,1);
 inhibition_activity = false;
 inhibition_threshold = 0.1;
 in_features_cpl = 2560;
-out_features_cpl = 1000;
+out_features_cpl = 5000;
 verify_step = 500;
 get_lr_step = 10;
 get_lr_batch = 100;
-n_neuron_cluster = 10;
-n_classes = [2,4,6];
+n_neuron_cluster = 5;
+n_classes = [2,4,6,8,10];
 % 开始训练
 for i=1:length(n_classes)
     n_class = n_classes(i);
