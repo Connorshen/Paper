@@ -3,20 +3,20 @@ clc
 % 无关的参数
 trial = 5;
 data_ratio = 1;% 数据集比例
-test_early_stopping = 10;% 测试的时候提早break的step，不想提早结束的话取-1
-train_early_stopping = 1000;% 训练的时候提早break的step，不想提早结束的话取-1
+test_early_stopping = -1;% 测试的时候提早break的step，不想提早结束的话取-1
+train_early_stopping = 10000;% 训练的时候提早break的step，不想提早结束的话取-1
 file_name = "train_history/compare_inhibition.mat";
 compare_inhibition = cell(1,1);
 % 初始化参数
 inhibition_activity = false;
-inhibition_threshold = 0.3;
+inhibition_threshold = 0.5;
 in_features_cpl = 2560;
-out_features_cpl = 500;
-verify_step = 100;
+out_features_cpl = 10000;
+verify_step = 500;
 get_lr_step = 10;
 get_lr_batch = 100;
 n_neuron_cluster = 10;
-n_classes = [2,4,6];
+n_classes = [2,4,6,8,10];
 % 开始训练
 for i=1:length(n_classes)
     n_class = n_classes(i);
@@ -30,6 +30,7 @@ for i=1:length(n_classes)
         rand('state',j);
         % 训练普通rl
         init_para.inhibition_activity = false;
+        init_para
         net = init_net(init_para);
         disp("init net success")
         [rl_check_points,rl_best_train_result] = rl_trainer(init_para,net,data,train_early_stopping,test_early_stopping);
@@ -37,6 +38,7 @@ for i=1:length(n_classes)
         compare_inhibition{j,i*4-2} = rl_best_train_result.init_para;
         % 训练抑制rl
         init_para.inhibition_activity = true;
+        init_para
         net = init_net(init_para);
         disp("init net success")
         [rl_check_points,rl_best_train_result] = rl_trainer(init_para,net,data,train_early_stopping,test_early_stopping);
