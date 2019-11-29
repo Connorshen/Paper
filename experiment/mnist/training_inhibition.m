@@ -9,9 +9,9 @@ file_name = "train_history/compare_inhibition.mat";
 compare_inhibition = cell(1,1);
 % 初始化参数
 inhibition_activity = false;
-inhibition_threshold = 0.4;
+inhibition_threshold = 0.5;
 in_features_cpl = 2560;
-out_features_cpl = 500;
+out_features_cpl = 1000;
 verify_step = 500;
 get_lr_step = 10;
 get_lr_batch = 100;
