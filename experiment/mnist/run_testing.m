@@ -1,7 +1,7 @@
 function [acc,loss] = run_testing(net,init_para,data,early_stopping)
 test_img = data.test_img;
 test_label = data.test_label;
-batch_size = 32;
+batch_size = 100;
 test_len = int32(size(test_img,1));
 n_batch = idivide(test_len,batch_size,"ceil");
 reward_all = [];
