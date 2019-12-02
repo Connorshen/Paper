@@ -9,7 +9,7 @@ file_name = "train_history/compare_inhibition_threshold.mat";
 compare_inhibition_threshold = cell(1,1);
 % 初始化参数
 inhibition_thresholds = 0.1:0.2:0.9;
-digits = 0:9;
+digits = 0:3;
 in_features_cpl = 2560;
 out_features_cpl = 1000;
 verify_step = 500;
@@ -21,9 +21,7 @@ data = load_mnist_data(digits,data_ratio);
 disp("load data success");
 % 开始训练
 for i=1:length(inhibition_thresholds)
-    
     inhibition_threshold = inhibition_thresholds(i);
-    
     init_para = init_paramter(digits,in_features_cpl,out_features_cpl,n_neuron_cluster,verify_step,get_lr_step,get_lr_batch);
     init_para.inhibition_threshold = inhibition_threshold;
     for j = 1:trial
