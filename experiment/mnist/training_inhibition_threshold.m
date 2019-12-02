@@ -9,7 +9,7 @@ file_name = "train_history/compare_inhibition_threshold.mat";
 compare_inhibition_threshold = cell(1,1);
 % 初始化参数
 inhibition_thresholds = 0.1:0.2:0.9;
-digits = 0:3;
+digits = 0:5;
 in_features_cpl = 2560;
 out_features_cpl = 1000;
 verify_step = 500;
