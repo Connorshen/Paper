@@ -1,4 +1,4 @@
-function plot_inhibition()
+function plot_inhibition_class()
 close all
 load("compare_inhibition.mat")
 n_trial = size(compare_inhibition,1);

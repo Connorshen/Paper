@@ -47,4 +47,4 @@ for i=1:length(n_classes)
     end
 end
 save(file_name,"compare_inhibition","-v7.3");
-plot_inhibition()
+plot_inhibition_class()
