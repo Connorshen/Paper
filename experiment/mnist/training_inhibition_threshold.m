@@ -1,7 +1,7 @@
 clear
 clc
 % 无关的参数
-trial = 8;
+trial = 5;
 data_ratio = 1;% 数据集比例
 test_early_stopping = -1;% 测试的时候提早break的step，不想提早结束的话取-1
 train_early_stopping = 10000;% 训练的时候提早break的step，不想提早结束的话取-1
@@ -16,12 +16,14 @@ verify_step = 500;
 get_lr_step = 10;
 get_lr_batch = 100;
 n_neuron_cluster = 10;
+% 加载数据集
+data = load_mnist_data(digits,data_ratio);
+disp("load data success");
 % 开始训练
 for i=1:length(inhibition_thresholds)
-    % 加载数据集
+    
     inhibition_threshold = inhibition_thresholds(i);
-    data = load_mnist_data(digits,data_ratio);
-    disp("load data success");
+    
     init_para = init_paramter(digits,in_features_cpl,out_features_cpl,n_neuron_cluster,verify_step,get_lr_step,get_lr_batch);
     init_para.inhibition_threshold = inhibition_threshold;
     for j = 1:trial
