@@ -38,10 +38,10 @@ subplot(2,2,1);
 for i=1:len
     acc_mean = acc_all_mean(i,:);
     acc_std = acc_all_std(i,:);
-    shaded_error_bar = shadedErrorBar(step_index,acc_mean,acc_std);
-    shaded_error_bar.mainLine.LineWidth = fig_para.linewidth;
-    shaded_error_bar.mainLine.Color = fig_para.colors(i,:);
-    shaded_error_bar.patch.FaceColor = fig_para.colors(i,:);
+    shaerror_bar = shadedErrorBar(step_index,acc_mean,acc_std);
+    s.mainLine.LineWidth = fig_para.linewidth;
+    s.mainLine.Color = fig_para.colors(i,:);
+    s.patch.FaceColor = fig_para.colors(i,:);
     hold on;
 end
 legend(num2str(cluster_sizes),"Location","SouthEast");
