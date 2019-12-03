@@ -27,7 +27,10 @@ for i=1:n_classes
 end
 figure(1)
 fig_para = fig_paramter();
-plot(1:size(n_categoryies,1),acc_all,"LineWidth",fig_para.linewidth);
+for i = 1:size(n_categoryies,1)
+    plot(1:size(n_categoryies,1),acc_all(:,i),"LineWidth",fig_para.linewidth,"Color",fig_para.colors(i,:));
+    hold on
+end
 axis([0.5,5.5,0,1.1])
 set(gca,"XTick",1:size(n_categoryies,1));
 set(gca,"XTickLabel",n_categoryies);
