@@ -35,13 +35,13 @@ end
 figure(1)
 fig_para = fig_paramter();
 subplot(2,2,1);
-colors = ['k','c','m','r','b'];
 for i=1:len
     acc_mean = acc_all_mean(i,:);
     acc_std = acc_all_std(i,:);
-    color = colors(i);
-    s = shadedErrorBar(step_index,acc_mean,acc_std,"lineprops",color);
-    set(s.mainLine,"LineWidth",fig_para.linewidth)
+    shaded_error_bar = shadedErrorBar(step_index,acc_mean,acc_std);
+    shaded_error_bar.mainLine.LineWidth = fig_para.linewidth;
+    shaded_error_bar.mainLine.Color = fig_para.colors(i,:);
+    shaded_error_bar.patch.FaceColor = fig_para.colors(i,:);
     hold on;
 end
 legend(num2str(out_features_cpls),"Location","SouthEast");
@@ -51,7 +51,7 @@ set(gca, "FontSize", fig_para.fontsize);
 title("Training process of different CPL scales");
 subplot(2,2,2);
 for i=1:len
-    plot(step_index,loss_all_mean(i,:),"LineWidth",fig_para.linewidth,"Color",colors(i))
+    plot(step_index,loss_all_mean(i,:),"LineWidth",fig_para.linewidth,"Color",fig_para.colors(i,:))
     hold on;
 end
 
@@ -61,7 +61,7 @@ set(gca, "FontSize", fig_para.fontsize);
 title("Training process of different CPL scales");
 legend(num2str(out_features_cpls),"Location","NorthEast");
 subplot(2,2,[3 4]);
-errorbar(out_features_cpls,acc_final_mean,acc_final_std,"-b","LineWidth",fig_para.linewidth)
+errorbar(out_features_cpls,acc_final_mean,acc_final_std,"Color",fig_para.colors(1,:),"LineWidth",fig_para.linewidth)
 axis([5000,100000,0.3,1])
 set(gca,"XTick",out_features_cpls);
 set(gca,"XTickLabel",out_features_cpls);
