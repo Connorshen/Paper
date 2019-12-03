@@ -51,7 +51,7 @@ set(gca, "FontSize", fig_para.fontsize);
 title("Training process of different cluster sizes");
 subplot(2,2,2);
 for i=1:len
-    plot(step_index,loss_all_mean(i,:),"LineWidth",fig_para.linewidth,"Color",colors(i));
+    plot(step_index,loss_all_mean(i,:),"LineWidth",fig_para.linewidth,"Color",fig_para.colors(i,:));
     hold on;
 end
 ylabel("Cross entropy loss","FontSize", fig_para.fontsize);
@@ -60,7 +60,7 @@ set(gca, "FontSize", fig_para.fontsize);
 title("Training process of different cluster sizes");
 legend(num2str(cluster_sizes),"Location","NorthEast");
 subplot(2,2,[3 4]);
-errorbar(1:size(cluster_sizes,1),acc_final_mean,acc_final_std,"-b","LineWidth",fig_para.linewidth)
+errorbar(1:size(cluster_sizes,1),acc_final_mean,acc_final_std,"Color",fig_para.colors(1,:),"LineWidth",fig_para.linewidth)
 axis([0,6,0.6,1])
 set(gca,"XTick",1:size(cluster_sizes,1));
 set(gca,"XTickLabel",cluster_sizes);
