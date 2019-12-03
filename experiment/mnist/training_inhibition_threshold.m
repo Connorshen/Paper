@@ -8,8 +8,8 @@ train_early_stopping = 10000;% 训练的时候提早break的step，不想提早�
 file_name = "train_history/compare_inhibition_threshold.mat";
 compare_inhibition_threshold = cell(1,1);
 % 初始化参数
-inhibition_thresholds = 0.1:0.2:0.9;
-digits = 0:5;
+inhibition_thresholds = 0.1:0.1:0.9;
+digits = 0:3;
 in_features_cpl = 2560;
 out_features_cpl = 1000;
 verify_step = 500;

@@ -43,7 +43,7 @@ fig_para = fig_paramter();
 plot(1:size(thresholds,1),acc_normal_all,"LineWidth",fig_para.linewidth);
 hold on;
 errorbar(1:size(thresholds,1),acc_inhibition_all,acc_inhibition_std,"LineWidth",fig_para.linewidth);
-axis([0.5,5.5,0,1])
+axis([0.5,10,0,1])
 xlabel("Threshold","FontSize", fig_para.fontsize)
 ylabel("Accuracy","FontSize", fig_para.fontsize)
 set(gca,"XTick",1:size(thresholds,1));
