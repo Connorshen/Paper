@@ -31,11 +31,15 @@ batch_loss_all = mean(batch_loss_all,1);
 figure(1)
 fig_para = fig_paramter();
 subplot(1,2,1);
-s = shadedErrorBar(step_index,rl_acc_all_mean,rl_acc_all_std,"lineprops",'r');
-set(s.mainLine,"LineWidth",fig_para.linewidth)
+shaded_error_bar = shadedErrorBar(step_index,rl_acc_all_mean,rl_acc_all_std);
+shaded_error_bar.mainLine.LineWidth = fig_para.linewidth;
+shaded_error_bar.mainLine.Color = fig_para.colors(1,:);
+shaded_error_bar.patch.FaceColor = fig_para.colors(1,:);
 hold on;
-s = shadedErrorBar(step_index,batch_acc_all_mean,batch_acc_all_std,"lineprops",'b');
-set(s.mainLine,"LineWidth",fig_para.linewidth)
+shaded_error_bar = shadedErrorBar(step_index,batch_acc_all_mean,batch_acc_all_std);
+shaded_error_bar.mainLine.LineWidth = fig_para.linewidth;
+shaded_error_bar.mainLine.Color = fig_para.colors(2,:);
+shaded_error_bar.patch.FaceColor = fig_para.colors(2,:);
 xlabel("Step","FontSize", fig_para.fontsize);
 ylabel("Accuracy","FontSize", fig_para.fontsize);
 set(gca, "FontSize", fig_para.fontsize);
@@ -43,7 +47,9 @@ legend("rl","rl batch","Location","SouthEast")
 axis([200,inf,0.7,1])
 title("Convergence speed of accuracy")
 subplot(1,2,2);
-plot(step_index,rl_loss_all,"r",step_index,batch_loss_all,"b","LineWidth",fig_para.linewidth);
+plot(step_index,rl_loss_all,"Color",fig_para.colors(1,:),"LineWidth",fig_para.linewidth);
+hold on;
+plot(step_index,batch_loss_all,"Color",fig_para.colors(2,:),"LineWidth",fig_para.linewidth);
 legend("rl","rl batch");
 xlabel("Step","FontSize", fig_para.fontsize);
 ylabel("Cross entropy loss","FontSize", fig_para.fontsize);
