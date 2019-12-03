@@ -34,7 +34,7 @@ for i=1:len
 end
 figure(1)
 fig_para = fig_paramter();
-plot(1:size(cluster_sizes,1),cos_sim_all,"-b","LineWidth",fig_para.linewidth)
+plot(1:size(cluster_sizes,1),cos_sim_all,"Color",fig_para.colors(1,:),"LineWidth",fig_para.linewidth)
 axis([0,6,0.6,1])
 set(gca,"XTick",1:size(cluster_sizes,1));
 set(gca,"XTickLabel",cluster_sizes);
