@@ -2,7 +2,7 @@
     <tr>
         <th> </th>
         <th> cpl</th>
-        <th> xgboost</th>
+        <th> gbdt</th>
     </tr>
     <tr>
         <td>
@@ -11,6 +11,9 @@
         <td>
         0.9866&plusmn;0.0002
         </td>
+        <td>
+        0.969&plusmn;0.001
+        </td>
     <t/r>
     <tr>
         <td>
@@ -18,6 +21,9 @@
         </td>
          <td>
         0.8761&plusmn;0.001
+        </td>
+        <td>
+        0.888&plusmn;0.001
         </td>
     <t/r>
 </table>
