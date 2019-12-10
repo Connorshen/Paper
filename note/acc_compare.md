@@ -3,6 +3,7 @@
         <th> </th>
         <th> cpl</th>
         <th> gbdt</th>
+        <th> mlp</th>
     </tr>
     <tr>
         <td>
@@ -14,6 +15,9 @@
         <td>
         0.969&plusmn;0.001
         </td>
+        <td>
+        0.972&plusmn;0.000
+        </td>
     <t/r>
     <tr>
         <td>
@@ -24,6 +28,9 @@
         </td>
         <td>
         0.888&plusmn;0.001
+        </td>
+        <td>
+        0.877&plusmn;0.005
         </td>
     <t/r>
 </table>
