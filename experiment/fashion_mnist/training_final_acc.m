@@ -27,7 +27,7 @@ for i = 1:trial
     net = init_net(init_para);
     disp("init net success")
     [rl_check_points,rl_best_train_result] = rl_trainer(init_para,net,data,train_early_stopping,test_early_stopping);
-    compare_final_acc{i,1} = rl_check_points;
+    compare_final_acc{i,1} = rl_check_points; 
 end
 compare_final_acc{i,2} = rl_best_train_result;
 save(file_name,"compare_final_acc","-v7.3");
