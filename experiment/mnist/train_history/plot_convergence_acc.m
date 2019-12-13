@@ -8,7 +8,7 @@ rl_loss_all = [];
 batch_loss_all = [];
 step_all = compare_convergence{1,1}(:,1);
 step_index = step_all(compare_convergence{1,1}(:,5)~=0);
-for i = 1:len
+for i = 4:4
     rl_acc = compare_convergence{i,1}(:,4);
     rl_acc = rl_acc(step_index)';
     rl_acc_all = [rl_acc_all;rl_acc];
@@ -31,20 +31,14 @@ batch_loss_all = mean(batch_loss_all,1);
 figure(1)
 fig_para = fig_paramter();
 subplot(1,2,1);
-shaded_error_bar = shadedErrorBar(step_index,rl_acc_all_mean,rl_acc_all_std);
-shaded_error_bar.mainLine.LineWidth = fig_para.linewidth;
-shaded_error_bar.mainLine.Color = fig_para.colors(1,:);
-shaded_error_bar.patch.FaceColor = fig_para.colors(1,:);
+plot(step_index,rl_acc_all_mean,"LineWidth",fig_para.linewidth);
 hold on;
-shaded_error_bar = shadedErrorBar(step_index,batch_acc_all_mean,batch_acc_all_std);
-shaded_error_bar.mainLine.LineWidth = fig_para.linewidth;
-shaded_error_bar.mainLine.Color = fig_para.colors(2,:);
-shaded_error_bar.patch.FaceColor = fig_para.colors(2,:);
+plot(step_index,batch_acc_all_mean,"LineWidth",fig_para.linewidth);
 xlabel("Step","FontSize", fig_para.fontsize);
 ylabel("Accuracy","FontSize", fig_para.fontsize);
 set(gca, "FontSize", fig_para.fontsize);
 legend("rl","rl batch","Location","SouthEast")
-axis([200,inf,0.7,1])
+axis([0,inf,0,1])
 title("Convergence speed of accuracy")
 subplot(1,2,2);
 plot(step_index,rl_loss_all,"Color",fig_para.colors(1,:),"LineWidth",fig_para.linewidth);
