@@ -1,7 +1,7 @@
 function lr = get_lr(net,init_para,train_img,train_label)
 batch_size = init_para.get_lr_batch;
 [batch_img,batch_label] = get_batch(train_img,train_label,batch_size);
-[b_output_cpl,~,~,~,~]=forward(net,init_para,batch_img',batch_label');
+[~,b_output_cpl,~,~,~]=forward(net,init_para,batch_img',batch_label');
 n_digit = length(init_para.digits);
 output_cpl_map = cell(n_digit,1);
 self_sum = cell(n_digit,1);
