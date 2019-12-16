@@ -20,7 +20,7 @@ net.weight_cpl(net.weight_cpl~=0) = 1;
 % 随机设置权重初始值
 % net.weight_out = rand(init_para.n_category, init_para.out_features_cpl);
 % 根据激活比例来设置权重初始值
-batch_size = 100;
+batch_size = 1000;
 net.weight_out = rand(init_para.n_category, init_para.out_features_cpl);
 net.weight_filter_out = zeros(size(net.weight_out));
 net.weight_filter_out(net.weight_out>init_para.synaptic_th) = 1;
