@@ -8,7 +8,7 @@ rl_loss_all = [];
 batch_loss_all = [];
 step_all = compare_convergence{1,1}(:,1);
 step_index = step_all(compare_convergence{1,1}(:,5)~=0);
-for i = 4:4
+for i = 1:1
     rl_acc = compare_convergence{i,1}(:,4);
     rl_acc = rl_acc(step_index)';
     rl_acc_all = [rl_acc_all;rl_acc];

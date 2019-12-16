@@ -4,15 +4,15 @@ clc
 trial = 1;
 data_ratio = 1;% 数据集比例
 test_early_stopping = -1;% 测试的时候提早break的step，不想提早结束的话取-1
-train_early_stopping = -1;% 训练的时候提早break的step，不想提早结束的话取-1
+train_early_stopping = 1000;% 训练的时候提早break的step，不想提早结束的话取-1
 file_name = "train_history/compare_final_acc.mat";
 compare_final_acc = cell(trial,2);
 % 初始化参数
-digits = 0:9;
+digits = 0:4;
 in_features_cpl = 2560;
-out_features_cpl = 200000;
+out_features_cpl = 50000;
 verify_step = 1000;
-get_lr_step = 10;
+get_lr_step = 100;
 get_lr_batch = 100;
 n_neuron_cluster = 10;
 init_para = init_paramter(digits,in_features_cpl,out_features_cpl,n_neuron_cluster,verify_step,get_lr_step,get_lr_batch);
@@ -26,7 +26,7 @@ for i = 1:trial
     % 训练普通rl
     net = init_net(init_para,data.train_img,data.train_label);
     disp("init net success")
-    [rl_check_points,rl_best_train_result] = rl_trainer(init_para,net,data,train_early_stopping,test_early_stopping);
+    [rl_check_points,rl_best_train_result] = rl_batch_trainer(init_para,net,data,train_early_stopping,test_early_stopping);
     compare_final_acc{i,1} = rl_check_points;
 end
 compare_final_acc{i,2} = rl_best_train_result;
